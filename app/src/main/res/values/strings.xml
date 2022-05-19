@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">RoomBasic</string>
+
+    <string name="menu_delete_all">Eliminar todos</string>
+    <string name="menu_show_all">Mostrar contraseñas</string>
+    <string name="hint_nombre">Nombre...</string>
+    <string name="hint_password">Contaseña (solo letras)...Por ej. "xamdlApQ"</string>
+    <string name="button_save">Añadir</string>
+    <string name="empty_not_saved">No guardado: el nombre está vacío</string>
+
+</resources>
