@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Firebase Auth</string>
+    <string name="app_name">Virgolini</string>
 
     <string name="label_emailpassword">Email/Password Authentication</string>
     <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
 
-    <string name="label_anonymous_auth">Firebase Authentication</string>
+    <string name="label_anonymous_auth">Virgolini</string>
 
     <string name="hint_user_id">User ID</string>
     <string name="sign_in">Sign In</string>
