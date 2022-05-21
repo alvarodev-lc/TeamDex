@@ -1,0 +1,78 @@
+[
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/drawable_firebase_lockup_400.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/drawable/firebase_lockup_400.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/layout_activity_main.xml.flat",
+        "source": "es.upm.miw.virgolini-main-16:/layout/activity_main.xml"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-mdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/drawable_flag.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/drawable/flag.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-ldpi_ic_launcher.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-ldpi/ic_launcher.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "es.upm.miw.virgolini-merged_res-14:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "es.upm.miw.virgolini-main-16:/mipmap-xhdpi/ic_launcher.png"
+    }
+]

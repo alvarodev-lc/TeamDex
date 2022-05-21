@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "es.upm.miw.virgolini-mergeDebugResources-12:/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/home/alvaro/.gradle/caches/transforms-3/ea5e60c3686267a8822c026b26aad880/transformed/appcompat-1.1.0/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}
