@@ -805,9 +805,10 @@ id barrier
 id beginning
 id blocking
 id bottom
-id buttonAnonymousSignOut
+id buttonLogIn
+id buttonLogOut
 id buttonPanel
-id buttonSignIn
+id buttonSignUp
 id cancel_action
 id center
 id center_horizontal
@@ -987,6 +988,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
+layout activity_sign_in
 layout custom_dialog
 layout notification_action
 layout notification_action_tombstone
@@ -1086,6 +1088,7 @@ string instant_validation
 string label_anonymous_auth
 string label_emailpassword
 string loading
+string logout
 string passwordless_status_fmt
 string passwordless_title_text
 string project_id
@@ -1093,6 +1096,7 @@ string search_menu_title
 string send_link
 string sign_in
 string sign_out
+string sign_up
 string signed_in
 string signed_out
 string start_phone_auth

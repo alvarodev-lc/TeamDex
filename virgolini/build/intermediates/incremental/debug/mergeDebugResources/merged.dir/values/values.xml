@@ -374,6 +374,9 @@
     <item name="action_bar_spinner" type="id"/>
     <item name="action_menu_divider" type="id"/>
     <item name="action_menu_presenter" type="id"/>
+    <item name="buttonLogIn" type="id"/>
+    <item name="buttonLogOut" type="id"/>
+    <item name="buttonSignUp" type="id"/>
     <item name="home" type="id"/>
     <item name="line1" type="id"/>
     <item name="line3" type="id"/>
@@ -425,7 +428,7 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with <ns1:g example="Mail" id="application_name">%s</ns1:g></string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <string name="account_linking">Login interface customization example</string>
+    <string name="account_linking">Login</string>
     <string name="anonymous_sign_in">Anonymous Sign In</string>
     <string name="app_name">Virgolini</string>
     <string name="auth_failed">Authentication failed</string>
@@ -474,6 +477,7 @@
     <string name="label_anonymous_auth">Virgolini</string>
     <string name="label_emailpassword">Email/Password Authentication</string>
     <string name="loading">Loading…</string>
+    <string name="logout">Logout</string>
     <string name="passwordless_status_fmt">Email User: %1$s (verified: %2$b)</string>
     <string name="passwordless_title_text">Passwordless Sign In</string>
     <string name="project_id" translatable="false">virgolini-8f0b9</string>
@@ -481,6 +485,7 @@
     <string name="send_link">Send Link</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
+    <string name="sign_up">Sign up</string>
     <string name="signed_in">Signed In</string>
     <string name="signed_out">Signed Out</string>
     <string name="start_phone_auth">Start</string>

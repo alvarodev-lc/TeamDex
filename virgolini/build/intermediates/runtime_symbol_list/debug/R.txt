@@ -804,9 +804,10 @@ int id barrier 0x7f070043
 int id beginning 0x7f070044
 int id blocking 0x7f070045
 int id bottom 0x7f070046
-int id buttonAnonymousSignOut 0x7f070047
+int id buttonLogIn 0x7f0700d3
+int id buttonLogOut 0x7f0700d4
 int id buttonPanel 0x7f070048
-int id buttonSignIn 0x7f070049
+int id buttonSignUp 0x7f0700d5
 int id cancel_action 0x7f07004a
 int id center 0x7f07004b
 int id center_horizontal 0x7f07004c
@@ -986,6 +987,7 @@ int layout abc_search_view 0x7f0a0019
 int layout abc_select_dialog_material 0x7f0a001a
 int layout abc_tooltip 0x7f0a001b
 int layout activity_main 0x7f0a001c
+int layout activity_sign_in 0x7f0a0031
 int layout custom_dialog 0x7f0a001d
 int layout notification_action 0x7f0a001e
 int layout notification_action_tombstone 0x7f0a001f
@@ -1085,6 +1087,7 @@ int string instant_validation 0x7f0c0048
 int string label_anonymous_auth 0x7f0c0049
 int string label_emailpassword 0x7f0c004a
 int string loading 0x7f0c004b
+int string logout 0x7f0c005f
 int string passwordless_status_fmt 0x7f0c004c
 int string passwordless_title_text 0x7f0c004d
 int string project_id 0x7f0c004e
@@ -1092,6 +1095,7 @@ int string search_menu_title 0x7f0c004f
 int string send_link 0x7f0c0050
 int string sign_in 0x7f0c0051
 int string sign_out 0x7f0c0052
+int string sign_up 0x7f0c0060
 int string signed_in 0x7f0c0053
 int string signed_out 0x7f0c0054
 int string start_phone_auth 0x7f0c0055
