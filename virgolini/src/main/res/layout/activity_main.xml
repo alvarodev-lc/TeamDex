@@ -47,23 +47,23 @@
         tools:text="Email: none" />
 
     <Button
-        android:id="@+id/buttonSignIn"
+        android:id="@+id/buttonLogIn"
         android:layout_width="@dimen/field_width_standard"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fieldEmail"
         android:layout_alignStart="@+id/titleAnonymous"
-        android:layout_marginStart="-1dp"
-        android:layout_marginTop="14dp"
-        android:text="@string/sign_in" />
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="1dp"
+        android:text="@string/account_linking" />
 
     <Button
-        android:id="@+id/buttonAnonymousSignOut"
+        android:id="@+id/buttonLogOut"
         android:layout_width="@dimen/field_width_standard"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/buttonSignIn"
+        android:layout_alignTop="@+id/buttonLogIn"
         android:enabled="false"
-        android:text="@string/sign_out"
-        android:layout_toEndOf="@+id/buttonSignIn" />
+        android:text="@string/logout"
+        android:layout_toEndOf="@+id/buttonLogIn" />
 
     <Switch
         android:id="@+id/statusSwitch"
@@ -94,7 +94,7 @@
         android:layout_below="@+id/titleLinking"
         android:layout_alignStart="@+id/titleAnonymous"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="3dp"
         android:hint="@string/hint_email"
         android:importantForAutofill="no"
         android:inputType="textEmailAddress" />
@@ -108,6 +108,16 @@
         android:hint="@string/hint_password"
         android:inputType="textPassword"
         android:importantForAutofill="no" />
+
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="@dimen/field_width_standard"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fieldEmail"
+        android:layout_alignStart="@+id/titleAnonymous"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="58dp"
+        android:text="@string/sign_up" />
 
 
 </RelativeLayout>

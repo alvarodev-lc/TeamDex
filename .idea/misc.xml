@@ -3,7 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="virgolini/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="virgolini/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="virgolini/src/main/res/layout/activity_sign_in.xml" value="0.33" />
       </map>
     </option>
   </component>

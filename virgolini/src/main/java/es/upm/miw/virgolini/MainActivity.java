@@ -1,5 +1,6 @@
 package es.upm.miw.virgolini;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static final String LOG_TAG = "btb";
+    static final String LOG_TAG = "vg";
 
     private FirebaseAuth mAuth;
 
@@ -39,8 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPasswordField = findViewById(R.id.fieldPassword);
 
         // Click listeners
-        findViewById(R.id.buttonSignIn).setOnClickListener(this);
-        findViewById(R.id.buttonAnonymousSignOut).setOnClickListener(this);
+        findViewById(R.id.buttonSignUp).setOnClickListener(this);
+        findViewById(R.id.buttonLogOut).setOnClickListener(this);
+        findViewById(R.id.buttonLogIn).setOnClickListener(this);
         findViewById(R.id.statusSwitch).setClickable(false);
 
         // Initialize Firebase Auth
@@ -61,10 +63,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.buttonSignIn) {
-            signInWithCredentials();
-        } else if (i == R.id.buttonAnonymousSignOut) {
-            signOut();
+        if (i == R.id.buttonLogIn) {
+            logInWithCredentials();
+        } else if (i == R.id.buttonLogOut) {
+            logOut();
+        }
+        else if (i == R.id.buttonSignUp) {
+            Intent sign_in_activity = new Intent(this, SignInActivity.class);
+            startActivity(sign_in_activity);
         }
     }
 
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return valid;
     }
 
-    private void signInWithCredentials() {
+    private void logInWithCredentials() {
         if (!validateLinkForm()) {
             return;
         }
@@ -109,12 +115,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.i(LOG_TAG, "signInWithCredentials:success");
+                            Log.i(LOG_TAG, "logInWithCredentials:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(LOG_TAG, "signInWithCredentials:failure", task.getException());
+                            Log.w(LOG_TAG, "logInWithCredentials:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
@@ -124,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // [END signin_with_email_and_password]
     }
 
-    private void signOut() {
+    private void logOut() {
         mAuth.signOut();
         updateUI(null);
     }
@@ -151,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // Button visibility
-        findViewById(R.id.buttonSignIn).setEnabled(!isSignedIn);
-        findViewById(R.id.buttonAnonymousSignOut).setEnabled(isSignedIn);
+        findViewById(R.id.buttonLogIn).setEnabled(!isSignedIn);
+        findViewById(R.id.buttonLogOut).setEnabled(isSignedIn);
         mSwitch.setChecked(isSignedIn);
     }
 }
