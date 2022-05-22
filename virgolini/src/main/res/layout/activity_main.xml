@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/desc_logo"
+        android:src="@drawable/flag" />
+
+    <TextView
+        android:id="@+id/titleAnonymous"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/icon"
+        android:layout_marginBottom="8dp"
+        android:text="@string/label_emailpassword"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/statusId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleAnonymous"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/signed_out"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/statusEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statusId"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        tools:text="Email: none" />
+
+    <Button
+        android:id="@+id/buttonLogIn"
+        android:layout_width="@dimen/field_width_standard"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fieldEmail"
+        android:layout_alignStart="@+id/titleAnonymous"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="1dp"
+        android:text="@string/account_linking" />
+
+    <Button
+        android:id="@+id/buttonLogOut"
+        android:layout_width="@dimen/field_width_standard"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonLogIn"
+        android:enabled="false"
+        android:text="@string/logout"
+        android:layout_toEndOf="@+id/buttonLogIn" />
+
+    <Switch
+        android:id="@+id/statusSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/statusId"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:checked="false"
+        android:text="@string/status_logged" />
+
+    <TextView
+        android:id="@+id/titleLinking"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statusEmail"
+        android:layout_alignStart="@+id/titleAnonymous"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/account_linking" />
+
+    <EditText
+        android:id="@+id/fieldEmail"
+        android:layout_width="@dimen/field_width_standard"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleLinking"
+        android:layout_alignStart="@+id/titleAnonymous"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="3dp"
+        android:hint="@string/hint_email"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/fieldPassword"
+        android:layout_width="@dimen/field_width_standard"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/fieldEmail"
+        android:layout_toEndOf="@+id/fieldEmail"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:importantForAutofill="no" />
+
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="@dimen/field_width_standard"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fieldEmail"
+        android:layout_alignStart="@+id/titleAnonymous"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="58dp"
+        android:text="@string/sign_up" />
+
+
+</RelativeLayout>
