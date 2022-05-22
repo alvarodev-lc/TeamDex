@@ -12,23 +12,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbbe5ae8-ca18-4ef4-9ad4-e43b12887790" name="Changes" comment="Fix app name">
-      <change afterPath="$PROJECT_DIR$/virgolini/src/main/java/es/upm/miw/virgolini/SignInActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/virgolini/src/main/res/layout/activity_sign_in.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/virgolini/src/main/res/values/ids.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.3.3/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.3/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.3.3/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.3/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/virgolini/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/R.jar" beforeDir="false" afterPath="$PROJECT_DIR$/virgolini/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/R.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/virgolini/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/virgolini/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/virgolini/src/main/java/es/upm/miw/virgolini/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/virgolini/src/main/java/es/upm/miw/virgolini/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/virgolini/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/virgolini/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/virgolini/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/virgolini/src/main/res/values/strings.xml" afterDir="false" />
-    </list>
+    <list default="true" id="dbbe5ae8-ca18-4ef4-9ad4-e43b12887790" name="Changes" comment="Nothing here" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -216,7 +200,21 @@
       <option name="project" value="LOCAL" />
       <updated>1653173209116</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Adding sign up functionality">
+      <created>1653215597204</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1653215597204</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Nothing here">
+      <created>1653215706827</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1653215706827</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -233,6 +231,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix app name" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix app name" />
+    <MESSAGE value="Adding sign up functionality" />
+    <MESSAGE value="Nothing here" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nothing here" />
   </component>
 </project>
