@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="es.upm.miw.virgolini.SignInActivity">
+        <activity android:name="es.upm.miw.virgolini.SignUpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

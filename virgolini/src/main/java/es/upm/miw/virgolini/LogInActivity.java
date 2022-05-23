@@ -6,8 +6,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -69,7 +67,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             logOut();
         }
         else if (i == R.id.buttonSignUp) {
-            Intent sign_up_activity = new Intent(this, SignInActivity.class);
+            Intent sign_up_activity = new Intent(this, SignUpActivity.class);
             startActivity(sign_up_activity);
         }
     }
