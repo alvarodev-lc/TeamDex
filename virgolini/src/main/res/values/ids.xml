@@ -3,4 +3,5 @@
     <item name="buttonLogIn" type="id" />
     <item name="buttonLogOut" type="id" />
     <item name="buttonSignUp" type="id" />
+    <item name="redirectToLogIn" type="id" />
 </resources>

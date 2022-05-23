@@ -1,5 +1,6 @@
 package es.upm.miw.virgolini;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,7 +29,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_sign_up);
 
         // Fields
         mEmailField = findViewById(R.id.fieldEmail);
@@ -36,6 +37,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         // Click listeners
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
+        findViewById(R.id.buttonLogIn).setOnClickListener(this);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -54,6 +56,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         int i = v.getId();
         if (i == R.id.buttonSignUp) {
             createUserWithCredentials();
+        }
+        else if (i == R.id.buttonLogIn){
+            Intent log_in_activity = new Intent(this, LogInActivity.class);
+            startActivity(log_in_activity);
         }
     }
 
