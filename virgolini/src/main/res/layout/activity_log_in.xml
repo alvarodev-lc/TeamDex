@@ -11,21 +11,11 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginStart="65dp"
+        android:layout_width="239dp"
+        android:layout_height="171dp"
         android:contentDescription="@string/desc_logo"
-        android:src="@drawable/flag" />
-
-    <EditText
-        android:id="@+id/fieldEmail"
-        android:layout_width="@dimen/field_width_standard"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/titleAnonymous"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="189dp"
-        android:hint="@string/hint_email"
-        android:importantForAutofill="no"
-        android:inputType="textEmailAddress" />
+        android:src="@drawable/logo" />
 
     <EditText
         android:id="@+id/fieldPassword"
@@ -38,6 +28,17 @@
         android:hint="@string/hint_password"
         android:importantForAutofill="no"
         android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/fieldEmail"
+        android:layout_width="@dimen/field_width_standard"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/titleAnonymous"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="210dp"
+        android:hint="@string/hint_email"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress" />
 
     <TextView
         android:id="@+id/titleAnonymous"
@@ -53,7 +54,7 @@
 
     <Button
         android:id="@+id/buttonLogIn"
-        android:layout_width="@dimen/field_width_standard"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fieldEmail"
         android:layout_alignStart="@+id/titleAnonymous"
@@ -63,7 +64,7 @@
 
     <Button
         android:id="@+id/buttonLogOut"
-        android:layout_width="@dimen/field_width_standard"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/buttonLogIn"
         android:layout_marginStart="4dp"
@@ -72,12 +73,12 @@
 
     <Button
         android:id="@+id/buttonSignUp"
-        android:layout_width="@dimen/field_width_standard"
+        android:layout_width="345dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fieldEmail"
         android:layout_alignStart="@+id/titleAnonymous"
-        android:layout_marginStart="111dp"
-        android:layout_marginTop="113dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="111dp"
         android:text="@string/sign_up" />
 
     <TextView
@@ -86,7 +87,7 @@
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/icon"
-        android:layout_marginTop="147dp"
+        android:layout_marginTop="160dp"
         android:layout_marginBottom="8dp"
         android:text="@string/dont_have_account"
         android:textAlignment="center" />
