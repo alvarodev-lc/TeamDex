@@ -115,6 +115,9 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.i(LOG_TAG, "logInWithCredentials:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Intent api_call_activity = new Intent(LogInActivity.this, ApiCall.class);
+                            startActivity(api_call_activity);
+
                             // Here we should instantiate a new intent to move forward
                             //updateUI(user);
                         } else {
