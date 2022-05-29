@@ -1,5 +1,6 @@
 package es.upm.miw.virgolini;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
@@ -8,9 +9,11 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import es.upm.miw.virgolini.pojo.Pokemon;
-import es.upm.miw.virgolini.pojo.PokemonList;
+import es.upm.miw.virgolini.models.Pokemon;
+import es.upm.miw.virgolini.models.PokemonList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,13 +22,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiCall extends AppCompatActivity implements View.OnClickListener {
 
+    private RecyclerView recyclerView;
+    private PokemonListAdapter pokemonListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.ergast);
+        setContentView(R.layout.pokemon_recyclerview);
 
-        String LOG_TAG = "erg_api";
+        String LOG_TAG = "poke_api";
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        pokemonListAdapter = new PokemonListAdapter();
+        recyclerView.setAdapter(pokemonListAdapter);
+        recyclerView.setHasFixedSize(true);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        recyclerView.setLayoutManager(layoutManager);
+
 
         String base_url = "https://pokeapi.co/api/v2/";
 
@@ -43,7 +57,8 @@ public class ApiCall extends AppCompatActivity implements View.OnClickListener {
                     PokemonList Pokemons = response.body();
                     Log.d(LOG_TAG, response.message());
                     assert Pokemons != null;
-                    List<Pokemon> Pokemon_list = Pokemons.getResults();
+                    ArrayList<Pokemon> Pokemon_list = Pokemons.getResults();
+                    pokemonListAdapter.addPokemonList(Pokemon_list);
                     for(Pokemon Pokemon: Pokemon_list){
                         String name = Pokemon.getName();
                         Log.d(LOG_TAG, name);
