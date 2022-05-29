@@ -58,13 +58,12 @@ public class ApiCall extends AppCompatActivity implements View.OnClickListener {
                     Log.d(LOG_TAG, response.message());
                     assert Pokemons != null;
                     ArrayList<Pokemon> Pokemon_list = Pokemons.getResults();
-                    pokemonListAdapter.addPokemonList(Pokemon_list);
                     for(Pokemon Pokemon: Pokemon_list){
                         String name = Pokemon.getName();
                         Log.d(LOG_TAG, name);
                         Log.d(LOG_TAG, Pokemon.getUrl());
-                        //Log.d(LOG_TAG, Pokemon.getAbilities().toString());
                     }
+                    pokemonListAdapter.addPokemonList(Pokemon_list);
                 }
             }
             @Override

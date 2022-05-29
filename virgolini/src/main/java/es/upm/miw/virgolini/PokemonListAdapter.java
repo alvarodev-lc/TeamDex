@@ -36,14 +36,16 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         holder.poke_name.setText(poke.getName());
     }
 
-    @Override
-    public int getItemCount(){
-        return 0;
-    }
 
     public void addPokemonList(List<Pokemon> pokemon_list) {
         data.addAll(pokemon_list);
-        Log.d("list_poke", data.toString());
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        Log.d("poke_api", String.valueOf(data.size()));
+        return data.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
