@@ -8,7 +8,7 @@ import retrofit2.http.Path;
 public interface IPokemonEndpoint {
 
     //Request method and URL specified in the annotation
-    @GET("pokemon?limit=10000")
+    @GET("pokemon?limit=100")
     Call<PokemonList> getAllPokemon();
     @GET("pokemon/{name}/")
     Call<Pokemon> getPokemon(@Path("round") String name);

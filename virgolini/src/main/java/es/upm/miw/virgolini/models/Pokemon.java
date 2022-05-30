@@ -7,14 +7,20 @@ import com.google.gson.annotations.SerializedName;
 @Generated("jsonschema2pojo")
 public class Pokemon {
 
+
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("num")
+    @Expose
+    private int num;
 
     public String getName() {
+        // Capitalize first letter
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
         return name;
     }
 
@@ -30,4 +36,12 @@ public class Pokemon {
         this.url = url;
     }
 
+    public int getNum() {
+        String[] split_url = url.split("/");
+        return Integer.parseInt(split_url[split_url.length - 1]);
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
 }

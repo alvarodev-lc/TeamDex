@@ -39,7 +39,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
         // Click listeners
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
-        findViewById(R.id.buttonLogOut).setOnClickListener(this);
         findViewById(R.id.buttonLogIn).setOnClickListener(this);
         //findViewById(R.id.statusSwitch).setClickable(false);
 
@@ -63,8 +62,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         int i = v.getId();
         if (i == R.id.buttonLogIn) {
             logInWithCredentials();
-        } else if (i == R.id.buttonLogOut) {
-            logOut();
         }
         else if (i == R.id.buttonSignUp) {
             Intent sign_up_activity = new Intent(this, SignUpActivity.class);
@@ -115,7 +112,10 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.i(LOG_TAG, "logInWithCredentials:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent api_call_activity = new Intent(LogInActivity.this, ApiCall.class);
+                            Toast.makeText(LogInActivity.this,
+                                    "Authentication successful", Toast.LENGTH_SHORT).show();
+                            Intent api_call_activity = new Intent(LogInActivity.this,
+                                    PokedexActivity.class);
                             startActivity(api_call_activity);
 
                             // Here we should instantiate a new intent to move forward

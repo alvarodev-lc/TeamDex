@@ -101,7 +101,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
                             // Sign in success, firebase account created
                             Log.d(LOG_TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(SignUpActivity.this, "Successfully created your account. Please Log in!",
+                                    Toast.LENGTH_LONG).show();
+                            Intent api_call_activity = new Intent(SignUpActivity.this,
+                                    LogInActivity.class);
+                            startActivity(api_call_activity);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());

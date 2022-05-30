@@ -20,7 +20,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiCall extends AppCompatActivity implements View.OnClickListener {
+public class PokedexActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView recyclerView;
     private PokemonListAdapter pokemonListAdapter;

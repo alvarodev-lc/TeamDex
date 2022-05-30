@@ -46,13 +46,14 @@
     <string name="email_fmt">Email: %s</string>
     <string name="anonymous_sign_in">Anonymous Sign In</string>
     <string name="account_linking">Login</string>
-    <string name="already_have_account">Already have an account?</string>
-    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="already_have_account">Already have an account? Log in!</string>
+    <string name="dont_have_account">Don\'t have an account? Sign up!</string>
     <string name="logout">Logout</string>
     <string name="status_logged">Logged</string>
     <string name="field_required">Field required.</string>
 
     <string name="sign_up">Sign up</string>
+    <string name="welcome">Welcome!</string>
 
 
 </resources>
