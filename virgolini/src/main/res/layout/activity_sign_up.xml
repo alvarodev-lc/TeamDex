@@ -17,9 +17,8 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:text="@string/welcome"
-            android:src="@drawable/pokeball"
+            android:layout_height="100dp"
+            android:src="@drawable/pikachu"
             android:gravity="center"
             android:textColor="#000000"/>
 
@@ -31,7 +30,7 @@
             android:layout_marginTop="15dp"
             android:textColor="#000000"
             android:textSize="25sp"
-            android:fontFamily="monospace"
+            android:fontFamily="Roboto"
             />
         <EditText
             android:id="@+id/fieldEmail"
@@ -43,7 +42,7 @@
             android:textColorHint="#000000"
             android:background="@drawable/custombutton"
             android:textSize="16sp"
-            android:fontFamily="monospace"
+            android:fontFamily="Roboto"
             />
         <EditText
             android:id="@+id/fieldPassword"
@@ -57,7 +56,7 @@
             android:textColorHint="#000000"
             android:background="@drawable/custombutton"
             android:textSize="16sp"
-            android:fontFamily="monospace"/>
+            android:fontFamily="Roboto"/>
         <Button
             android:id="@+id/buttonSignUp"
             android:layout_width="250dp"
@@ -68,22 +67,23 @@
             android:background="@drawable/custombutton2"
             android:textColor="#FFFBF6"
             android:textSize="14sp"
-            android:fontFamily="monospace"/>
+            android:fontFamily="Roboto"/>
+        <Button
+            android:id="@+id/buttonLogIn"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custombutton3"
+            android:fontFamily="Roboto"
+            android:text="@string/dont_have_account"
+            android:textAllCaps="false"
+            android:textColor="#333"
+            android:textSize="14sp" />
         <View
             android:layout_width="fill_parent"
             android:layout_height="2dp"
             android:background="#3fff"
             android:layout_marginTop="15dp"
-            />
-        <TextView
-            android:id="@+id/buttonLogIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/already_have_account"
-            android:layout_marginTop="15dp"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:fontFamily="monospace"
             />
 
     </LinearLayout>
