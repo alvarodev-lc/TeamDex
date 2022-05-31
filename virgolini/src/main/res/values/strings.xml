@@ -55,6 +55,8 @@
     <string name="sign_up">Sign up</string>
     <string name="welcome">Welcome!</string>
 
+    <string name="poke_type">Type:</string>
+
 
 </resources>
 

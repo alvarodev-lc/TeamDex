@@ -1,11 +1,15 @@
 package es.upm.miw.virgolini;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,16 +24,18 @@ import es.upm.miw.virgolini.models.PokemonResult;
 public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder>{
 
     private ArrayList<PokemonResult> data;
+    private OnPokemonClickListener onPokemonClickListener;
 
-    public PokemonListAdapter() {
+    public PokemonListAdapter(OnPokemonClickListener onPokemonClickListener) {
         data = new ArrayList<>();
+        this.onPokemonClickListener = onPokemonClickListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pokemon_item, parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, onPokemonClickListener);
     }
 
     @Override
@@ -53,14 +59,29 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         return data.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView poke_image;
         private TextView poke_name;
+        private OnPokemonClickListener onPokemonClickListener;
 
-        public ViewHolder(View v) {
+
+        public ViewHolder(View v, OnPokemonClickListener onPokemonClickListener) {
             super(v);
             poke_image = (ImageView) v.findViewById(R.id.poke_image);
             poke_name = (TextView) v.findViewById(R.id.poke_name);
+            this.onPokemonClickListener = onPokemonClickListener;
+
+            v.setOnClickListener(this);
+
         }
+
+        @Override
+        public void onClick(View v) {
+            onPokemonClickListener.onPokemonClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnPokemonClickListener{
+        void onPokemonClick(int position);
     }
 }

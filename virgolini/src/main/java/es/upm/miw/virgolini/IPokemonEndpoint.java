@@ -9,9 +9,8 @@ import retrofit2.http.Query;
 public interface IPokemonEndpoint {
 
     //Request method and URL specified in the annotation
-    @GET("pokemon?limit=20")
+    @GET("pokemon")
     Call<PokemonList> getAllPokemon(@Query("limit") int limit,@Query("offset") int offset);
-    @GET("pokemon/{name}/")
-    Call<PokemonResult> getPokemon(@Path("round") String name);
-
+    @GET("pokemon/{num}")
+    Call<Pokemon> getPokemon(@Path("num") String num);
 }

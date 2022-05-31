@@ -2,9 +2,12 @@ package es.upm.miw.virgolini;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,11 +22,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PokedexActivity extends AppCompatActivity implements View.OnClickListener {
+public class PokedexActivity extends AppCompatActivity implements View.OnClickListener, PokemonListAdapter.OnPokemonClickListener {
 
     private Retrofit retrofit;
     private RecyclerView recyclerView;
     private PokemonListAdapter pokemonListAdapter;
+    private ArrayList<PokemonResult> poke_list = new ArrayList<PokemonResult>();
     private int offset;
     private boolean charge_allowed;
     private String LOG_TAG = "poke_api";
@@ -36,7 +40,7 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        pokemonListAdapter = new PokemonListAdapter();
+        pokemonListAdapter = new PokemonListAdapter(this);
         recyclerView.setAdapter(pokemonListAdapter);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
@@ -62,7 +66,6 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-
         String base_url = "https://pokeapi.co/api/v2/";
 
         retrofit = new Retrofit.Builder()
@@ -87,6 +90,7 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
                     Log.d(LOG_TAG, response.message());
                     assert Pokemons != null;
                     ArrayList<PokemonResult> Pokemon_list = Pokemons.getResults();
+                    poke_list.addAll(Pokemon_list);
                     for(PokemonResult Pokemon: Pokemon_list){
                         String name = Pokemon.getName();
                         Log.d(LOG_TAG, name);
@@ -114,5 +118,16 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         int i = v.getId();
+    }
+
+    @Override
+    public void onPokemonClick(int position) {
+        Toast.makeText(PokedexActivity.this,
+                "Clicked", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, PokemonActivity.class);
+        PokemonResult pokemon = poke_list.get(position);
+        intent.putExtra("pokemon", pokemon);
+        startActivity(intent);
     }
 }
