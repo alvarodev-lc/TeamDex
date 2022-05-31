@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     private Retrofit retrofit;
     private String LOG_TAG = "pokemon_activity";
     private PokemonResult poke;
+    private Pokemon pokemon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +37,12 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.pokemon_stats);
 
         Intent intent = getIntent();
-        PokemonResult pokemon = (PokemonResult) intent.getExtras().getSerializable("pokemon");
+        PokemonResult pokemon_result = (PokemonResult) intent.getExtras().getSerializable("pokemon");
 
-        poke = pokemon;
+        poke = pokemon_result;
 
         TextView poke_name = (TextView) findViewById(R.id.poke_name);
-        poke_name.setText(pokemon.getName());
+        poke_name.setText(pokemon_result.getName());
 
         String base_url = "https://pokeapi.co/api/v2/";
 
@@ -49,8 +52,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                 .build();
 
         getPokemonData();
-
-    }
+        }
 
     private void getPokemonData(){
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
@@ -61,11 +63,28 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
             public void onResponse(@NonNull Call<Pokemon> call, @NonNull Response<Pokemon> response) {
                 if (response.isSuccessful()){
                     Pokemon resp = response.body();
+                    pokemon = resp;
                     assert resp != null;
-                    List<TypeList> poke_list = resp.getTypes();
-                    for(TypeList tipo_lista: poke_list){
-                        Type tipo = tipo_lista.getType();
-                        Log.d(LOG_TAG, tipo.getName());
+                    LinearLayout type_layout =  findViewById(R.id.type_layout);
+
+                    List<TypeList> list_type_list = resp.getTypes();
+                    for(TypeList tipo_lista: list_type_list){
+                        Type type = tipo_lista.getType();
+                        String type_name = type.getName();
+                        type_name = type_name.substring(0, 1).toUpperCase() +
+                                type_name.substring(1);
+                        Log.d(LOG_TAG, type_name);
+
+                        TextView type_view = new TextView(PokemonActivity.this);
+                        type_view.setText(type_name);
+                        LinearLayout.LayoutParams lp =
+                                new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                        );
+                        lp.setMargins(10,52,7,0);
+                        type_view.setLayoutParams(lp);
+                        type_layout.addView(type_view);
                     }
                 }
             }

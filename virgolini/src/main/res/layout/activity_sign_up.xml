@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:text="@string/sign_up"
             android:layout_marginTop="15dp"
-            android:textColor="#000000"
+            android:textColor="#016C4E"
             android:textSize="25sp"
             android:fontFamily="Roboto"
             />
@@ -75,10 +75,10 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/custombutton3"
             android:fontFamily="Roboto"
-            android:text="@string/dont_have_account"
+            android:text="@string/already_have_account"
             android:textAllCaps="false"
             android:textColor="#333"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         <View
             android:layout_width="fill_parent"
             android:layout_height="2dp"

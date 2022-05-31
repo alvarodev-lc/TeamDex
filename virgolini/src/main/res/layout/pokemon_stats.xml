@@ -11,31 +11,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/pokeball" />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/pokeball"/>
+                <TextView
+                    android:id="@+id/poke_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/type_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
             <TextView
-                android:id="@+id/poke_name"
+                android:id="@+id/type_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"/>
-    </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/poke_type"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:text="@string/poke_type"/>
+        </LinearLayout>
 
 
     </LinearLayout>
