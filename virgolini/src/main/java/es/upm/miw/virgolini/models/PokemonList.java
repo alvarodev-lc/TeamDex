@@ -20,7 +20,7 @@ public class PokemonList {
     private Object previous;
     @SerializedName("results")
     @Expose
-    private ArrayList<Pokemon> results = null;
+    private ArrayList<PokemonResult> results = null;
 
     public int getCount() {
         return count;
@@ -46,11 +46,11 @@ public class PokemonList {
         this.previous = previous;
     }
 
-    public ArrayList<Pokemon> getResults() {
+    public ArrayList<PokemonResult> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Pokemon> results) {
+    public void setResults(ArrayList<PokemonResult> results) {
         this.results = results;
     }
 

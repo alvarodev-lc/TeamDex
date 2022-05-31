@@ -10,14 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import es.upm.miw.virgolini.models.Pokemon;
+import es.upm.miw.virgolini.models.PokemonResult;
 
 public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder>{
 
-    private ArrayList<Pokemon> data;
+    private ArrayList<PokemonResult> data;
 
     public PokemonListAdapter() {
         data = new ArrayList<>();
@@ -32,12 +34,15 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
     @Override
     public void onBindViewHolder (ViewHolder holder, int position){
-        Pokemon poke = data.get(position);
+        PokemonResult poke = data.get(position);
         holder.poke_name.setText(poke.getName());
+
+        Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.getNum() + ".png")
+            .into(holder.poke_image);
     }
 
 
-    public void addPokemonList(List<Pokemon> pokemon_list) {
+    public void addPokemonList(List<PokemonResult> pokemon_list) {
         data.addAll(pokemon_list);
         notifyDataSetChanged();
     }

@@ -8,15 +8,12 @@
         android:id="@+id/poke_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:background="@color/colorAccent"
         android:layout_gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/poke_name"
-        android:inputType="textCapSentences"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/app_name"/>
+        android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
