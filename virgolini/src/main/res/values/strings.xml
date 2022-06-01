@@ -55,11 +55,13 @@
     <string name="sign_up">Sign up</string>
     <string name="welcome">Welcome!</string>
 
-    <string name="poke_type">Type:</string>
+    <string name="poke_type">Type(s):</string>
     <string name="poke_ability">Abilities:</string>
     <string name="poke_height">Height:</string>
     <string name="poke_weight">Weight:</string>
-    <string name="poke_exp">Base experience:</string>
+    <string name="poke_exp">XP:</string>
+    <string name="poke_capt_rate">Capture rate:</string>
+    <string name="poke_happiness">Base happiness:</string>
     <string name="shiny_version">Shiny version:</string>
 
 

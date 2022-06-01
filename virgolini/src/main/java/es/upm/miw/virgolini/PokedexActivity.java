@@ -124,7 +124,7 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
     public void onPokemonClick(int position) {
         PokemonResult pokemon = poke_list.get(position);
         Toast.makeText(PokedexActivity.this,
-               pokemon.getName() + " selected" , Toast.LENGTH_SHORT).show();
+               pokemon.getName() + " selected" , Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(this, PokemonActivity.class);
         intent.putExtra("pokemon", pokemon);

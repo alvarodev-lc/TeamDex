@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -28,18 +28,22 @@
                 android:id="@+id/poke_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="25dp"
                 android:textSize="30sp" />
 
             <ImageView
                 android:id="@+id/poke_image"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:scaleType="fitXY" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <LinearLayout
             android:id="@+id/type_layout"
             android:layout_width="match_parent"
@@ -48,39 +52,21 @@
 
             <TextView
                 android:id="@+id/type_desc"
-                android:textStyle="bold"
-                android:textColor="#016C4E"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/poke_type"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ability_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/ability_desc"
-                android:textStyle="bold"
                 android:textColor="#016C4E"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/poke_ability"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/exp_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -100,6 +86,34 @@
                 android:layout_marginStart="10dp"
                 android:textSize="20sp" />
         </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ability_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ability_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/poke_ability"
+                android:textColor="#016C4E"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/ability_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/height_layout"
@@ -109,14 +123,14 @@
 
             <TextView
                 android:id="@+id/height_desc"
-                android:textStyle="bold"
-                android:textColor="#016C4E"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="15dp"
                 android:text="@string/poke_height"
-                android:textSize="20sp" />
+                android:textColor="#016C4E"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/height"
@@ -128,21 +142,21 @@
 
             <LinearLayout
                 android:id="@+id/wieght_layout"
-                android:layout_marginStart="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="30dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/weight_desc"
-                    android:textStyle="bold"
-                    android:textColor="#016C4E"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="15dp"
                     android:text="@string/poke_weight"
-                    android:textSize="20sp" />
+                    android:textColor="#016C4E"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/weight"
@@ -156,6 +170,56 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/capt_rate_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/capt_rate_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:text="@string/poke_capt_rate"
+                android:textColor="#016C4E"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/poke_capt_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/happiness_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/happiness_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:text="@string/poke_happiness"
+                android:textColor="#016C4E"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/poke_happiness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/shiny_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -163,14 +227,14 @@
 
             <TextView
                 android:id="@+id/shiny_desc"
-                android:textStyle="bold"
-                android:textColor="#016C4E"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/shiny_version"
-                android:textSize="20sp" />
+                android:textColor="#016C4E"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/shiny_image"

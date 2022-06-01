@@ -13,4 +13,6 @@ public interface IPokemonEndpoint {
     Call<PokemonList> getAllPokemon(@Query("limit") int limit,@Query("offset") int offset);
     @GET("pokemon/{num}")
     Call<Pokemon> getPokemon(@Path("num") String num);
+    @GET("pokemon-species/{num}")
+    Call<Species> getPokemonSpecies(@Path("num") String num);
 }

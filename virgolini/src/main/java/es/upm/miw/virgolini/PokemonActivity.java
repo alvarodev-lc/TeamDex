@@ -25,6 +25,7 @@ import es.upm.miw.virgolini.models.Ability;
 import es.upm.miw.virgolini.models.AbilityList;
 import es.upm.miw.virgolini.models.Pokemon;
 import es.upm.miw.virgolini.models.PokemonResult;
+import es.upm.miw.virgolini.models.Species;
 import es.upm.miw.virgolini.models.Type;
 import es.upm.miw.virgolini.models.TypeList;
 import retrofit2.Call;
@@ -94,10 +95,39 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                     TextView poke_weight = findViewById(R.id.weight);
                     setTextViewText(poke_weight, resp.getWeight() + " kg");
 
+                    getSpeciesData();
+
                 }
             }
             @Override
             public void onFailure(@NonNull Call<Pokemon> call, @NonNull Throwable t) {
+                Log.d(LOG_TAG, "Error");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void getSpeciesData(){
+        IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
+        Call<Species> pokemonCall = apiService.getPokemonSpecies(String.valueOf(poke.getNum()));
+
+        pokemonCall.enqueue(new Callback<Species>() {
+            @Override
+            public void onResponse(@NonNull Call<Species> call, @NonNull Response<Species> response) {
+                if (response.isSuccessful()){
+                    Species resp = response.body();
+                    assert resp != null;
+                    Log.d(LOG_TAG, "Capture rate: " + String.valueOf(resp.getCaptureRate()));
+
+                    TextView poke_capt_rate = findViewById(R.id.poke_capt_rate);
+                    setTextViewText(poke_capt_rate, resp.getCaptureRate() + " %");
+
+                    TextView poke_happiness = findViewById(R.id.poke_happiness);
+                    setTextViewText(poke_happiness, String.valueOf(resp.getBaseHappiness()));
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<Species> call, @NonNull Throwable t) {
                 Log.d(LOG_TAG, "Error");
                 t.printStackTrace();
             }
@@ -112,7 +142,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
             String type_name = type.getName();
             type_name = type_name.substring(0, 1).toUpperCase() +
                     type_name.substring(1);
-            Log.d(LOG_TAG, type_name);
+            Log.d(LOG_TAG, "Type: " + type_name);
 
             addTextViewToLayout(type_layout, type_name, 20, 25, 25);
         }
@@ -127,9 +157,9 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
             String ability_name = ability.getName();
             ability_name = ability_name.substring(0, 1).toUpperCase() +
                     ability_name.substring(1);
-            Log.d(LOG_TAG, ability_name);
+            Log.d(LOG_TAG, "Ability: " + ability_name);
 
-            addTextViewToLayout(ability_layout, "- " + ability_name, 20, 150, 40);
+            addTextViewToLayout(ability_layout, "- " + ability_name, 20, 50, 25);
         }
     }
 
