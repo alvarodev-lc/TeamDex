@@ -56,6 +56,11 @@
     <string name="welcome">Welcome!</string>
 
     <string name="poke_type">Type:</string>
+    <string name="poke_ability">Abilities:</string>
+    <string name="poke_height">Height:</string>
+    <string name="poke_weight">Weight:</string>
+    <string name="poke_exp">Base experience:</string>
+    <string name="shiny_version">Shiny version:</string>
 
 
 </resources>

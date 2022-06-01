@@ -122,11 +122,11 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onPokemonClick(int position) {
+        PokemonResult pokemon = poke_list.get(position);
         Toast.makeText(PokedexActivity.this,
-                "Clicked", Toast.LENGTH_SHORT).show();
+               pokemon.getName() + " selected" , Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(this, PokemonActivity.class);
-        PokemonResult pokemon = poke_list.get(position);
         intent.putExtra("pokemon", pokemon);
         startActivity(intent);
     }

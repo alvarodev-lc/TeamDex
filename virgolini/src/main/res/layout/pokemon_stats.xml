@@ -13,35 +13,171 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="80dp"
             android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/pokeball"/>
-                <TextView
-                    android:id="@+id/poke_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"/>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/pokeball" />
+
+            <TextView
+                android:id="@+id/poke_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:textSize="30sp" />
+
+            <ImageView
+                android:id="@+id/poke_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="15dp"
+                android:scaleType="fitXY" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/type_layout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/type_desc"
+                android:textStyle="bold"
+                android:textColor="#016C4E"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/poke_type"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ability_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ability_desc"
+                android:textStyle="bold"
+                android:textColor="#016C4E"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/poke_ability"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/exp_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/exp_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:text="@string/poke_exp"
+                android:textColor="#016C4E"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/poke_exp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/height_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/height_desc"
+                android:textStyle="bold"
+                android:textColor="#016C4E"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/poke_height"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/wieght_layout"
+                android:layout_marginStart="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/weight_desc"
+                    android:textStyle="bold"
+                    android:textColor="#016C4E"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/poke_weight"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/shiny_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/shiny_desc"
+                android:textStyle="bold"
+                android:textColor="#016C4E"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
                 android:layout_marginTop="20dp"
-                android:text="@string/poke_type"/>
+                android:text="@string/shiny_version"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/shiny_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="5dp"
+                android:scaleType="fitXY" />
         </LinearLayout>
 
 
