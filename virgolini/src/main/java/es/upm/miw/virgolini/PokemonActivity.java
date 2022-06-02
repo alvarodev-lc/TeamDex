@@ -1,6 +1,7 @@
 package es.upm.miw.virgolini;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.Layout;
@@ -16,8 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.squareup.picasso.Picasso;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +92,12 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                     loadPokemonTypes(resp);
                     loadPokemonAbilities(resp);
 
+                    try {
+                        scrapPokemonPokedexInfo(resp);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     TextView poke_exp = findViewById(R.id.poke_exp);
                     setTextViewText(poke_exp, resp.getExperience() + " xp");
                     TextView poke_height = findViewById(R.id.height);
@@ -137,14 +147,56 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         LinearLayout type_layout =  findViewById(R.id.type_layout);
 
         List<TypeList> list_type_list = pokemon.getTypes();
-        for(TypeList tipo_list: list_type_list){
-            Type type = tipo_list.getType();
-            String type_name = type.getName();
-            type_name = type_name.substring(0, 1).toUpperCase() +
-                    type_name.substring(1);
-            Log.d(LOG_TAG, "Type: " + type_name);
 
-            addTextViewToLayout(type_layout, type_name, 20, 25, 25);
+        Integer type_list_size = list_type_list.size();
+
+        if (type_list_size == 1) {
+            String pokemon_type1 = list_type_list.get(0).getType().getName();
+            String pokemon_type2 = list_type_list.get(1).getType().getName();
+
+            // Capitalize first letter of each word
+            String[] words = pokemon_type1.split(" ");
+            StringBuilder sb = new StringBuilder();
+
+            for (String s : words) {
+                sb.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
+            }
+
+            String pokemon_type1_capitalized = sb.toString().trim();
+
+            Log.d(LOG_TAG, "Type 1: " + pokemon_type1);
+
+            String pokemon_type = pokemon_type1_capitalized;
+            addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
+        } else if (type_list_size == 2) {
+            String pokemon_type1 = list_type_list.get(0).getType().getName();
+            String pokemon_type2 = list_type_list.get(1).getType().getName();
+
+            // Capitalize first letter of each word
+            String[] words = pokemon_type1.split(" ");
+            StringBuilder sb = new StringBuilder();
+
+            for (String s : words) {
+                sb.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
+            }
+
+            String pokemon_type1_capitalized = sb.toString().trim();
+
+            String[] words2 = pokemon_type2.split(" ");
+            StringBuilder sb2 = new StringBuilder();
+
+            for (String s : words2) {
+                sb2.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
+            }
+
+            String pokemon_type2_capitalized = sb2.toString().trim();
+
+            Log.d(LOG_TAG, "Type 1: " + pokemon_type1);
+            Log.d(LOG_TAG, "Type 2: " + pokemon_type2);
+
+            String pokemon_type = pokemon_type1_capitalized + "/" + pokemon_type2_capitalized;
+
+            addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
         }
     }
 
@@ -161,6 +213,40 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
             addTextViewToLayout(ability_layout, "- " + ability_name, 20, 50, 25);
         }
+    }
+
+    public void scrapPokemonPokedexInfo(Pokemon pokemon) throws IOException {
+        LinearLayout pokedex_desc_placeholder_layout = findViewById(R.id.pokedex_desc_placeholder_layout);
+        TextView pokedex_species_placeholder = findViewById(R.id.pokedex_species_placeholder);
+        TextView pokedex_desc_placeholder = findViewById(R.id.pokedex_desc_placeholder);
+
+        Integer pokemon_num = poke.getNum();
+
+        String url = "https://pokedex.org/#/pokemon/" + pokemon_num.toString();
+
+        new Thread(() -> {
+            try {
+                Document document = Jsoup.connect(url).get();
+                String monster_species = document.select("div.monster-species").text();
+                String monster_description = document.select("div.monster-description").text();
+
+                Log.d("Scrapping", "Monster species: " + monster_species);
+                Log.d("Scrapping", "Monster description: " + monster_description);
+
+                runOnUiThread(() -> {
+                    //addTextViewToLayout(pokedex_desc_placeholder_layout, monster_species, 20, 60, 25);
+                    //addTextViewToLayout(pokedex_desc_placeholder_layout, monster_description, 17, 60, 40);
+
+                    pokedex_species_placeholder.setText(monster_species);
+                    // underline monster_species
+                    pokedex_species_placeholder.setPaintFlags(pokedex_species_placeholder.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+                    pokedex_desc_placeholder.setText(monster_description);
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void addTextViewToLayout(LinearLayout layout, String name, int text_size, int left_margin, int top_margin){
