@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -152,7 +153,6 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
         if (type_list_size == 1) {
             String pokemon_type1 = list_type_list.get(0).getType().getName();
-            String pokemon_type2 = list_type_list.get(1).getType().getName();
 
             // Capitalize first letter of each word
             String[] words = pokemon_type1.split(" ");
@@ -216,32 +216,53 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void scrapPokemonPokedexInfo(Pokemon pokemon) throws IOException {
-        LinearLayout pokedex_desc_placeholder_layout = findViewById(R.id.pokedex_desc_placeholder_layout);
-        TextView pokedex_species_placeholder = findViewById(R.id.pokedex_species_placeholder);
-        TextView pokedex_desc_placeholder = findViewById(R.id.pokedex_desc_placeholder);
+        LinearLayout pokedex_description_layout = findViewById(R.id.pokedex_desc_layout);
+        TextView pokedex_summary = findViewById(R.id.pokedex_summary);
+        TextView pokedex_description = findViewById(R.id.pokedex_description);
+        TextView pokedex_summary_placeholder = findViewById(R.id.pokedex_summary_placeholder);
+        TextView pokedex_description_placeholder = findViewById(R.id.pokedex_description_placeholder);
 
         Integer pokemon_num = poke.getNum();
 
-        String url = "https://pokedex.org/#/pokemon/" + pokemon_num.toString();
+        Log.d("Scrapping", "Pokemon num: " + pokemon_num);
+
+        String url = "https://pokemon.gameinfo.io/en/pokemon/" + pokemon_num.toString() + "-" + poke.getName().toLowerCase();
+
+        Log.d("Scrapping", "URL: " + url);
 
         new Thread(() -> {
             try {
                 Document document = Jsoup.connect(url).get();
-                String monster_species = document.select("div.monster-species").text();
-                String monster_description = document.select("div.monster-description").text();
+                Elements description = document.body().select("p.description");
+                String pokemon_summary = description.get(0).text();
+                String pokemon_description = description.get(1).text();
 
-                Log.d("Scrapping", "Monster species: " + monster_species);
-                Log.d("Scrapping", "Monster description: " + monster_description);
+                Log.d("Scrapping", "Summary: " + pokemon_summary);
+                Log.d("Scrapping", "About: " + pokemon_description);
 
                 runOnUiThread(() -> {
                     //addTextViewToLayout(pokedex_desc_placeholder_layout, monster_species, 20, 60, 25);
                     //addTextViewToLayout(pokedex_desc_placeholder_layout, monster_description, 17, 60, 40);
 
-                    pokedex_species_placeholder.setText(monster_species);
+                    pokedex_summary_placeholder.setText(pokemon_summary);
                     // underline monster_species
-                    pokedex_species_placeholder.setPaintFlags(pokedex_species_placeholder.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                    pokedex_summary.setPaintFlags(pokedex_summary.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-                    pokedex_desc_placeholder.setText(monster_description);
+                    pokedex_description_placeholder.setText(pokemon_description);
+                    pokedex_description.setPaintFlags(pokedex_summary.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+                    // dynamically adjust the height of the description based on the number of characters
+                    int number_of_lines = pokemon_description.length() / 30;
+                    if (number_of_lines > 1) {
+                        pokedex_description_layout.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT));
+                    }
+
+                    // move the layout to the top
+                    pokedex_description_layout.setY(50);
+
+
                 });
             } catch (IOException e) {
                 e.printStackTrace();
