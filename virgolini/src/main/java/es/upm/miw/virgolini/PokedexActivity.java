@@ -6,7 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import androidx.appcompat.widget.SearchView;
+
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,13 +37,13 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
     private int offset;
     private boolean charge_allowed;
     private String LOG_TAG = "poke_api";
+    private int POKEMON_MAX_RESULTS = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.pokemon_recyclerview);
-
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         pokemonListAdapter = new PokemonListAdapter(this);
@@ -48,21 +54,21 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            super.onScrolled(recyclerView, dx, dy);
 
-                if(dy > 0) {
-                    int totalItemCount = layoutManager.getItemCount();
-                    int visibleItemCount = layoutManager.getChildCount();
-                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+            if(dy > 0) {
+                int totalItemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+                int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
 
-                    if (charge_allowed) {
-                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount){
-                            charge_allowed = false;
-                            offset += 20;
-                            getPokemonData(offset);
-                        }
+                if (charge_allowed) {
+                    if ((visibleItemCount + pastVisibleItems) >= totalItemCount){
+                        charge_allowed = false;
+                        offset += 20;
+                        getPokemonData(offset);
                     }
                 }
+            }
             }
         });
 
@@ -77,9 +83,67 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
         offset = 0;
         getPokemonData(offset);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // below line is to get our inflater
+        MenuInflater inflater = getMenuInflater();
+
+        // inside inflater we are inflating our menu file.
+        inflater.inflate(R.menu.search_menu, menu);
+
+        // below line is to get our menu item.
+        MenuItem searchItem = menu.findItem(R.id.actionSearch);
+
+        // getting search view of our item.
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        // below line is to call set on query text listener method.
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // inside on query text change method we are
+                // calling a method to filter our recycler view.
+                filter(query);
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    private void filter(String query) {
+        // creating a new array list to filter our data.
+        ArrayList<PokemonResult> filteredlist = new ArrayList<>();
+
+        // running a for loop to compare elements.
+        for (PokemonResult pokemon: poke_list){
+            // checking if the entered string matched with any item of our recycler view.
+            if (pokemon.getName().toLowerCase().contains(query.toLowerCase())) {
+                // if the item is matched we are
+                // adding it to our filtered list.
+                filteredlist.add(pokemon);
+            }
+        }
+        if (filteredlist.isEmpty()) {
+            // if no item is added in filtered list we are
+            // displaying a toast message as no data found.
+            Toast.makeText(this, "No pokémons found...", Toast.LENGTH_SHORT).show();
+        } else {
+            // at last we are passing that filtered
+            // list to our adapter class.
+            pokemonListAdapter.filterList(filteredlist);
+        }
+    }
+
     private void getPokemonData(int offset){
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
-        Call<PokemonList> pokemonResultCall = apiService.getAllPokemon(20, offset);
+        Call<PokemonList> pokemonResultCall = apiService.getAllPokemon(POKEMON_MAX_RESULTS, offset);
 
         pokemonResultCall.enqueue(new Callback<PokemonList>() {
             @Override
