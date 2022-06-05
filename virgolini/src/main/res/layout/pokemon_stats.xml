@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
@@ -314,7 +315,23 @@
                 android:scaleType="fitXY" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/poke_stats_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/poke_stats"
+            android:textColor="#016C4E"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
+        <com.github.mikephil.charting.charts.HorizontalBarChart
+            android:id="@+id/stats_bar_chart"
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="19dp"/>
     </LinearLayout>
-
 </ScrollView>

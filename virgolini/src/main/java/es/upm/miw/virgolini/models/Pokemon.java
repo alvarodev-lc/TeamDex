@@ -34,6 +34,10 @@ public class Pokemon {
     @Expose
     private String weight = null;
 
+    @SerializedName("stats")
+    @Expose
+    private List<Stat> stats = null;
+
     public List<TypeList> getTypes() {
         return types;
     }
@@ -85,5 +89,13 @@ public class Pokemon {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public List<Stat> getStats() {
+        return stats;
+    }
+
+    public void setStats(List<Stat> stats) {
+        this.stats = stats;
     }
 }

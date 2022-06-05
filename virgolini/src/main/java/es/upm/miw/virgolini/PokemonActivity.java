@@ -1,6 +1,7 @@
 package es.upm.miw.virgolini;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.Image;
 import android.os.Bundle;
@@ -15,6 +16,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -24,6 +37,8 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import es.upm.miw.virgolini.models.Ability;
@@ -31,6 +46,8 @@ import es.upm.miw.virgolini.models.AbilityList;
 import es.upm.miw.virgolini.models.Pokemon;
 import es.upm.miw.virgolini.models.PokemonResult;
 import es.upm.miw.virgolini.models.Species;
+import es.upm.miw.virgolini.models.Stat;
+import es.upm.miw.virgolini.models.StatName;
 import es.upm.miw.virgolini.models.Type;
 import es.upm.miw.virgolini.models.TypeList;
 import retrofit2.Call;
@@ -44,6 +61,18 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     private Retrofit retrofit;
     private String LOG_TAG = "pokemon_activity";
     private PokemonResult poke;
+
+    // variable for our bar chart
+    private BarChart barChart;
+
+    // variable for our bar data.
+    private BarData barData;
+
+    // variable for our bar data set.
+    private BarDataSet barDataSet;
+
+    // array list for storing entries.
+    ArrayList barEntriesArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +92,16 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                 .build();
 
         getPokemonData();
-        }
+    }
 
-    private void getPokemonData(){
+    private void getPokemonData() {
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
         Call<Pokemon> pokemonCall = apiService.getPokemon(String.valueOf(poke.getNum()));
 
         pokemonCall.enqueue(new Callback<Pokemon>() {
             @Override
             public void onResponse(@NonNull Call<Pokemon> call, @NonNull Response<Pokemon> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     Pokemon resp = response.body();
                     assert resp != null;
 
@@ -81,13 +110,13 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
                     ImageView sprite_view = findViewById(R.id.poke_image);
                     String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/" +
-                            "master/sprites/pokemon/"+ poke.getNum() +".png";
+                            "master/sprites/pokemon/" + poke.getNum() + ".png";
                     addImageView(sprite_url, sprite_view);
 
                     ImageView shiny_sprite_view = findViewById(R.id.shiny_image);
                     String shiny_sprite_url =
                             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/" +
-                                    "pokemon/shiny/" + poke.getNum() +".png";
+                                    "pokemon/shiny/" + poke.getNum() + ".png";
                     addImageView(shiny_sprite_url, shiny_sprite_view);
 
                     loadPokemonTypes(resp);
@@ -108,8 +137,11 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
                     getSpeciesData();
 
+                    loadStats(resp);
+
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<Pokemon> call, @NonNull Throwable t) {
                 Log.d(LOG_TAG, "Error");
@@ -118,14 +150,14 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void getSpeciesData(){
+    private void getSpeciesData() {
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
         Call<Species> pokemonCall = apiService.getPokemonSpecies(String.valueOf(poke.getNum()));
 
         pokemonCall.enqueue(new Callback<Species>() {
             @Override
             public void onResponse(@NonNull Call<Species> call, @NonNull Response<Species> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     Species resp = response.body();
                     assert resp != null;
                     Log.d(LOG_TAG, "Capture rate: " + String.valueOf(resp.getCaptureRate()));
@@ -137,6 +169,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                     setTextViewText(poke_happiness, String.valueOf(resp.getBaseHappiness()));
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<Species> call, @NonNull Throwable t) {
                 Log.d(LOG_TAG, "Error");
@@ -144,8 +177,9 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-    public void loadPokemonTypes(Pokemon pokemon){
-        LinearLayout type_layout =  findViewById(R.id.type_layout);
+
+    public void loadPokemonTypes(Pokemon pokemon) {
+        LinearLayout type_layout = findViewById(R.id.type_layout);
 
         List<TypeList> list_type_list = pokemon.getTypes();
 
@@ -200,11 +234,11 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void loadPokemonAbilities(Pokemon pokemon){
-        LinearLayout ability_layout =  findViewById(R.id.ability_layout);
+    public void loadPokemonAbilities(Pokemon pokemon) {
+        LinearLayout ability_layout = findViewById(R.id.ability_layout);
 
         List<AbilityList> list_ability_list = pokemon.getAbilities();
-        for(AbilityList ability_list: list_ability_list){
+        for (AbilityList ability_list : list_ability_list) {
             Ability ability = ability_list.getAbility();
             String ability_name = ability.getName();
             ability_name = ability_name.substring(0, 1).toUpperCase() +
@@ -270,7 +304,145 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         }).start();
     }
 
-    public void addTextViewToLayout(LinearLayout layout, String name, int text_size, int left_margin, int top_margin){
+    public void loadStats(Pokemon pokemon) {
+        List<Stat> list_stat_list = pokemon.getStats();
+        // initializing variable for bar chart.
+        barChart = findViewById(R.id.stats_bar_chart);
+
+        barEntriesArrayList = new ArrayList<>();
+
+        String[] stat_names = new String[list_stat_list.size()];
+
+        // create hashmap for stat names and values
+        HashMap<String, String> stat_hashmap = new HashMap<>();
+        stat_hashmap.put("hp", "HP");
+        stat_hashmap.put("attack", "Atk");
+        stat_hashmap.put("defense", "Def");
+        stat_hashmap.put("special-attack", "SpA");
+        stat_hashmap.put("special-defense", "SpD");
+        stat_hashmap.put("speed", "Spe");
+
+        HashMap<String, Integer> stats_order_hashmap = new HashMap<>();
+        stats_order_hashmap.put("hp", 0);
+        stats_order_hashmap.put("attack", 1);
+        stats_order_hashmap.put("defense", 2);
+        stats_order_hashmap.put("special-attack", 3);
+        stats_order_hashmap.put("special-defense", 4);
+        stats_order_hashmap.put("speed", 5);
+
+        //reorder list of stats based on order of stats_order_hashmap
+        List<Stat> ordered_list_stat_list = new ArrayList<>();
+        for (Stat stat_value : list_stat_list) {
+            StatName stat = stat_value.getStat();
+            String stat_name = stat.getName();
+            Log.d("reorder", "Stat name: " + stat_name + "Position: " + stats_order_hashmap.get(stat.getName()));
+            ordered_list_stat_list.add(stats_order_hashmap.get(stat_name), stat_value);
+        }
+
+        for (Stat stat_value : ordered_list_stat_list) {
+            int index = ordered_list_stat_list.indexOf(stat_value);
+            StatName stat = stat_value.getStat();
+            String stat_name = stat_hashmap.get(stat.getName());
+
+            Integer stat_base_stat = stat_value.getBaseStat();
+            Log.d("poke_stats", "Index: " + index + " Stat: " + stat_name + " - " + stat_base_stat);
+
+            // adding new entry to our array list with bar
+            // entry and passing x and y axis value to it.
+            barEntriesArrayList.add(new BarEntry(index, stat_base_stat));
+
+            stat_names[index] = stat_name;
+        }
+
+        // creating a new bar data set.
+        barDataSet = new BarDataSet(barEntriesArrayList, "Stats");
+
+        // creating a new bar data and
+        // passing our bar data set.
+        barData = new BarData(barDataSet);
+
+        // below line is to set data
+        // to our bar chart.
+        barChart.setData(barData);
+
+        // set the colors of the bars
+        int[] colors = new int[] {
+                Color.rgb(239, 71, 111),
+                Color.rgb(237, 142, 80),
+                Color.rgb(255, 209, 82),
+                Color.rgb(6, 204, 160),
+                Color.rgb(17, 155, 198),
+                Color.rgb(164, 164, 255),
+        };
+
+        barDataSet.setColors(colors);
+
+        // setting text color.
+        barDataSet.setValueTextColor(Color.BLACK);
+
+        // setting text size
+        barDataSet.setValueTextSize(25f);
+
+        // set column label
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(stat_names));
+
+        barChart.setNoDataText("Loading stats...");
+
+        int max = list_stat_list.size();
+        barChart.getAxisLeft().setLabelCount(max);
+
+        // disable grid lines
+        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getXAxis().setDrawGridLines(false);
+
+        // remove legend
+        barChart.getLegend().setEnabled(false);
+
+        // remove description
+        barChart.getDescription().setEnabled(false);
+
+        // make it non interactive
+        barChart.setTouchEnabled(false);
+        barChart.setPinchZoom(false);
+
+        // put y values at the right of each bar
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getAxisLeft().setEnabled(false);
+
+        barDataSet.setDrawValues(true);
+        barDataSet.setValueTextColor(Color.BLACK);
+        barDataSet.setValueTextSize(12f);
+
+        YAxis left = barChart.getAxisLeft();
+        left.setAxisMinimum(0f);
+
+        // format y values as integers
+        barDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.valueOf((int) value);
+            }
+        });
+
+        // add extra space to the left of the chart
+        barChart.setExtraLeftOffset(10f);
+        barChart.setExtraRightOffset(20f);
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        // set bar width
+        barData.setBarWidth(0.6f);
+
+        // increase x axis label size
+        xAxis.setTextSize(13f);
+
+        barChart.invalidate();
+        barChart.refreshDrawableState();
+    }
+
+    public void addTextViewToLayout(LinearLayout layout, String name, int text_size, int left_margin, int top_margin) {
         TextView type_view = new TextView(PokemonActivity.this);
         type_view.setText(name);
         type_view.setTextSize(text_size);
@@ -279,16 +451,16 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-        lp.setMargins(left_margin,top_margin,7,0);
+        lp.setMargins(left_margin, top_margin, 7, 0);
         type_view.setLayoutParams(lp);
         layout.addView(type_view);
     }
 
-    public void addImageView(String url, ImageView sprite_view){
+    public void addImageView(String url, ImageView sprite_view) {
         Picasso.get().load(url).into(sprite_view);
     }
 
-    public void setTextViewText(TextView view, String text){
+    public void setTextViewText(TextView view, String text) {
         view.setText(text);
     }
 

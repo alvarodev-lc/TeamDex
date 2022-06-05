@@ -64,6 +64,7 @@
     <string name="poke_happiness">Base happiness:</string>
     <string name="shiny_version">Shiny version:</string>
     <string name="pokedex_info">Pokédex Description</string>
+    <string name="poke_stats">Stats</string>
 
 
 </resources>
