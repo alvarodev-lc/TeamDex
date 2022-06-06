@@ -89,4 +89,8 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     public interface OnPokemonClickListener{
         void onPokemonClick(int position);
     }
+
+    public ArrayList<PokemonResult> getData() {
+        return data;
+    }
 }

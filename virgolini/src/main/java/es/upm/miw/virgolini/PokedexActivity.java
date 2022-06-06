@@ -1,5 +1,6 @@
 package es.upm.miw.virgolini;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.view.View;
 import androidx.appcompat.widget.SearchView;
 
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import es.upm.miw.virgolini.models.Pokemon;
 import es.upm.miw.virgolini.models.PokemonResult;
 import es.upm.miw.virgolini.models.PokemonList;
 import retrofit2.Call;
@@ -184,9 +187,19 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
         int i = v.getId();
     }
 
+
+
     @Override
     public void onPokemonClick(int position) {
-        PokemonResult pokemon = poke_list.get(position);
+        ArrayList<PokemonResult> poke_list_new = pokemonListAdapter.getData();
+        PokemonResult pokemon = poke_list_new.get(position);
+
+        String poke_name = pokemon.getName();
+        String poke_url = pokemon.getUrl();
+        String poke_id = poke_url.substring(poke_url.length() - 2, poke_url.length() - 1);
+        int poke_id_num = Integer.parseInt(poke_id);
+        Log.d("poke_click", poke_name + " " + poke_id_num);
+
         Toast.makeText(PokedexActivity.this,
                pokemon.getName() + " selected" , Toast.LENGTH_SHORT).show();
 
