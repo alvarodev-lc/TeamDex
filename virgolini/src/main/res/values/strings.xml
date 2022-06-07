@@ -66,6 +66,8 @@
     <string name="pokedex_info">Pokédex Description</string>
     <string name="poke_stats">Stats</string>
 
+    <string name="button_pokedex">Pokédex</string>
+    <string name="button_teams">Pokéteam</string>
 
 </resources>
 

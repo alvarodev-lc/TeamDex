@@ -19,6 +19,8 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import es.upm.miw.virgolini.models.PokemonMainActivity;
+
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
 
     static final String LOG_TAG = "vg";
@@ -115,7 +117,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(LogInActivity.this,
                                     "Authentication successful", Toast.LENGTH_SHORT).show();
                             Intent api_call_activity = new Intent(LogInActivity.this,
-                                    PokedexActivity.class);
+                                    PokemonMainActivity.class);
                             startActivity(api_call_activity);
 
                             // Here we should instantiate a new intent to move forward
