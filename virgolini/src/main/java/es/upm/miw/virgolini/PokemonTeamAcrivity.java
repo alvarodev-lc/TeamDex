@@ -1,4 +1,4 @@
-package es.upm.miw.virgolini.models;
+package es.upm.miw.virgolini;
 
 import android.os.Bundle;
 

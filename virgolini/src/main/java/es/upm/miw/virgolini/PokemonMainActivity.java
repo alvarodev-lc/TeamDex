@@ -1,4 +1,4 @@
-package es.upm.miw.virgolini.models;
+package es.upm.miw.virgolini;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,6 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import es.upm.miw.virgolini.PokedexActivity;
-import es.upm.miw.virgolini.R;
 
 public class PokemonMainActivity extends AppCompatActivity {
 
