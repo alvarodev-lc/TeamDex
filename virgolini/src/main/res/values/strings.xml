@@ -67,7 +67,11 @@
     <string name="poke_stats">Stats</string>
 
     <string name="button_pokedex">Pokédex</string>
-    <string name="button_teams">Pokéteam</string>
+    <string name="button_team_builder">Team Builder</string>
+    <string name="title_activity_main">Pokédex</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>
 
