@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/poke_card_view"
+    android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="0dp"
+    card_view:cardCornerRadius="5dp"
+    card_view:contentPadding="15dp">
 
-    <ImageView
-        android:id="@+id/poke_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_gravity="center_horizontal"/>
+        <ImageView
+            android:id="@+id/poke_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="-20dp"/>
 
-    <TextView
-        android:id="@+id/poke_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
-
-    </LinearLayout>
+        <TextView
+            android:id="@+id/poke_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:fontFamily="Roboto"
+            android:paddingTop="75dp"
+            android:textFontWeight="600"
+            android:textSize="15dp"/>
+    </androidx.cardview.widget.CardView>

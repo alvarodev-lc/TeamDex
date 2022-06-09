@@ -475,4 +475,8 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
 
     }
+
+    public Retrofit getRetrofitInstance() {
+        return retrofit;
+    }
 }
