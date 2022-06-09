@@ -1,11 +1,11 @@
-package es.upm.miw.virgolini.models;
+package es.upm.mssde.pokedex.models;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("jsonschema2pojo")
-public class StatName {
+public class Type {
 
     @SerializedName("name")
     @Expose

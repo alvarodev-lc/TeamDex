@@ -1,5 +1,5 @@
-package es.upm.miw.virgolini;
-import es.upm.miw.virgolini.models.*;
+package es.upm.mssde.pokedex;
+import es.upm.mssde.pokedex.models.*;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

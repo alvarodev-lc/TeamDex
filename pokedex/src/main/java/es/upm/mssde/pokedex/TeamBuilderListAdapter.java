@@ -1,4 +1,4 @@
-package es.upm.miw.virgolini;
+package es.upm.mssde.pokedex;
 
 import android.content.Context;
 import android.view.LayoutInflater;

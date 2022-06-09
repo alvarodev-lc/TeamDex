@@ -1,14 +1,11 @@
-package es.upm.miw.virgolini;
+package es.upm.mssde.pokedex;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.Image;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,39 +14,32 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import es.upm.miw.virgolini.models.Ability;
-import es.upm.miw.virgolini.models.AbilityList;
-import es.upm.miw.virgolini.models.Pokemon;
-import es.upm.miw.virgolini.models.PokemonResult;
-import es.upm.miw.virgolini.models.Species;
-import es.upm.miw.virgolini.models.Stat;
-import es.upm.miw.virgolini.models.StatName;
-import es.upm.miw.virgolini.models.Type;
-import es.upm.miw.virgolini.models.TypeList;
+import es.upm.mssde.pokedex.models.Ability;
+import es.upm.mssde.pokedex.models.AbilityList;
+import es.upm.mssde.pokedex.models.Pokemon;
+import es.upm.mssde.pokedex.models.PokemonResult;
+import es.upm.mssde.pokedex.models.Species;
+import es.upm.mssde.pokedex.models.Stat;
+import es.upm.mssde.pokedex.models.StatName;
+import es.upm.mssde.pokedex.models.TypeList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

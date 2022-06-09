@@ -1,4 +1,4 @@
-package es.upm.miw.virgolini.models;
+package es.upm.mssde.pokedex.models;
 
 import java.util.List;
 import javax.annotation.Generated;

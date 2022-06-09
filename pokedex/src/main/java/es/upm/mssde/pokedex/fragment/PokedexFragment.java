@@ -1,4 +1,4 @@
-package es.upm.miw.virgolini.fragment;
+package es.upm.mssde.pokedex.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,12 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import es.upm.miw.virgolini.IPokemonEndpoint;
-import es.upm.miw.virgolini.PokemonActivity;
-import es.upm.miw.virgolini.PokemonListAdapter;
-import es.upm.miw.virgolini.R;
-import es.upm.miw.virgolini.models.PokemonList;
-import es.upm.miw.virgolini.models.PokemonResult;
+import es.upm.mssde.pokedex.IPokemonEndpoint;
+import es.upm.mssde.pokedex.PokemonActivity;
+import es.upm.mssde.pokedex.PokemonListAdapter;
+import es.upm.mssde.pokedex.R;
+import es.upm.mssde.pokedex.models.PokemonList;
+import es.upm.mssde.pokedex.models.PokemonResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

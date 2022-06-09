@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="es.upm.miw.virgolini">
+    package="es.upm.mssde.pokedex">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -17,14 +17,14 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".FragmentActivity"
+            android:name="es.upm.mssde.pokedex.FragmentActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".LogInActivity"
+            android:name="es.upm.mssde.pokedex.LogInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,29 +33,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name="es.upm.mssde.pokedex.SignUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".PokedexActivity"
+            android:name="es.upm.mssde.pokedex.PokedexActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".PokemonActivity"
+            android:name="es.upm.mssde.pokedex.PokemonActivity"
             android:exported="true"
-            android:parentActivityName=".FragmentActivity">
+            android:parentActivityName="es.upm.mssde.pokedex.FragmentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".PokemonTeamActivity"
+            android:name="es.upm.mssde.pokedex.PokemonTeamActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

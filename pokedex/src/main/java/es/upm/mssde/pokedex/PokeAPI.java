@@ -1,17 +1,15 @@
-package es.upm.miw.virgolini;
+package es.upm.mssde.pokedex;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicReference;
 
-import es.upm.miw.virgolini.models.Pokemon;
-import es.upm.miw.virgolini.models.PokemonList;
-import es.upm.miw.virgolini.models.PokemonResult;
+import es.upm.mssde.pokedex.models.Pokemon;
+import es.upm.mssde.pokedex.models.PokemonList;
+import es.upm.mssde.pokedex.models.PokemonResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

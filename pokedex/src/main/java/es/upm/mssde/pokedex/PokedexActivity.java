@@ -1,11 +1,9 @@
-package es.upm.miw.virgolini;
+package es.upm.mssde.pokedex;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,8 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import androidx.appcompat.widget.SearchView;
 
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,9 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import es.upm.miw.virgolini.models.Pokemon;
-import es.upm.miw.virgolini.models.PokemonResult;
-import es.upm.miw.virgolini.models.PokemonList;
+import es.upm.mssde.pokedex.models.PokemonResult;
+import es.upm.mssde.pokedex.models.PokemonList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

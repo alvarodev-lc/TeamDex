@@ -1,6 +1,4 @@
-package es.upm.miw.virgolini.models;
-
-import android.util.Log;
+package es.upm.mssde.pokedex.models;
 
 import java.util.List;
 import javax.annotation.Generated;

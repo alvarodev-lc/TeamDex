@@ -1,15 +1,13 @@
-package es.upm.miw.virgolini.fragment;
+package es.upm.mssde.pokedex.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import es.upm.miw.virgolini.R;
+import es.upm.mssde.pokedex.R;
 
 public class PokemonTeamBuilderFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package es.upm.miw.virgolini;
+package es.upm.mssde.pokedex;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,9 +7,9 @@ import android.widget.RadioButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import es.upm.miw.virgolini.fragment.PokedexFragment;
-import es.upm.miw.virgolini.fragment.PokemonTeamBuilderFragment;
-import es.upm.miw.virgolini.fragment.TeamBuilderFragment;
+import es.upm.mssde.pokedex.R;
+import es.upm.mssde.pokedex.fragment.PokedexFragment;
+import es.upm.mssde.pokedex.fragment.TeamBuilderFragment;
 
 public class FragmentActivity extends AppCompatActivity implements View.OnClickListener {
 

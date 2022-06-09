@@ -1,4 +1,4 @@
-package es.upm.miw.virgolini;
+package es.upm.mssde.pokedex;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import es.upm.miw.virgolini.models.AbilityList;
-import es.upm.miw.virgolini.models.Pokemon;
-import es.upm.miw.virgolini.models.Stat;
-import es.upm.miw.virgolini.models.Type;
-import es.upm.miw.virgolini.models.TypeList;
+import es.upm.mssde.pokedex.models.AbilityList;
+import es.upm.mssde.pokedex.models.Pokemon;
+import es.upm.mssde.pokedex.models.Stat;
+import es.upm.mssde.pokedex.models.Type;
+import es.upm.mssde.pokedex.models.TypeList;
 
 public class TeamDatabase extends SQLiteOpenHelper {
     private static final String DB_NAME = "TEAM";

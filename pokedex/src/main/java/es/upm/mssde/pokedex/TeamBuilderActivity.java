@@ -1,12 +1,10 @@
-package es.upm.miw.virgolini.fragment;
+package es.upm.mssde.pokedex;
 
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -15,50 +13,37 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
-import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import es.upm.miw.virgolini.PokeAPI;
-import es.upm.miw.virgolini.R;
-import es.upm.miw.virgolini.TeamBuilderListAdapter;
-import es.upm.miw.virgolini.TeamDatabase;
-import es.upm.miw.virgolini.models.Pokemon;
-import es.upm.miw.virgolini.models.PokemonResult;
+import es.upm.mssde.pokedex.models.Pokemon;
+import es.upm.mssde.pokedex.models.PokemonResult;
 
-public class TeamBuilderFragment extends Fragment {
+public class TeamBuilderActivity extends AppCompatActivity {
 
     private TeamDatabase teamDatabase;
     private ArrayList<Pokemon> team;
     private int[] teamButtonResources;
     private PokeAPI pokeAPI;
-    private View view;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = View.inflate(getActivity(), R.layout.team_builder, null);
+        setContentView(R.layout.team_builder);
 
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         this.team = new ArrayList<>();
-        teamDatabase = new TeamDatabase(getActivity());
+        teamDatabase = new TeamDatabase(TeamBuilderActivity.this);
 
         this.teamButtonResources = new int[]{R.id.member1, R.id.member2, R.id.member3, R.id.member4, R.id.member5, R.id.member6};
 
         pokeAPI = new PokeAPI();
 
-        SearchView searchBox = view.findViewById(R.id.searchbox);
+        SearchView searchBox = findViewById(R.id.searchbox);
         searchBox.setQueryHint("Search for a Specific Pokemon");
 
         searchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -66,9 +51,9 @@ public class TeamBuilderFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 updateTeamBuilderListView(searchPokemon(query));
                 InputMethodManager inputManager = (InputMethodManager)
-                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
 
                 return false;
@@ -100,7 +85,7 @@ public class TeamBuilderFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         teamDatabase.close();
         super.onDestroy();
     }
@@ -131,9 +116,9 @@ public class TeamBuilderFragment extends Fragment {
         }
 
         TeamBuilderListAdapter adapter =
-                new TeamBuilderListAdapter(getActivity(), names);
+                new TeamBuilderListAdapter(TeamBuilderActivity.this, names);
 
-        ListView lv = view.findViewById(R.id.dexView);
+        ListView lv = findViewById(R.id.dexView);
 
         lv.post(new Runnable() {
             @Override
@@ -159,7 +144,7 @@ public class TeamBuilderFragment extends Fragment {
     public int getPokemonSprite(String num) {
         String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/" +  "master/sprites/pokemon/" + num + ".png";
 
-        return getResources().getIdentifier(sprite_url, "drawable", getActivity().getPackageName());
+        return getResources().getIdentifier(sprite_url, "drawable", getPackageName());
     }
 
     public void addToTeam(Pokemon poke) {
@@ -169,39 +154,39 @@ public class TeamBuilderFragment extends Fragment {
         if (team.size() < 6) {
             switch (team.size()) {
                 case 0:
-                    imgBtn = view.findViewById(R.id.member1);
+                    imgBtn = findViewById(R.id.member1);
                     imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = view.findViewById(R.id.member1_name);
+                    txtView = findViewById(R.id.member1_name);
                     txtView.setText(poke.getName());
                     break;
                 case 1:
-                    imgBtn = view.findViewById(R.id.member2);
+                    imgBtn = findViewById(R.id.member2);
                     imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = view.findViewById(R.id.member2_name);
+                    txtView = findViewById(R.id.member2_name);
                     txtView.setText(poke.getName());
                     break;
                 case 2:
-                    imgBtn = view.findViewById(R.id.member3);
+                    imgBtn = findViewById(R.id.member3);
                     imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = view.findViewById(R.id.member3_name);
+                    txtView = findViewById(R.id.member3_name);
                     txtView.setText(poke.getName());
                     break;
                 case 3:
-                    imgBtn = view.findViewById(R.id.member4);
+                    imgBtn = findViewById(R.id.member4);
                     imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = view.findViewById(R.id.member4_name);
+                    txtView = findViewById(R.id.member4_name);
                     txtView.setText(poke.getName());
                     break;
                 case 4:
-                    imgBtn = view.findViewById(R.id.member5);
+                    imgBtn = findViewById(R.id.member5);
                     imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = view.findViewById(R.id.member5_name);
+                    txtView = findViewById(R.id.member5_name);
                     txtView.setText(poke.getName());
                     break;
                 case 5:
-                    imgBtn = view.findViewById(R.id.member6);
+                    imgBtn = findViewById(R.id.member6);
                     imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = view.findViewById(R.id.member6_name);
+                    txtView = findViewById(R.id.member6_name);
                     txtView.setText(poke.getName());
                     break;
                 default:
@@ -211,7 +196,7 @@ public class TeamBuilderFragment extends Fragment {
 
             team.add(poke);
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG);
         }
     }
 
@@ -278,7 +263,7 @@ public class TeamBuilderFragment extends Fragment {
         ImageButton imgBttn;
 
         for (int i = 0; i < 6; i++) {
-            imgBttn = view.findViewById(teamButtonResources[i]);
+            imgBttn = findViewById(teamButtonResources[i]);
 
             if (i >= team.size()) {
                 imgBttn.setImageResource(R.drawable.pokeball);
@@ -297,7 +282,7 @@ public class TeamBuilderFragment extends Fragment {
 
     public void saveTeam(View view) {
         if (team.size() == 0) {
-            Toast.makeText(getActivity().getApplicationContext(), "Team is empty!", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Team is empty!", Toast.LENGTH_LONG);
             return;
         }
 
@@ -312,6 +297,6 @@ public class TeamBuilderFragment extends Fragment {
 
         teamDatabase.addTeam(team);
 
-        Toast.makeText(getActivity().getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
+        Toast.makeText(getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
     }
 }

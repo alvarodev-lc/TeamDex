@@ -1,11 +1,11 @@
-package es.upm.miw.virgolini;
+package es.upm.mssde.pokedex;
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import es.upm.miw.virgolini.R;
+import es.upm.mssde.pokedex.R;
 
 public class PokemonTeamActivity extends AppCompatActivity {
 

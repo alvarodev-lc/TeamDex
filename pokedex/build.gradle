@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "es.upm.miw.virgolini"
+        applicationId "es.upm.mssde.pokedex"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
