@@ -9,9 +9,6 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("jsonschema2pojo")
 public class Pokemon {
-    @SerializedName("id")
-    @Expose
-    private String num = null;
 
     @SerializedName("types")
     @Expose
@@ -40,14 +37,6 @@ public class Pokemon {
     @SerializedName("stats")
     @Expose
     private List<Stat> stats = null;
-
-    public String getNum() {
-        return num;
-    }
-
-    public void setNum(String num) {
-        this.num = num;
-    }
 
     public List<TypeList> getTypes() {
         return types;
