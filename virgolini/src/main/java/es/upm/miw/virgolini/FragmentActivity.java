@@ -8,12 +8,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import es.upm.miw.virgolini.fragment.PokedexFragment;
-import es.upm.miw.virgolini.fragment.PokemonTeamBuilderFragment;
+import es.upm.miw.virgolini.fragment.TeamBuilderFragment;
 
 public class FragmentActivity extends AppCompatActivity implements View.OnClickListener {
 
     private PokedexFragment pokedexFragment;
-    private PokemonTeamBuilderFragment pokemonTeamBuilderFragment;
+    private TeamBuilderFragment teamBuilderFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
 
     private void initData() {
         pokedexFragment = new PokedexFragment();
-        pokemonTeamBuilderFragment = new PokemonTeamBuilderFragment();
+        teamBuilderFragment = new TeamBuilderFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, pokedexFragment).commit();
     }
@@ -46,7 +46,7 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
         if (v.getId() == R.id.rb_pokedex) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, pokedexFragment).commit();
         } else if (v.getId() == R.id.rb_team_builder) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, pokemonTeamBuilderFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, teamBuilderFragment).commit();
         }
     }
 }
