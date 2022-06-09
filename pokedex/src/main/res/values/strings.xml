@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Amitkemon</string>
+    <string name="app_name">PAS - Pokédex</string>
 
     <string name="label_emailpassword">Email/Password Authentication</string>
     <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
