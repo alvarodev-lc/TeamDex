@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:clipToPadding="false" />
 
-        <LinearLayout
+        <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -46,6 +46,6 @@
                 android:text="@string/button_team_builder"
                 android:textSize="13dp" />
 
-        </LinearLayout>
+        </RadioGroup>
 
 </LinearLayout>
