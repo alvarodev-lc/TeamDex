@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">PAS-Pokédex</string>
+    <string name="app_name">Virgolini</string>
 
     <string name="label_emailpassword">Email/Password Authentication</string>
     <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
 
-    <string name="label_anonymous_auth">PAS-Pokédex</string>
+    <string name="label_anonymous_auth">Virgolini</string>
 
     <string name="hint_user_id">User ID</string>
     <string name="sign_in">Sign In</string>
@@ -67,7 +67,11 @@
     <string name="poke_stats">Stats</string>
 
     <string name="button_pokedex">Pokédex</string>
-    <string name="button_teams">Pokéteam</string>
+    <string name="button_team_builder">Team Builder</string>
+    <string name="title_activity_main">Pokédex</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>
 
