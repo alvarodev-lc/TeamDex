@@ -1,6 +1,7 @@
 package es.upm.mssde.pokedex;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -21,6 +23,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -170,10 +173,9 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
     public void loadPokemonTypes(Pokemon pokemon) {
         LinearLayout type_layout = findViewById(R.id.type_layout);
-
         List<TypeList> list_type_list = pokemon.getTypes();
-
         Integer type_list_size = list_type_list.size();
+        String pokemon_type = "";
 
         if (type_list_size == 1) {
             String pokemon_type1 = list_type_list.get(0).getType().getName();
@@ -190,8 +192,11 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
             Log.d(LOG_TAG, "Type 1: " + pokemon_type1);
 
-            String pokemon_type = pokemon_type1_capitalized;
-            addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
+            //pokemon_type = pokemon_type1_capitalized;
+
+            //addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
+
+            addCardView(type_layout, pokemon_type1_capitalized);
         } else if (type_list_size == 2) {
             String pokemon_type1 = list_type_list.get(0).getType().getName();
             String pokemon_type2 = list_type_list.get(1).getType().getName();
@@ -218,16 +223,85 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
             Log.d(LOG_TAG, "Type 1: " + pokemon_type1);
             Log.d(LOG_TAG, "Type 2: " + pokemon_type2);
 
-            String pokemon_type = pokemon_type1_capitalized + "/" + pokemon_type2_capitalized;
+            //pokemon_type = pokemon_type1_capitalized + "/" + pokemon_type2_capitalized;
 
-            addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
+            //addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
+
+            addCardView(type_layout, pokemon_type1_capitalized);
+            addCardView(type_layout, pokemon_type2_capitalized);
         }
+    }
+
+    public void addCardView(LinearLayout layout, String text) {
+        // create round card view and add the ability_name
+        CardView cardView = new CardView(this);
+        // change width and height of the card
+        cardView.setRadius(100);
+        cardView.setCardElevation(0);
+        cardView.setContentPadding(20, 20, 20, 20);
+        //set background color to material color
+        cardView.setCardBackgroundColor(getMatColor(text));
+        // set margin right in card view
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(25, 0, 5, 0);
+        cardView.setLayoutParams(params);
+        // add the ability_name to the card view
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setTextSize(16);
+        textView.setTextColor(Color.WHITE);
+        cardView.addView(textView);
+        // add the card view to the layout
+        layout.addView(cardView);
+    }
+
+    // function that given a type of pokemon, returns a material design color
+    public int getMatColor(String typeColor) {
+        HashMap<String, String> matColor = new HashMap<>();
+        matColor.put("Grass", "#A4C639");
+        matColor.put("Poison", "#A33EA1");
+        matColor.put("Fire", "#EE8130");
+        matColor.put("Water", "#6390F0");
+        matColor.put("Bug", "#A6B91A");
+        matColor.put("Normal", "#A8A77A");
+        matColor.put("Electric", "#F7D02C");
+        matColor.put("Ground", "#D9A664");
+        matColor.put("Fairy", "#F4B1F4");
+        matColor.put("Fighting", "#C22E28");
+        matColor.put("Psychic", "#F95587");
+        matColor.put("Rock", "#B6A136");
+        matColor.put("Ice", "#96D9D6");
+        matColor.put("Ghost", "#735797");
+        matColor.put("Dragon", "#6F35FC");
+        matColor.put("Dark", "#705746");
+        matColor.put("Steel", "#B7B7CE");
+
+        return Color.parseColor(matColor.get(typeColor));
+    }
+
+    private int getMatColorRandom(String typeColor)
+    {
+        int returnColor = Color.BLACK;
+        int arrayId = getResources().getIdentifier("mdcolor_" + typeColor, "array", getApplicationContext().getPackageName());
+
+        if (arrayId != 0)
+        {
+            TypedArray colors = getResources().obtainTypedArray(arrayId);
+            int index = (int) (Math.random() * colors.length());
+            returnColor = colors.getColor(index, Color.BLACK);
+            colors.recycle();
+        }
+        return returnColor;
     }
 
     public void loadPokemonAbilities(Pokemon pokemon) {
         LinearLayout ability_layout = findViewById(R.id.ability_layout);
 
         List<AbilityList> list_ability_list = pokemon.getAbilities();
+
         for (AbilityList ability_list : list_ability_list) {
             Ability ability = ability_list.getAbility();
             String ability_name = ability.getName();
@@ -235,7 +309,30 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                     ability_name.substring(1);
             Log.d(LOG_TAG, "Ability: " + ability_name);
 
-            addTextViewToLayout(ability_layout, "- " + ability_name, 20, 50, 25);
+            //addTextViewToLayout(ability_layout, "+ " + ability_name, 20, 50, 25);
+            // create round card view and add the ability_name
+            CardView cardView = new CardView(this);
+            // change width and height of the card
+            cardView.setRadius(100);
+            cardView.setCardElevation(0);
+            cardView.setContentPadding(20, 20, 20, 20);
+            //set background color to material green
+            cardView.setCardBackgroundColor(getMatColorRandom("400"));
+            // set margin right in card view
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(25, 0, 5, 0);
+            cardView.setLayoutParams(params);
+            // add the ability_name to the card view
+            TextView textView = new TextView(this);
+            textView.setText(ability_name);
+            textView.setTextSize(16);
+            textView.setTextColor(Color.WHITE);
+            cardView.addView(textView);
+            // add the card view to the layout
+            ability_layout.addView(cardView);
         }
     }
 
@@ -356,7 +453,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         barChart.setData(barData);
 
         // set the colors of the bars
-        int[] colors = new int[] {
+        int[] colors = new int[]{
                 Color.rgb(239, 71, 111),
                 Color.rgb(237, 142, 80),
                 Color.rgb(255, 209, 82),
@@ -427,6 +524,10 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
         // increase x axis label size
         xAxis.setTextSize(13f);
+
+        CircleHorizontalBarChartRenderer renderer = new CircleHorizontalBarChartRenderer(barChart, barChart.getAnimator(), barChart.getViewPortHandler());
+        renderer.initBuffers();
+        barChart.setRenderer(renderer);
 
         barChart.invalidate();
         barChart.refreshDrawableState();

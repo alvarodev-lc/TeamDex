@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     public void onBindViewHolder (ViewHolder holder, int position){
         PokemonResult poke = data.get(position);
         holder.poke_name.setText(poke.getName());
+        int poke_num = poke.getNum();
+        // fill with zeros until the number is 3 digits
+        String poke_num_str = "#" + String.format("%03d", poke_num);
+        holder.poke_num.setText(poke_num_str);
 
         Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.getNum() + ".png")
             .into(holder.poke_image);
@@ -120,6 +125,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public CardView cardView;
+        public TextView poke_num;
         private ImageView poke_image;
         private TextView poke_name;
         private OnPokemonClickListener onPokemonClickListener;
@@ -128,8 +134,9 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         public ViewHolder(View v, OnPokemonClickListener onPokemonClickListener) {
             super(v);
             cardView = v.findViewById(R.id.poke_card_view);
-            poke_image = (ImageView) v.findViewById(R.id.poke_image);
-            poke_name = (TextView) v.findViewById(R.id.poke_name);
+            poke_num = v.findViewById(R.id.poke_num);
+            poke_image = v.findViewById(R.id.poke_image);
+            poke_name = v.findViewById(R.id.poke_name);
             this.onPokemonClickListener = onPokemonClickListener;
 
             v.setOnClickListener(this);
