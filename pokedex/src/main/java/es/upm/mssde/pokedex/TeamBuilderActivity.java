@@ -73,7 +73,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         ArrayList<String> results = new ArrayList<>();
 
         if (pokeAPI.poke_list.size() == 0) {
-            pokeAPI.getAllPokemons();
+            pokeAPI.getPokemons(1000);
         }
 
         for (PokemonResult pokemon : pokeAPI.poke_list) {

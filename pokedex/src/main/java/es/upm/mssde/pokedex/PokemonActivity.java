@@ -196,7 +196,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
             //addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
 
-            addCardView(type_layout, pokemon_type1_capitalized);
+            addCardView(type_layout, pokemon_type1_capitalized, -1);
         } else if (type_list_size == 2) {
             String pokemon_type1 = list_type_list.get(0).getType().getName();
             String pokemon_type2 = list_type_list.get(1).getType().getName();
@@ -227,20 +227,20 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
             //addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
 
-            addCardView(type_layout, pokemon_type1_capitalized);
-            addCardView(type_layout, pokemon_type2_capitalized);
+            addCardView(type_layout, pokemon_type1_capitalized, -1);
+            addCardView(type_layout, pokemon_type2_capitalized, -1);
         }
     }
 
-    public void addCardView(LinearLayout layout, String text) {
+    public void addCardView(LinearLayout layout, String text, int i) {
         // create round card view and add the ability_name
         CardView cardView = new CardView(this);
         // change width and height of the card
         cardView.setRadius(100);
-        cardView.setCardElevation(0);
+        cardView.setCardElevation(4);
         cardView.setContentPadding(20, 20, 20, 20);
         //set background color to material color
-        cardView.setCardBackgroundColor(getMatColor(text));
+        cardView.setCardBackgroundColor(Color.parseColor("#FAFAFA"));
         // set margin right in card view
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -252,18 +252,23 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextSize(16);
-        textView.setTextColor(Color.WHITE);
+        if (i != -1) {
+            textView.setTextColor(getMaterialColorSeq(i));
+        } else {
+            textView.setTextColor(getMaterialColorType(text));
+        }
         cardView.addView(textView);
         // add the card view to the layout
         layout.addView(cardView);
     }
 
     // function that given a type of pokemon, returns a material design color
-    public int getMatColor(String typeColor) {
+    public int getMaterialColorType(String typeColor) {
+        Log.d("COLOR_REQUEST_POKE_TYPE", "Type: " + typeColor);
         HashMap<String, String> matColor = new HashMap<>();
-        matColor.put("Grass", "#A4C639");
+        matColor.put("Grass", "#7a8a06");
         matColor.put("Poison", "#A33EA1");
-        matColor.put("Fire", "#EE8130");
+        matColor.put("Fire", "#e6653e");
         matColor.put("Water", "#6390F0");
         matColor.put("Bug", "#A6B91A");
         matColor.put("Normal", "#A8A77A");
@@ -278,29 +283,28 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         matColor.put("Dragon", "#6F35FC");
         matColor.put("Dark", "#705746");
         matColor.put("Steel", "#B7B7CE");
+        matColor.put("Flying", "#d0c0fc");
 
         return Color.parseColor(matColor.get(typeColor));
     }
 
-    private int getMatColorRandom(String typeColor)
+    private int getMaterialColorSeq(int index)
     {
-        int returnColor = Color.BLACK;
-        int arrayId = getResources().getIdentifier("mdcolor_" + typeColor, "array", getApplicationContext().getPackageName());
+        HashMap<Integer, Integer> matColor = new HashMap<>();
+        matColor.put(0, Color.parseColor("#388baf"));
+        matColor.put(1, Color.parseColor("#5f3061"));
+        matColor.put(2, Color.parseColor("#ef4d46"));
+        matColor.put(3, Color.parseColor("#f4e7e3"));
 
-        if (arrayId != 0)
-        {
-            TypedArray colors = getResources().obtainTypedArray(arrayId);
-            int index = (int) (Math.random() * colors.length());
-            returnColor = colors.getColor(index, Color.BLACK);
-            colors.recycle();
-        }
-        return returnColor;
+        return matColor.get(index);
     }
 
     public void loadPokemonAbilities(Pokemon pokemon) {
         LinearLayout ability_layout = findViewById(R.id.ability_layout);
 
         List<AbilityList> list_ability_list = pokemon.getAbilities();
+
+        int i = 0;
 
         for (AbilityList ability_list : list_ability_list) {
             Ability ability = ability_list.getAbility();
@@ -311,28 +315,30 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
             //addTextViewToLayout(ability_layout, "+ " + ability_name, 20, 50, 25);
             // create round card view and add the ability_name
-            CardView cardView = new CardView(this);
+            //CardView cardView = new CardView(this);
             // change width and height of the card
-            cardView.setRadius(100);
-            cardView.setCardElevation(0);
-            cardView.setContentPadding(20, 20, 20, 20);
+            //cardView.setRadius(100);
+            //cardView.setCardElevation(4);
+            //cardView.setContentPadding(20, 20, 20, 20);
             //set background color to material green
-            cardView.setCardBackgroundColor(getMatColorRandom("400"));
+            //cardView.setCardBackgroundColor(getMaterialColor(i));
+            //cardView.setCardBackgroundColor(Color.argb(255, 240, 240, 240));
             // set margin right in card view
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(25, 0, 5, 0);
-            cardView.setLayoutParams(params);
+            //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            //params.setMargins(25, 0, 5, 0);
+            //cardView.setLayoutParams(params);
             // add the ability_name to the card view
-            TextView textView = new TextView(this);
-            textView.setText(ability_name);
-            textView.setTextSize(16);
-            textView.setTextColor(Color.WHITE);
-            cardView.addView(textView);
+            //TextView textView = new TextView(this);
+            //textView.setText(ability_name);
+            //textView.setTextSize(16);
+            //textView.setTextColor(getMaterialColor(i));
+            //cardView.addView(textView);
             // add the card view to the layout
-            ability_layout.addView(cardView);
+            //ability_layout.addView(cardView);
+
+            addCardView(ability_layout, ability_name, i);
+
+            i++;
         }
     }
 

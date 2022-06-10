@@ -3,9 +3,12 @@ package es.upm.mssde.pokedex;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
 
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonList;
@@ -16,12 +19,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PokeAPI {
+public class PokeAPI implements MyObservable {
 
     private Retrofit retrofit;
-    private final int POKEMON_MAX_RESULTS = 100;
+    public int POKEMON_MAX_RESULTS = 100;
     public ArrayList<PokemonResult> poke_list;
     private Pokemon queryPokemon;
+    private List<MyObserver> myObservers;
 
     public PokeAPI() {
         String base_url = "https://pokeapi.co/api/v2/";
@@ -32,6 +36,7 @@ public class PokeAPI {
                 .build();
 
         poke_list = new ArrayList<>();
+        myObservers = new ArrayList<>();
     }
 
     public void getPokemonData(int poke_num) {
@@ -59,9 +64,10 @@ public class PokeAPI {
         });
     }
 
-    public void getAllPokemons(){
+    public void getPokemons(int offset){
+        Log.d("getPokemonData", "offset: " + offset);
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
-        Call<PokemonList> pokemonResultCall = apiService.getAllPokemon(POKEMON_MAX_RESULTS, 0);
+        Call<PokemonList> pokemonResultCall = apiService.getAllPokemon(POKEMON_MAX_RESULTS, offset);
 
         pokemonResultCall.enqueue(new Callback<PokemonList>() {
             @Override
@@ -72,6 +78,7 @@ public class PokeAPI {
                     assert Pokemons != null;
                     ArrayList<PokemonResult> Pokemon_list = Pokemons.getResults();
                     poke_list.addAll(Pokemon_list);
+                    notifyObserversPokemonData();
                 }
             }
             @Override
@@ -106,5 +113,28 @@ public class PokeAPI {
 
     public Pokemon getQueryPokemon() {
         return queryPokemon;
+    }
+
+    public void setPokemonMaxResults(int POKEMON_MAX_RESULTS) {
+        this.POKEMON_MAX_RESULTS = POKEMON_MAX_RESULTS;
+    }
+
+    @Override
+    public void addObserver(MyObserver myObserver) {
+        Log.d("addObserver", "New observer added");
+        this.myObservers.add(myObserver);
+    }
+
+    @Override
+    public void removeObserver(MyObserver myObserver) {
+        this.myObservers.remove(myObserver);
+    }
+
+    @Override
+    public void notifyObserversPokemonData() {
+        for (MyObserver myObserver : myObservers) {
+            Log.d("notifyObserversPokemonData", "Notifying observer");
+            myObserver.onPokemonDataChanged(poke_list);
+        }
     }
 }

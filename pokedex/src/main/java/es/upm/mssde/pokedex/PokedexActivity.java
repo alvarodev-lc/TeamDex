@@ -29,14 +29,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PokedexActivity extends AppCompatActivity implements View.OnClickListener, PokemonListAdapter.OnPokemonClickListener {
 
-    private Retrofit retrofit;
     private RecyclerView recyclerView;
     private PokemonListAdapter pokemonListAdapter;
     private ArrayList<PokemonResult> poke_list = new ArrayList<PokemonResult>();
-    private int offset;
     private boolean charge_allowed;
-    private String LOG_TAG = "poke_api";
-    private int POKEMON_MAX_RESULTS = 100;
+    private PokeAPI pokeAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,24 +60,17 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
                 if (charge_allowed) {
                     if ((visibleItemCount + pastVisibleItems) >= totalItemCount){
                         charge_allowed = false;
-                        offset += 20;
-                        getPokemonData(offset);
+                        pokemonListAdapter.refreshPokemonData();
                     }
                 }
             }
             }
         });
 
-        String base_url = "https://pokeapi.co/api/v2/";
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(base_url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        pokeAPI = new PokeAPI();
 
         charge_allowed = true;
-        offset = 0;
-        getPokemonData(offset);
+        pokemonListAdapter.refreshPokemonData();
     }
 
     @Override
@@ -138,37 +128,6 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
             // list to our adapter class.
             pokemonListAdapter.filterList(filteredlist);
         }
-    }
-
-    private void getPokemonData(int offset){
-        IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
-        Call<PokemonList> pokemonResultCall = apiService.getAllPokemon(POKEMON_MAX_RESULTS, offset);
-
-        pokemonResultCall.enqueue(new Callback<PokemonList>() {
-            @Override
-            public void onResponse(@NonNull Call<PokemonList> call, @NonNull Response<PokemonList> response) {
-                charge_allowed = true;
-                if (response.isSuccessful()){
-                    PokemonList Pokemons = response.body();
-                    Log.d(LOG_TAG, response.message());
-                    assert Pokemons != null;
-                    ArrayList<PokemonResult> Pokemon_list = Pokemons.getResults();
-                    poke_list.addAll(Pokemon_list);
-                    for(PokemonResult Pokemon: Pokemon_list){
-                        String name = Pokemon.getName();
-                        Log.d(LOG_TAG, name);
-                        Log.d(LOG_TAG, Pokemon.getUrl());
-                    }
-                    pokemonListAdapter.addPokemonList(Pokemon_list);
-                }
-            }
-            @Override
-            public void onFailure(@NonNull Call<PokemonList> call, @NonNull Throwable t) {
-                charge_allowed = true;
-                Log.d(LOG_TAG, "Error");
-                t.printStackTrace();
-            }
-        });
     }
 
 

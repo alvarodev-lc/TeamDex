@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -21,14 +24,27 @@ import java.util.List;
 
 import es.upm.mssde.pokedex.models.PokemonResult;
 
-public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder>{
+public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder> implements MyObserver {
 
-    private ArrayList<PokemonResult> data;
+    public ArrayList<PokemonResult> data;
     private OnPokemonClickListener onPokemonClickListener;
+    private PokeAPI pokeAPI;
+    public final int POKEMON_MAX_RESULTS = 100;
+    int offset = 0;
 
     public PokemonListAdapter(OnPokemonClickListener onPokemonClickListener) {
         data = new ArrayList<>();
+        pokeAPI = new PokeAPI();
         this.onPokemonClickListener = onPokemonClickListener;
+        pokeAPI.addObserver(this);
+        pokeAPI.setPokemonMaxResults(POKEMON_MAX_RESULTS);
+    }
+
+    public void refreshPokemonData() {
+        Log.d("POKEMON_LIST_ADAPTER", "Refreshing pokemon data");
+        Log.d("POKEMON_LIST_ADAPTER", "Offset: " + offset);
+        pokeAPI.getPokemons(offset);
+        offset += POKEMON_MAX_RESULTS;
     }
 
     @NonNull
@@ -62,7 +78,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
                         (int) (Color.green(color) * 1.1 + 20),
                         (int) (Color.blue(color) * 1.1 + 20)
                 );
-                Log.d("POKEMON_LIST_ADAPTER", "color: " + mutedColor);
+                // Log.d("POKEMON_LIST_ADAPTER", "color: " + mutedColor);
                 holder.cardView.setCardBackgroundColor(mutedColor);
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -112,6 +128,10 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         notifyDataSetChanged();
     }
 
+    public int getPokemonMaxResults() {
+        return POKEMON_MAX_RESULTS;
+    }
+
     @Override
     public int getItemCount() {
         Log.d("poke_api", String.valueOf(data.size()));
@@ -120,6 +140,13 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
     public void filterList(ArrayList<PokemonResult> filteredList) {
         data = filteredList;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPokemonDataChanged(ArrayList<PokemonResult> pokemon_list) {
+        Log.d("POKEMON_LIST_ADAPTER", "onPokemonDataChanged");
+        data = pokemon_list;
         notifyDataSetChanged();
     }
 
