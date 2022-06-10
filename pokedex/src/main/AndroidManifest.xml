@@ -55,7 +55,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="es.upm.mssde.pokedex.PokemonTeamActivity"
+            android:name="es.upm.mssde.pokedex.TeamBuilderActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

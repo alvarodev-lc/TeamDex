@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 import es.upm.mssde.pokedex.models.AbilityList;
+import es.upm.mssde.pokedex.models.PokeDB;
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.Stat;
 import es.upm.mssde.pokedex.models.Type;
@@ -128,25 +129,40 @@ public class TeamDatabase extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE name ='" + name + "'");
     }
 
-    public ArrayList<Pair<String, String>> retrieveTeam() {
+    public ArrayList<PokeDB> retrieveTeam() {
         SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<Pair<String, String>> dexList = new ArrayList<>();
+        ArrayList<PokeDB> team = new ArrayList<>();
 
-        String query = "SELECT " + NAME_COL + ", " + TYPE_COL + " FROM " + TABLE_NAME;
+        String query = "SELECT " + NUM_COL + ", " + NAME_COL + ", " + TYPE_COL + " FROM " + TABLE_NAME;
         Cursor cursor = db.rawQuery(query, null);
 
         int i = 0;
         while (cursor.moveToNext()) {
+            int col_num = cursor.getColumnIndex(NUM_COL);
+            String num = cursor.getString(col_num);
+
             int colIndex = cursor.getColumnIndex(NAME_COL);
             String name = cursor.getString(colIndex);
 
             colIndex = cursor.getColumnIndex(TYPE_COL);
             String types = cursor.getString(colIndex);
+            // types to arraylist
+            String[] typeArray = types.split("/");
 
-            dexList.add(i, new Pair<>(name, types));
+            if (typeArray.length == 1) {
+                Type type = new Type();
+                type.setName(typeArray[0]);
+                team.add(i, new PokeDB(num, name, type));
+            } else {
+                Type type1 = new Type();
+                type1.setName(typeArray[0]);
+                Type type2 = new Type();
+                type2.setName(typeArray[1]);
+                team.add(i, new PokeDB(num, name, type1, type2));
+            }
             i++;
         }
-        return dexList;
+        return team;
     }
 
     public Pokemon getPokemon(String givenName) {

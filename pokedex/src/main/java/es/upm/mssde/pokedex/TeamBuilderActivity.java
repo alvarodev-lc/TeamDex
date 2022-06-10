@@ -2,27 +2,37 @@ package es.upm.mssde.pokedex;
 
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.util.Pair;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import es.upm.mssde.pokedex.models.PokeDB;
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
+import es.upm.mssde.pokedex.models.Type;
+import es.upm.mssde.pokedex.models.TypeList;
 
 public class TeamBuilderActivity extends AppCompatActivity {
 
@@ -38,12 +48,10 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         this.team = new ArrayList<>();
         teamDatabase = new TeamDatabase(TeamBuilderActivity.this);
-
-        this.teamButtonResources = new int[]{R.id.member1, R.id.member2, R.id.member3, R.id.member4, R.id.member5, R.id.member6};
-
+        
         pokeAPI = new PokeAPI();
 
-        SearchView searchBox = findViewById(R.id.searchbox);
+        SearchView searchBox = findViewById(R.id.search_box);
         searchBox.setQueryHint("Search for a Specific Pokemon");
 
         searchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -85,24 +93,21 @@ public class TeamBuilderActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         teamDatabase.close();
         super.onDestroy();
     }
 
     private void loadTeamFromDB() {
-        ArrayList<Pair<String, String>> al = teamDatabase.retrieveTeam();
-        int[] teamRes = new int[al.size()];
+        ArrayList<PokeDB> al = teamDatabase.retrieveTeam();
 
         for (int i = 0; i < al.size(); i++) {
-            String name = al.get(i).first; // gets name
-            System.out.println(name.toLowerCase(Locale.ROOT));
-            Pokemon pokemon = teamDatabase.getPokemon(name);
-            team.add(pokemon);
-            teamRes[i] = getPokemonSprite(pokemon.getName().toLowerCase(Locale.ROOT));
+            String num = al.get(i).getNum();
+            String name = al.get(i).getName();
+            ArrayList<Type> type = al.get(i).getTypes();
+            Log.d("TeamBuilderFragment", "Loading team from DB: " + name + " " + type);
+            addCardView(num, name, type);
         }
-
-        updateTeamBuilderUI(teamRes);
     }
 
     private void updateTeamBuilderListView(ArrayList<String> poke_names) {
@@ -116,7 +121,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         }
 
         TeamBuilderListAdapter adapter =
-                new TeamBuilderListAdapter(TeamBuilderActivity.this, names);
+                new TeamBuilderListAdapter(this, names);
 
         ListView lv = findViewById(R.id.dexView);
 
@@ -127,77 +132,83 @@ public class TeamBuilderActivity extends AppCompatActivity {
             }
         });
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("search_on_click", "Clicked on " + position);
-                Pokemon poke = pokeAPI.getPokemonFromName(names[position].toLowerCase(Locale.ROOT));
+        lv.setOnItemClickListener((parent, view, position, id) -> {
+            Log.d("search_on_click", "Clicked on " + position);
+            Pokemon poke = pokeAPI.getPokemonFromName(names[position].toLowerCase(Locale.ROOT));
 
-                if (poke != null) {
-                    Log.d("search_on_click", "Added " + poke.getName());
-                    addToTeam(poke);
-                }
+            if (poke != null) {
+                Log.d("search_on_click", "Added " + poke.getName());
+                addToTeam(poke);
             }
         });
     }
 
     public int getPokemonSprite(String num) {
-        String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/" +  "master/sprites/pokemon/" + num + ".png";
+        String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/" + "master/sprites/pokemon/" + num + ".png";
 
-        return getResources().getIdentifier(sprite_url, "drawable", getPackageName());
+        return getResources().getIdentifier(sprite_url, "drawable", this.getPackageName());
     }
 
     public void addToTeam(Pokemon poke) {
-        ImageButton imgBtn;
-        TextView txtView;
-
         if (team.size() < 6) {
-            switch (team.size()) {
-                case 0:
-                    imgBtn = findViewById(R.id.member1);
-                    imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = findViewById(R.id.member1_name);
-                    txtView.setText(poke.getName());
-                    break;
-                case 1:
-                    imgBtn = findViewById(R.id.member2);
-                    imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = findViewById(R.id.member2_name);
-                    txtView.setText(poke.getName());
-                    break;
-                case 2:
-                    imgBtn = findViewById(R.id.member3);
-                    imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = findViewById(R.id.member3_name);
-                    txtView.setText(poke.getName());
-                    break;
-                case 3:
-                    imgBtn = findViewById(R.id.member4);
-                    imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = findViewById(R.id.member4_name);
-                    txtView.setText(poke.getName());
-                    break;
-                case 4:
-                    imgBtn = findViewById(R.id.member5);
-                    imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = findViewById(R.id.member5_name);
-                    txtView.setText(poke.getName());
-                    break;
-                case 5:
-                    imgBtn = findViewById(R.id.member6);
-                    imgBtn.setImageResource(getPokemonSprite(poke.getNum().toLowerCase(Locale.ROOT)));
-                    txtView = findViewById(R.id.member6_name);
-                    txtView.setText(poke.getName());
-                    break;
-                default:
+            PokeDB pokeDB = new PokeDB();
+            pokeDB.setNum(poke.getNum());
+            pokeDB.setName(poke.getName());
+            List<TypeList> poke_types = poke.getTypes();
+            if (poke_types.size() == 11) {
+                pokeDB.setType1(poke_types.get(0).getType());
+            } else {
+                pokeDB.setType1(poke_types.get(0).getType());
+                pokeDB.setType2(poke_types.get(1).getType());
             }
+            addCardView(pokeDB.getNum(), pokeDB.getName(), pokeDB.getTypes());
+            team.add(poke);
 
             Log.d("addToTeam", "Added " + poke.getName() + " to team");
-
-            team.add(poke);
         } else {
-            Toast.makeText(getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG);
+            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG);
         }
+    }
+
+    public void addCardView(String poke_num, String poke_name, ArrayList<Type> poke_types) {
+        LinearLayout team_list = findViewById(R.id.team_list);
+        // create carddview that contains the pokemon name, its types and its sprite
+        CardView cardView = new CardView(this);
+        cardView.setRadius(10);
+        cardView.setCardElevation(10);
+        cardView.setMaxCardElevation(10);
+        cardView.setUseCompatPadding(true);
+        cardView.setContentPadding(10, 10, 10, 10);
+        cardView.setPreventCornerOverlap(false);
+
+        cardView.setOnClickListener(v -> removePokemonFromView(v));
+
+        //add content to cardview
+        LinearLayout cardViewContent = new LinearLayout(this);
+        cardViewContent.setOrientation(LinearLayout.VERTICAL);
+        cardViewContent.setGravity(Gravity.CENTER);
+
+        TextView poke_name_view = new TextView(this);
+        poke_name_view.setText(poke_name);
+        poke_name_view.setTextSize(20);
+        poke_name_view.setTypeface(null, Typeface.BOLD);
+        poke_name_view.setGravity(Gravity.CENTER);
+
+        ImageView poke_sprite_view = new ImageView(this);
+        poke_sprite_view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        poke_sprite_view.setAdjustViewBounds(true);
+        poke_sprite_view.setMaxHeight(100);
+        poke_sprite_view.setMaxWidth(100);
+
+        Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke_num + ".png")
+                .into(poke_sprite_view);
+
+        cardViewContent.addView(poke_name_view);
+        cardViewContent.addView(poke_sprite_view);
+
+        cardView.addView(cardViewContent);
+
+        team_list.addView(cardView);
     }
 
     public void removePokemonFromView(View v) {
@@ -227,62 +238,17 @@ public class TeamBuilderActivity extends AppCompatActivity {
         }
 
         teamDatabase.delete(removeMe.getName());
-        updateTeamBuilderUI(teamRes);
-
-    }
-
-    public void removePokemon(int index) {
-        if (index > team.size()) return;
-
-        int[] teamRes = new int[team.size() - 1];
-
-        List<Pokemon> poke_list_temp = new CopyOnWriteArrayList<>();
-
-        for (Pokemon p : team) {
-            poke_list_temp.add(p);
-        }
-
-        Pokemon removeMe = poke_list_temp.get(index);
-
-        poke_list_temp.remove(index);
-
-        team = new ArrayList<>();
-
-        for (int i = 0; i < poke_list_temp.size(); i++) {
-            Pokemon tempP = poke_list_temp.get(i);
-            team.add(tempP);
-            teamRes[i] = getPokemonSprite(tempP.getName().toLowerCase(Locale.ROOT));
-        }
-
-        teamDatabase.delete(removeMe.getName());
-        updateTeamBuilderUI(teamRes);
-        ;
-    }
-
-    private void updateTeamBuilderUI(int[] teamRes) {
-        ImageButton imgBttn;
-
-        for (int i = 0; i < 6; i++) {
-            imgBttn = findViewById(teamButtonResources[i]);
-
-            if (i >= team.size()) {
-                imgBttn.setImageResource(R.drawable.pokeball);
-            } else {
-                imgBttn.setImageResource(teamRes[i]);
-            }
-        }
     }
 
     public void resetTeam(View v) {
-        int size = team.size();
-        for (int i = 0; i < size; i++) {
-            removePokemon(0);
-        }
+        // delete all pokemon from team_list
+        LinearLayout team_list = v.findViewById(R.id.team_list);
+        team_list.removeAllViews();
     }
 
     public void saveTeam(View view) {
         if (team.size() == 0) {
-            Toast.makeText(getApplicationContext(), "Team is empty!", Toast.LENGTH_LONG);
+            Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_LONG);
             return;
         }
 
@@ -297,6 +263,6 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         teamDatabase.addTeam(team);
 
-        Toast.makeText(getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
+        Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
     }
 }

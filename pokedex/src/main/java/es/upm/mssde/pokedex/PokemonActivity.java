@@ -362,10 +362,10 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                 Document document = Jsoup.connect(url).get();
                 Elements description = document.body().select("p.description");
                 String pokemon_summary = description.get(0).text();
-                String pokemon_description = description.get(1).text();
+                String pokemon_description = description.get(1).text().replaceAll("\"", "");
 
                 Log.d("Scrapping", "Summary: " + pokemon_summary);
-                Log.d("Scrapping", "About: " + pokemon_description);
+                Log.d("Scrapping", "Description: " + pokemon_description);
 
                 runOnUiThread(() -> {
                     //addTextViewToLayout(pokedex_desc_placeholder_layout, monster_species, 20, 60, 25);
