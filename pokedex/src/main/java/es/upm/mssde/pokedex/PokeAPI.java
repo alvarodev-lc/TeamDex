@@ -85,7 +85,8 @@ public class PokeAPI implements MyObservable {
                     assert Pokemons != null;
                     ArrayList<PokemonResult> Pokemon_list = Pokemons.getResults();
                     poke_list.addAll(Pokemon_list);
-                    notifyObserversPokemonData();
+                    Log.d("poke_api_all", "poke_list size: " + poke_list.size());
+                    notifyObserversPokemonsData();
                 }
             }
             @Override
@@ -133,6 +134,7 @@ public class PokeAPI implements MyObservable {
 
     @Override
     public void removeObserver(MyObserver myObserver) {
+        Log.d("removeObserver", "Observer removed");
         this.myObservers.remove(myObserver);
     }
 

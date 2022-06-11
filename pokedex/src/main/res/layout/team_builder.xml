@@ -8,69 +8,89 @@
     android:orientation="vertical"
     tools:context=".TeamBuilderActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/save_team"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:theme="@style/Theme.MaterialComponents"
-                android:text="Save"
-                android:textColor="@color/colorWhite"
-                app:cornerRadius="10dp"
-                app:backgroundTint="@color/colorPrimary"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/reset_team"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:theme="@style/Theme.MaterialComponents"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:text="Reset"
-                android:textColor="@android:color/holo_red_dark"
-                app:cornerRadius="10dp"
-                app:strokeColor="@android:color/holo_red_dark"/>
-
-        </RelativeLayout>
-
-        <SearchView
-            android:id="@+id/search_box"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:layout_marginTop="20dp"/>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/dexView"
-        android:layout_width="wrap_content"
-        android:layout_height="333dp"
-        android:divider="#000"
-        android:dividerHeight="1dp"
-        android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/team_list"
-        android:layout_width="372dp"
-        android:layout_height="74dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical"
-        android:paddingRight="85dp" />
+                <RelativeLayout
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/save_team"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:text="Save"
+                        android:textColor="@color/colorWhite"
+                        android:theme="@style/Theme.MaterialComponents"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/reset_team"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="Reset"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:theme="@style/Theme.MaterialComponents"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="@android:color/holo_red_dark" />
+
+                </RelativeLayout>
+
+                <SearchView
+                    android:id="@+id/search_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:iconifiedByDefault="false" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/dexView"
+                android:layout_width="wrap_content"
+                android:layout_height="333dp"
+                android:divider="#000"
+                android:dividerHeight="1dp"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/team_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+            </LinearLayout>
+    </ScrollView>
 </LinearLayout>

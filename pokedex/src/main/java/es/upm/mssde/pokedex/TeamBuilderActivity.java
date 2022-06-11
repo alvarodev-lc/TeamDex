@@ -51,7 +51,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         teamBuilderListAdapter = new TeamBuilderListAdapter(this);
 
         SearchView searchBox = findViewById(R.id.search_box);
-        searchBox.setQueryHint("Search for a Specific Pokemon");
+        searchBox.setQueryHint("Search for a Pokemon");
 
         searchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -68,6 +68,9 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String query) {
+                ListView lv_ = findViewById(R.id.dexView);
+                lv_.setVisibility(View.VISIBLE);
+
                 updateTeamBuilderListView(searchPokemon(query));
                 return false;
             }
@@ -75,14 +78,18 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         loadTeamFromDB();
 
-        teamBuilderListAdapter.getPokemonsData(1000);
+        teamBuilderListAdapter.getPokemonsData(100);
     }
 
     private ArrayList<PokemonResult> searchPokemon(String query) {
+        Log.d("POKEDEX_SEARCH", "Searching for: " + query);
         ArrayList<PokemonResult> results = new ArrayList<>();
+
+        Log.d("POKEDEX_SEARCH", teamBuilderListAdapter.poke_list.size() + " pokemons in list");
 
         for (PokemonResult pokemon : teamBuilderListAdapter.poke_list) {
             if (pokemon.getName().toLowerCase().contains(query.toLowerCase())) {
+                Log.d("POKEMON_FOUND", pokemon.getName());
                 results.add(pokemon);
             }
         }
@@ -128,23 +135,46 @@ public class TeamBuilderActivity extends AppCompatActivity {
             if (poke != null) {
                 Log.d("search_on_click", "Added " + poke.getName());
                 addToTeam(poke);
+
+                Toast.makeText(TeamBuilderActivity.this, "Added " + poke.getName(), Toast.LENGTH_SHORT).show();
+
+                // Remove the pokemon from the list
+                teamBuilderListAdapter.poke_list.remove(position);
+
+                // clear the search box
+                SearchView searchBox = findViewById(R.id.search_box);
+                searchBox.setQuery("", false);
+
+                // close the list view
+                ListView lv_ = findViewById(R.id.dexView);
+                lv_.setVisibility(View.GONE);
             }
         });
     }
 
     public int getPokemonSprite(String num) {
-        String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/" + "master/sprites/pokemon/" + num + ".png";
+        String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + num + ".png";
 
         return getResources().getIdentifier(sprite_url, "drawable", this.getPackageName());
     }
 
-    public void addToTeam(PokemonResult poke) {
+    public void addToTeamDB(PokemonResult poke) {
         if (team.size() < 6) {
             PokeDB pokeDB = new PokeDB();
             pokeDB.setNum(String.valueOf(poke.getNum()));
             pokeDB.setName(poke.getName());
 
-            addCardView(pokeDB.getNum(), pokeDB.getName());
+            team.add(poke);
+
+            Log.d("addToTeamDB", "Added " + poke.getName() + " to team");
+        } else {
+            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG);
+        }
+    }
+
+    public void addToTeam(PokemonResult poke) {
+        if (team.size() < 6) {
+            addCardView(String.valueOf(poke.getNum()), poke.getName());
             team.add(poke);
 
             Log.d("addToTeam", "Added " + poke.getName() + " to team");
@@ -157,18 +187,18 @@ public class TeamBuilderActivity extends AppCompatActivity {
         LinearLayout team_list = findViewById(R.id.team_list);
         // create carddview that contains the pokemon name, its types and its sprite
         CardView cardView = new CardView(this);
-        cardView.setRadius(10);
+        cardView.setRadius(100);
         cardView.setCardElevation(10);
         cardView.setMaxCardElevation(10);
         cardView.setUseCompatPadding(true);
-        cardView.setContentPadding(10, 10, 10, 10);
+        cardView.setContentPadding(30, 30, 30, 30);
         cardView.setPreventCornerOverlap(false);
 
         cardView.setOnClickListener(v -> removePokemonFromView(v));
 
         //add content to cardview
         LinearLayout cardViewContent = new LinearLayout(this);
-        cardViewContent.setOrientation(LinearLayout.VERTICAL);
+        cardViewContent.setOrientation(LinearLayout.HORIZONTAL);
         cardViewContent.setGravity(Gravity.CENTER);
 
         TextView poke_name_view = new TextView(this);
@@ -180,14 +210,19 @@ public class TeamBuilderActivity extends AppCompatActivity {
         ImageView poke_sprite_view = new ImageView(this);
         poke_sprite_view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         poke_sprite_view.setAdjustViewBounds(true);
-        poke_sprite_view.setMaxHeight(100);
-        poke_sprite_view.setMaxWidth(100);
+        poke_sprite_view.setMaxHeight(300);
+        poke_sprite_view.setMaxWidth(300);
+
+        // align sprite to left
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 10, 0);
+        poke_sprite_view.setLayoutParams(params);
 
         Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke_num + ".png")
                 .into(poke_sprite_view);
 
-        cardViewContent.addView(poke_name_view);
         cardViewContent.addView(poke_sprite_view);
+        cardViewContent.addView(poke_name_view);
 
         cardView.addView(cardViewContent);
 

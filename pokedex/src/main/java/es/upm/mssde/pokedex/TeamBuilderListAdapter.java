@@ -1,6 +1,7 @@
 package es.upm.mssde.pokedex;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class TeamBuilderListAdapter extends ArrayAdapter<String> implements MyOb
     }
 
     public void getPokemonsData(int num_pokes) {
+        Log.d("TEAM_BUILDER_LIST_ADAPTER", "Getting pokemon data");
         pokeAPI.getPokemonsData(num_pokes);
     }
 
@@ -72,6 +74,7 @@ public class TeamBuilderListAdapter extends ArrayAdapter<String> implements MyOb
 
     @Override
     public void onPokemonsDataChanged(ArrayList<PokemonResult> poke_list) {
+        Log.d("TEAM_BUILDER_LIST_ADAPTER", "Pokemons data recieved");
         this.poke_list = poke_list;
         notifyDataSetChanged();
     }
