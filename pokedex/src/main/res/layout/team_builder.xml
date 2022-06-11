@@ -5,14 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
+    android:orientation="vertical"
     tools:context=".TeamBuilderActivity">
 
-    <SearchView
-        android:id="@+id/search_box"
-        android:layout_width="250dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:hapticFeedbackEnabled="true"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save_team"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:theme="@style/Theme.MaterialComponents"
+                android:text="Save"
+                android:textColor="@color/colorWhite"
+                app:cornerRadius="10dp"
+                app:backgroundTint="@color/colorPrimary"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reset_team"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:theme="@style/Theme.MaterialComponents"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:text="Reset"
+                android:textColor="@android:color/holo_red_dark"
+                app:cornerRadius="10dp"
+                app:strokeColor="@android:color/holo_red_dark"/>
+
+        </RelativeLayout>
+
+        <SearchView
+            android:id="@+id/search_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/dexView"
@@ -24,28 +63,7 @@
         android:headerDividersEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </ListView>
-
-    <Button
-        android:id="@+id/reset_team"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginLeft="140dp"
-        android:layout_marginTop="176dp"
-        android:onClick="resetTeam"
-        android:text="Reset"/>
-
-    <Button
-        android:id="@+id/save_team"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:onClick="saveTeam"
-        android:text="Save"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/team_list"
@@ -54,6 +72,5 @@
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginTop="15dp"
         android:orientation="vertical"
-        android:paddingRight="85dp">
-    </LinearLayout>
+        android:paddingRight="85dp" />
 </LinearLayout>

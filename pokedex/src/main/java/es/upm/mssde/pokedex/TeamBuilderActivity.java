@@ -37,19 +37,18 @@ import es.upm.mssde.pokedex.models.TypeList;
 public class TeamBuilderActivity extends AppCompatActivity {
 
     private TeamDatabase teamDatabase;
-    private ArrayList<Pokemon> team;
-    private int[] teamButtonResources;
-    private PokeAPI pokeAPI;
+    private ArrayList<PokemonResult> team;
+    private TeamBuilderListAdapter teamBuilderListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.team_builder);
 
-        this.team = new ArrayList<>();
+        team = new ArrayList<>();
         teamDatabase = new TeamDatabase(TeamBuilderActivity.this);
-        
-        pokeAPI = new PokeAPI();
+
+        teamBuilderListAdapter = new TeamBuilderListAdapter(this);
 
         SearchView searchBox = findViewById(R.id.search_box);
         searchBox.setQueryHint("Search for a Specific Pokemon");
@@ -75,18 +74,16 @@ public class TeamBuilderActivity extends AppCompatActivity {
         });
 
         loadTeamFromDB();
+
+        teamBuilderListAdapter.getPokemonsData(1000);
     }
 
-    private ArrayList<String> searchPokemon(String query) {
-        ArrayList<String> results = new ArrayList<>();
+    private ArrayList<PokemonResult> searchPokemon(String query) {
+        ArrayList<PokemonResult> results = new ArrayList<>();
 
-        if (pokeAPI.poke_list.size() == 0) {
-            pokeAPI.getPokemons(1000);
-        }
-
-        for (PokemonResult pokemon : pokeAPI.poke_list) {
+        for (PokemonResult pokemon : teamBuilderListAdapter.poke_list) {
             if (pokemon.getName().toLowerCase().contains(query.toLowerCase())) {
-                results.add(pokemon.getName());
+                results.add(pokemon);
             }
         }
         return results;
@@ -106,22 +103,12 @@ public class TeamBuilderActivity extends AppCompatActivity {
             String name = al.get(i).getName();
             ArrayList<Type> type = al.get(i).getTypes();
             Log.d("TeamBuilderFragment", "Loading team from DB: " + name + " " + type);
-            addCardView(num, name, type);
+            addCardView(num, name);
         }
     }
 
-    private void updateTeamBuilderListView(ArrayList<String> poke_names) {
-        String[] names = new String[poke_names.size()];
-
-        int i = 0;
-        for (String name : poke_names) {
-            names[i] = name;
-            i++;
-
-        }
-
-        TeamBuilderListAdapter adapter =
-                new TeamBuilderListAdapter(this, names);
+    private void updateTeamBuilderListView(ArrayList<PokemonResult> poke_list) {
+        TeamBuilderListAdapter adapter = new TeamBuilderListAdapter(this, poke_list);
 
         ListView lv = findViewById(R.id.dexView);
 
@@ -134,7 +121,9 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         lv.setOnItemClickListener((parent, view, position, id) -> {
             Log.d("search_on_click", "Clicked on " + position);
-            Pokemon poke = pokeAPI.getPokemonFromName(names[position].toLowerCase(Locale.ROOT));
+            teamBuilderListAdapter.getPokemonData(position);
+
+            PokemonResult poke = poke_list.get(position);
 
             if (poke != null) {
                 Log.d("search_on_click", "Added " + poke.getName());
@@ -149,19 +138,13 @@ public class TeamBuilderActivity extends AppCompatActivity {
         return getResources().getIdentifier(sprite_url, "drawable", this.getPackageName());
     }
 
-    public void addToTeam(Pokemon poke) {
+    public void addToTeam(PokemonResult poke) {
         if (team.size() < 6) {
             PokeDB pokeDB = new PokeDB();
-            pokeDB.setNum(poke.getNum());
+            pokeDB.setNum(String.valueOf(poke.getNum()));
             pokeDB.setName(poke.getName());
-            List<TypeList> poke_types = poke.getTypes();
-            if (poke_types.size() == 11) {
-                pokeDB.setType1(poke_types.get(0).getType());
-            } else {
-                pokeDB.setType1(poke_types.get(0).getType());
-                pokeDB.setType2(poke_types.get(1).getType());
-            }
-            addCardView(pokeDB.getNum(), pokeDB.getName(), pokeDB.getTypes());
+
+            addCardView(pokeDB.getNum(), pokeDB.getName());
             team.add(poke);
 
             Log.d("addToTeam", "Added " + poke.getName() + " to team");
@@ -170,7 +153,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         }
     }
 
-    public void addCardView(String poke_num, String poke_name, ArrayList<Type> poke_types) {
+    public void addCardView(String poke_num, String poke_name) {
         LinearLayout team_list = findViewById(R.id.team_list);
         // create carddview that contains the pokemon name, its types and its sprite
         CardView cardView = new CardView(this);
@@ -219,20 +202,20 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         int[] teamRes = new int[team.size() - 1];
 
-        List<Pokemon> myList = new CopyOnWriteArrayList<>();
+        List<PokemonResult> myList = new CopyOnWriteArrayList<>();
 
-        for (Pokemon p : team) {
+        for (PokemonResult p : team) {
             myList.add(p);
         }
 
-        Pokemon removeMe = myList.get(index - 1);
+        PokemonResult removeMe = myList.get(index - 1);
 
         myList.remove(index - 1);
 
         team = new ArrayList<>();
 
         for (int i = 0; i < myList.size(); i++) {
-            Pokemon tempP = myList.get(i);
+            PokemonResult tempP = myList.get(i);
             team.add(tempP);
             teamRes[i] = getPokemonSprite(tempP.getName().toLowerCase(Locale.ROOT));
         }

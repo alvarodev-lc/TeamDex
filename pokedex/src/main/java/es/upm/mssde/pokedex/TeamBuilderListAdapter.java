@@ -10,20 +10,36 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class TeamBuilderListAdapter extends ArrayAdapter<String> {
+import java.util.ArrayList;
 
-    String[] names;
+import es.upm.mssde.pokedex.models.Pokemon;
+import es.upm.mssde.pokedex.models.PokemonResult;
+
+public class TeamBuilderListAdapter extends ArrayAdapter<String> implements MyObserver {
+    ArrayList<PokemonResult> poke_list;
     Context context;
+    private PokeAPI pokeAPI;
 
-    public TeamBuilderListAdapter(@NonNull Context context, String[] poke_names) {
+    public TeamBuilderListAdapter(@NonNull Context context) {
         super(context, R.layout.row_list);
-        this.names = poke_names;
+
+        poke_list = new ArrayList<>();
+        pokeAPI = new PokeAPI();
+        pokeAPI.addObserver(this);
+    }
+
+    public TeamBuilderListAdapter(@NonNull Context context, ArrayList<PokemonResult> poke_list) {
+        super(context, R.layout.row_list);
+        this.poke_list = poke_list;
         this.context = context;
+
+        pokeAPI = new PokeAPI();
+        pokeAPI.addObserver(this);
     }
 
     @Override
     public int getCount() {
-        return names.length;
+        return poke_list.size();
     }
 
     @NonNull
@@ -41,9 +57,33 @@ public class TeamBuilderListAdapter extends ArrayAdapter<String> {
         } else {
             viewHolder = (Viewolder) convertView.getTag();
         }
-        viewHolder.name.setText(names[position]);
+        viewHolder.name.setText(poke_list.get(position).getName());
 
         return convertView;
+    }
+
+    public void getPokemonsData(int num_pokes) {
+        pokeAPI.getPokemonsData(num_pokes);
+    }
+
+    public void getPokemonData(int position) {
+        pokeAPI.getPokemonData(position, false);
+    }
+
+    @Override
+    public void onPokemonsDataChanged(ArrayList<PokemonResult> poke_list) {
+        this.poke_list = poke_list;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPokemonDataChanged(Pokemon pokemon) {
+
+    }
+
+    @Override
+    public void onPokemonDataFromNameChanged(Pokemon pokemon) {
+
     }
 
     static class Viewolder {

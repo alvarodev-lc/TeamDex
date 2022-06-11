@@ -22,6 +22,7 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 
 public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder> implements MyObserver {
@@ -43,7 +44,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     public void refreshPokemonData() {
         Log.d("POKEMON_LIST_ADAPTER", "Refreshing pokemon data");
         Log.d("POKEMON_LIST_ADAPTER", "Offset: " + offset);
-        pokeAPI.getPokemons(offset);
+        pokeAPI.getPokemonsData(offset);
         offset += POKEMON_MAX_RESULTS;
     }
 
@@ -144,10 +145,20 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     }
 
     @Override
-    public void onPokemonDataChanged(ArrayList<PokemonResult> pokemon_list) {
+    public void onPokemonsDataChanged(ArrayList<PokemonResult> pokemon_list) {
         Log.d("POKEMON_LIST_ADAPTER", "onPokemonDataChanged");
         data = pokemon_list;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPokemonDataChanged(Pokemon pokemon) {
+
+    }
+
+    @Override
+    public void onPokemonDataFromNameChanged(Pokemon pokemon) {
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

@@ -16,6 +16,7 @@ import java.util.Locale;
 import es.upm.mssde.pokedex.models.AbilityList;
 import es.upm.mssde.pokedex.models.PokeDB;
 import es.upm.mssde.pokedex.models.Pokemon;
+import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.Stat;
 import es.upm.mssde.pokedex.models.Type;
 import es.upm.mssde.pokedex.models.TypeList;
@@ -70,7 +71,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
         pokeAPI = new PokeAPI();
     }
 
-    public void addPokemonToTeam(Pokemon pokemon) {
+    public void addPokemonToTeam(PokemonResult pokemon) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -82,10 +83,10 @@ public class TeamDatabase extends SQLiteOpenHelper {
         String name = pokemon.getName().substring(0, 1).toUpperCase() + pokemon.getName().substring(1);
         values.put(NAME_COL, name);
 
-        String poke_num = pokemon.getNum();
+        int poke_num = pokemon.getNum();
         values.put(NUM_COL, poke_num);
 
-        List<TypeList> types = pokemon.getTypes();
+        /*List<TypeList> types = pokemon.getTypes();
         Type type1 = types.get(0).getType();
         Type type2 = types.get(1).getType();
 
@@ -116,6 +117,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
         values.put(SPDEF_COL, spdef);
         values.put(SPATK_COL, spatk);
         values.put(SPEED_COL, speed);
+        */
 
         db.insert(TABLE_NAME, null, values);
 
@@ -176,7 +178,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
         int colIndex = cursor.getColumnIndex(NUM_COL);
         int num = cursor.getInt(colIndex);
 
-        pokeAPI.getPokemonData(num);
+        pokeAPI.getPokemonData(num, false);
         Pokemon poke = pokeAPI.getQueryPokemon();
         Log.d("DB", "getPokemon: " + poke.getName().toString());
 
@@ -207,8 +209,8 @@ public class TeamDatabase extends SQLiteOpenHelper {
         return false;
     }
 
-    public void addTeam(ArrayList<Pokemon> team) {
-        for (Pokemon pokemon : team) {
+    public void addTeam(ArrayList<PokemonResult> team) {
+        for (PokemonResult pokemon : team) {
             addPokemonToTeam(pokemon);
         }
 
