@@ -63,10 +63,11 @@
             </LinearLayout>
 
             <ListView
-                android:id="@+id/dexView"
-                android:layout_width="wrap_content"
-                android:layout_height="333dp"
-                android:divider="#000"
+                android:id="@+id/poke_search_list"
+                android:layout_width="230dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center_horizontal"
+                android:divider="#C8C8C8"
                 android:dividerHeight="1dp"
                 android:footerDividersEnabled="false"
                 android:headerDividersEnabled="false"

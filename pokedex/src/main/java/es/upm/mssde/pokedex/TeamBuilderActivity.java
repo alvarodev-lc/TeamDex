@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.util.Pair;
 
 import com.squareup.picasso.Picasso;
 
@@ -29,10 +26,8 @@ import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import es.upm.mssde.pokedex.models.PokeDB;
-import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.Type;
-import es.upm.mssde.pokedex.models.TypeList;
 
 public class TeamBuilderActivity extends AppCompatActivity {
 
@@ -68,7 +63,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String query) {
-                ListView lv_ = findViewById(R.id.dexView);
+                ListView lv_ = findViewById(R.id.poke_search_list);
                 lv_.setVisibility(View.VISIBLE);
 
                 updateTeamBuilderListView(searchPokemon(query));
@@ -78,7 +73,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         loadTeamFromDB();
 
-        teamBuilderListAdapter.getPokemonsData(100);
+        teamBuilderListAdapter.getPokemonsData(913);
     }
 
     private ArrayList<PokemonResult> searchPokemon(String query) {
@@ -93,6 +88,12 @@ public class TeamBuilderActivity extends AppCompatActivity {
                 results.add(pokemon);
             }
         }
+
+        // limit to 5 results
+        if (results.size() > 5) {
+            results.subList(5, results.size()).clear();
+        }
+
         return results;
     }
 
@@ -117,7 +118,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
     private void updateTeamBuilderListView(ArrayList<PokemonResult> poke_list) {
         TeamBuilderListAdapter adapter = new TeamBuilderListAdapter(this, poke_list);
 
-        ListView lv = findViewById(R.id.dexView);
+        ListView lv = findViewById(R.id.poke_search_list);
 
         lv.post(new Runnable() {
             @Override
@@ -146,7 +147,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
                 searchBox.setQuery("", false);
 
                 // close the list view
-                ListView lv_ = findViewById(R.id.dexView);
+                ListView lv_ = findViewById(R.id.poke_search_list);
                 lv_.setVisibility(View.GONE);
             }
         });

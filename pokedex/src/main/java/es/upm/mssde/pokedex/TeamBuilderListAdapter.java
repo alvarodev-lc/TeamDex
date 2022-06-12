@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,7 +66,8 @@ public class TeamBuilderListAdapter extends ArrayAdapter<String> implements MyOb
 
     public void getPokemonsData(int num_pokes) {
         Log.d("TEAM_BUILDER_LIST_ADAPTER", "Getting pokemon data");
-        pokeAPI.getPokemonsData(num_pokes);
+        pokeAPI.setPokemonMaxResults(num_pokes);
+        pokeAPI.getPokemonsData(0);
     }
 
     public void getPokemonData(int position) {
