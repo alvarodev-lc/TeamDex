@@ -27,6 +27,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import es.upm.mssde.pokedex.models.PokeDB;
 import es.upm.mssde.pokedex.models.PokemonResult;
+import es.upm.mssde.pokedex.models.PokemonTeam;
 import es.upm.mssde.pokedex.models.Type;
 
 public class TeamBuilderActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
     private TeamDatabase teamDatabase;
     private ArrayList<PokemonResult> team;
     private TeamBuilderListAdapter teamBuilderListAdapter;
+    private int team_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,25 @@ public class TeamBuilderActivity extends AppCompatActivity {
         teamDatabase = new TeamDatabase(TeamBuilderActivity.this);
 
         teamBuilderListAdapter = new TeamBuilderListAdapter(this);
+
+        String team_id_extra;
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+
+            if(extras == null) {
+                team_id_extra = null;
+            } else {
+                team_id_extra = extras.getString("team_id");
+            }
+        } else {
+            team_id_extra = (String) savedInstanceState.getSerializable("team_id");
+        }
+
+        if (team_id_extra != null) {
+            team_id = Integer.parseInt(team_id_extra);
+            team = teamDatabase.getTeam(team_id);
+        }
 
         SearchView searchBox = findViewById(R.id.search_box);
         searchBox.setQueryHint("Search for a Pokemon");
@@ -104,13 +125,13 @@ public class TeamBuilderActivity extends AppCompatActivity {
     }
 
     private void loadTeamFromDB() {
-        ArrayList<PokeDB> al = teamDatabase.retrieveTeam();
+        ArrayList<PokemonResult> team = teamDatabase.getTeam(team_id);
 
-        for (int i = 0; i < al.size(); i++) {
-            String num = al.get(i).getNum();
-            String name = al.get(i).getName();
-            ArrayList<Type> type = al.get(i).getTypes();
-            Log.d("TeamBuilderFragment", "Loading team from DB: " + name + " " + type);
+        for (int i = 0; i < team.size(); i++) {
+            PokemonResult pokemon = team.get(i);
+            int num = pokemon.getNum();
+            String name = pokemon.getName();
+            Log.d("TeamBuilderFragment", "Loading team from DB: " + name);
             addCardView(num, name);
         }
     }
@@ -175,7 +196,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
     public void addToTeam(PokemonResult poke) {
         if (team.size() < 6) {
-            addCardView(String.valueOf(poke.getNum()), poke.getName());
+            addCardView(poke.getNum(), poke.getName());
             team.add(poke);
 
             Log.d("addToTeam", "Added " + poke.getName() + " to team");
@@ -184,7 +205,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         }
     }
 
-    public void addCardView(String poke_num, String poke_name) {
+    public void addCardView(int poke_num, String poke_name) {
         LinearLayout team_list = findViewById(R.id.team_list);
         // create carddview that contains the pokemon name, its types and its sprite
         CardView cardView = new CardView(this);
@@ -280,7 +301,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         }
         */
 
-        teamDatabase.addTeam(team);
+        teamDatabase.addTeam(team, team_id);
 
         Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
     }

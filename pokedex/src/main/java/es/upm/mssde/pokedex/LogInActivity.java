@@ -115,7 +115,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(LogInActivity.this,
                                     "Authentication successful", Toast.LENGTH_SHORT).show();
                             Intent api_call_activity = new Intent(LogInActivity.this,
-                                    TeamBuilderActivity.class);
+                                    TeamViewerActivity.class);
                             startActivity(api_call_activity);
 
                             // Here we should instantiate a new intent to move forward

@@ -1,8 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save_team"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:text="@string/create_team"
+                android:textColor="@color/colorWhite"
+                android:theme="@style/Theme.MaterialComponents"
+                app:backgroundTint="@color/colorPrimary"
+                app:cornerRadius="10dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/teams_not_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_teams_found"
+        android:visibility="gone">
+    </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/team_builder_recyclerview"

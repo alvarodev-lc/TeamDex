@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.core.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,6 +18,7 @@ import es.upm.mssde.pokedex.models.AbilityList;
 import es.upm.mssde.pokedex.models.PokeDB;
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
+import es.upm.mssde.pokedex.models.PokemonTeam;
 import es.upm.mssde.pokedex.models.Stat;
 import es.upm.mssde.pokedex.models.Type;
 import es.upm.mssde.pokedex.models.TypeList;
@@ -28,22 +30,11 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
     private static final String TABLE_NAME = "team";
 
-    private static final String ID_COL = "id";
+    private static final String TEAM_ID_COL = "team_id";
 
     private static final String NUM_COL = "num";
 
     private static final String NAME_COL = "name";
-
-    private static final String TYPE_COL = "type";
-
-    private static final String ABILITY_COL = "ability";
-
-    private static final String HP_COL = "hp";
-    private static final String DEF_COL = "def";
-    private static final String ATK_COL = "atk";
-    private static final String SPDEF_COL = "spdef";
-    private static final String SPATK_COL = "spatk";
-    private static final String SPEED_COL = "speed";
 
     private PokeAPI pokeAPI;
 
@@ -54,31 +45,22 @@ public class TeamDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME + " ("
-                + ID_COL + " INTEGER, "
+                + TEAM_ID_COL + " INTEGER, "
                 + NUM_COL + " INTEGER,"
                 + NAME_COL + " TEXT,"
-                + TYPE_COL + " TEXT,"
-                + ABILITY_COL + " TEXT,"
-                + HP_COL + " INTEGER,"
-                + ATK_COL + " INTEGER,"
-                + DEF_COL + " INTEGER,"
-                + SPATK_COL + " INTEGER,"
-                + SPDEF_COL + " INTEGER,"
-                + SPEED_COL + " INTEGER)";
+                + "PRIMARY KEY (" + TEAM_ID_COL + "," + NUM_COL + "));";
 
         db.execSQL(query);
 
         pokeAPI = new PokeAPI();
     }
 
-    public void addPokemonToTeam(PokemonResult pokemon) {
+    public void addPokemonToTeam(PokemonResult pokemon, int team_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        int poke_id = (int) (Math.random() * 1000);
-
-        values.put(ID_COL, poke_id);
+        values.put(TEAM_ID_COL, team_id);
 
         String name = pokemon.getName().substring(0, 1).toUpperCase() + pokemon.getName().substring(1);
         values.put(NAME_COL, name);
@@ -131,11 +113,12 @@ public class TeamDatabase extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE name ='" + name + "'");
     }
 
-    public ArrayList<PokeDB> retrieveTeam() {
+    public ArrayList<PokemonResult> getTeam(int team_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<PokeDB> team = new ArrayList<>();
+        PokemonTeam team = new PokemonTeam();
+        ArrayList<PokemonResult> team_pokemons = new ArrayList<>();
 
-        String query = "SELECT " + NUM_COL + ", " + NAME_COL + ", " + TYPE_COL + " FROM " + TABLE_NAME;
+        String query = "SELECT " +  TEAM_ID_COL + ", " +  NUM_COL + ", " + NAME_COL + ", " + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = " + team_id;
         Cursor cursor = db.rawQuery(query, null);
 
         int i = 0;
@@ -146,25 +129,75 @@ public class TeamDatabase extends SQLiteOpenHelper {
             int colIndex = cursor.getColumnIndex(NAME_COL);
             String name = cursor.getString(colIndex);
 
-            colIndex = cursor.getColumnIndex(TYPE_COL);
-            String types = cursor.getString(colIndex);
-            // types to arraylist
-            String[] typeArray = types.split("/");
+            PokemonResult pokemon = new PokemonResult();
 
-            if (typeArray.length == 1) {
-                Type type = new Type();
-                type.setName(typeArray[0]);
-                team.add(i, new PokeDB(num, name, type));
-            } else {
-                Type type1 = new Type();
-                type1.setName(typeArray[0]);
-                Type type2 = new Type();
-                type2.setName(typeArray[1]);
-                team.add(i, new PokeDB(num, name, type1, type2));
-            }
+            pokemon.setName(name);
+            pokemon.setNum(Integer.parseInt(num));
+
+            team_pokemons.add(i, pokemon);
+
             i++;
         }
-        return team;
+
+
+        return team_pokemons;
+    }
+
+    public ArrayList<PokemonTeam> getAllTeams() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<PokemonTeam> teams = new ArrayList<>();
+        ArrayList<PokemonResult> pokemons = new ArrayList<>();
+
+        String query = "SELECT " +  TEAM_ID_COL + ", " +  NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+
+        ArrayList<Integer> team_ids = new ArrayList<>();
+
+        int i = 0;
+        while (cursor.moveToNext()) {
+            int col_num = cursor.getColumnIndex(NUM_COL);
+            String num = cursor.getString(col_num);
+
+            int colIndex = cursor.getColumnIndex(NAME_COL);
+            String name = cursor.getString(colIndex);
+
+            int col_team_id = cursor.getColumnIndex(TEAM_ID_COL);
+            int team_id = cursor.getInt(col_team_id);
+
+            team_ids.add(team_id);
+
+            PokemonResult pokemon = new PokemonResult();
+
+            pokemon.setName(name);
+            pokemon.setNum(Integer.parseInt(num));
+
+            pokemons.add(i, pokemon);
+
+            i++;
+        }
+
+        // group pokemons by team_id
+        HashMap<Integer, ArrayList<PokemonResult>> pokemons_by_team = new HashMap<>();
+        int j = 0;
+        for (PokemonResult pokemon : pokemons) {
+            int team_id = team_ids.get(j);
+            if (!pokemons_by_team.containsKey(team_id)) {
+                pokemons_by_team.put(team_id, new ArrayList<>());
+            }
+            pokemons_by_team.get(team_id).add(pokemon);
+
+            j++;
+        }
+
+        // convert to ArrayList<PokemonTeam>
+        for (int team_id : pokemons_by_team.keySet()) {
+            PokemonTeam team = new PokemonTeam();
+            team.setTeamPokemons(pokemons_by_team.get(team_id));
+            team.setTeamId(team_id);
+            teams.add(team);
+        }
+
+        return teams;
     }
 
     public Pokemon getPokemon(String givenName) {
@@ -209,9 +242,9 @@ public class TeamDatabase extends SQLiteOpenHelper {
         return false;
     }
 
-    public void addTeam(ArrayList<PokemonResult> team) {
+    public void addTeam(ArrayList<PokemonResult> team, int team_id) {
         for (PokemonResult pokemon : team) {
-            addPokemonToTeam(pokemon);
+            addPokemonToTeam(pokemon, team_id);
         }
 
         Log.d("DB", "Added team to DB");
