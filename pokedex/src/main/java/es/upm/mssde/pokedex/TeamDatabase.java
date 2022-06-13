@@ -7,21 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import androidx.core.util.Pair;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
-import es.upm.mssde.pokedex.models.AbilityList;
-import es.upm.mssde.pokedex.models.PokeDB;
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.PokemonTeam;
-import es.upm.mssde.pokedex.models.Stat;
-import es.upm.mssde.pokedex.models.Type;
-import es.upm.mssde.pokedex.models.TypeList;
 
 public class TeamDatabase extends SQLiteOpenHelper {
     private static final String DB_NAME = "TEAM";
@@ -118,7 +110,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
         PokemonTeam team = new PokemonTeam();
         ArrayList<PokemonResult> team_pokemons = new ArrayList<>();
 
-        String query = "SELECT " +  TEAM_ID_COL + ", " +  NUM_COL + ", " + NAME_COL + ", " + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = " + team_id;
+        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + ", " + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = " + team_id;
         Cursor cursor = db.rawQuery(query, null);
 
         int i = 0;
@@ -148,7 +140,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
         ArrayList<PokemonTeam> teams = new ArrayList<>();
         ArrayList<PokemonResult> pokemons = new ArrayList<>();
 
-        String query = "SELECT " +  TEAM_ID_COL + ", " +  NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME;
+        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME;
         Cursor cursor = db.rawQuery(query, null);
 
         ArrayList<Integer> team_ids = new ArrayList<>();

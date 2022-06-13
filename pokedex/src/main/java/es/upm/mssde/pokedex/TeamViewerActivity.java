@@ -37,7 +37,7 @@ public class TeamViewerActivity extends AppCompatActivity implements View.OnClic
 
         setContentView(R.layout.team_viewer);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.team_builder_recyclerview);
         teamViewerListAdapter = new TeamViewerListAdapter(this);
         recyclerView.setAdapter(teamViewerListAdapter);
         recyclerView.setHasFixedSize(true);
