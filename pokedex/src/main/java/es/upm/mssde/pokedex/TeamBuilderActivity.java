@@ -306,6 +306,9 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         // delete all from team_list
         team_list.removeAllViews();
+
+        // reset team arraylist
+        team.clear();
     }
 
     public void saveTeam() {
