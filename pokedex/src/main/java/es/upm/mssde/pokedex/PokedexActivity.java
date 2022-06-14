@@ -41,8 +41,9 @@ public class PokedexActivity extends AppCompatActivity implements View.OnClickLi
 
         setContentView(R.layout.pokemon_recyclerview);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.pokedex_recycler_view);
         pokemonListAdapter = new PokemonListAdapter(this);
+        pokemonListAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         recyclerView.setAdapter(pokemonListAdapter);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
