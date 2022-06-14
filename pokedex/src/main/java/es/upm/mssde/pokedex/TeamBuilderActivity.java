@@ -299,18 +299,16 @@ public class TeamBuilderActivity extends AppCompatActivity {
         teamDatabase.delete(removeMe.getName());
     }
 
-    public void resetTeam(View v) {
+    public void resetTeam() {
         Log.d("resetTeam", "Reset team");
         // delete all pokemon from team_list
-        LinearLayout team_list = v.findViewById(R.id.team_list);
+        LinearLayout team_list = findViewById(R.id.team_list);
 
-        // delete children from team_list
-        for (int i = team_list.getChildCount() - 1; i >= 0; i--) {
-            team_list.removeViewAt(i);
-        }
+        // delete all from team_list
+        team_list.removeAllViews();
     }
 
-    public void saveTeam(View view) {
+    public void saveTeam() {
         if (team.size() == 0) {
             Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_LONG);
             return;
@@ -335,7 +333,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         MaterialButton save_team_button = findViewById(R.id.save_team_button);
 
         save_team_button.setOnClickListener(v -> {
-            saveTeam(v);
+            saveTeam();
         });
     }
 
@@ -344,7 +342,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         MaterialButton reset_team_button = findViewById(R.id.reset_team_button);
 
         reset_team_button.setOnClickListener(v -> {
-            resetTeam(v);
+            resetTeam();
         });
     }
 }
