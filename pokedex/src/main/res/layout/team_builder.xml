@@ -29,7 +29,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/save_team"
+                        android:id="@+id/save_team_button"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:layout_alignParentEnd="true"
@@ -40,7 +40,7 @@
                         app:cornerRadius="10dp" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/reset_team"
+                        android:id="@+id/reset_team_button"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
@@ -88,8 +88,8 @@
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginTop="15dp"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical" />
             </LinearLayout>
-            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

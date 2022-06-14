@@ -3,6 +3,7 @@ package es.upm.mssde.pokedex;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -97,6 +99,9 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         loadTeamFromDB();
         teamBuilderListAdapter.getPokemonsData(913);
+
+        addOnClickListenerToResetTeamButton();
+        addOnClickListenerToSaveTeamButton();
     }
 
     private ArrayList<PokemonResult> searchPokemon(String query) {
@@ -218,7 +223,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         cardView.setContentPadding(30, 30, 30, 30);
         cardView.setPreventCornerOverlap(false);
 
-        cardView.setOnClickListener(v -> removePokemonFromView(v));
+        cardView.setOnClickListener(v -> goToPokemonStats(v));
 
         //add content to cardview
         LinearLayout cardViewContent = new LinearLayout(this);
@@ -253,6 +258,18 @@ public class TeamBuilderActivity extends AppCompatActivity {
         team_list.addView(cardView);
     }
 
+    public void goToPokemonStats(View v) {
+        // get position of cardview in team_list
+        LinearLayout team_list = findViewById(R.id.team_list);
+        int position = team_list.indexOfChild(v);
+
+        PokemonResult poke = team.get(position);
+
+        Intent intent = new Intent(this, PokemonActivity.class);
+        intent.putExtra("pokemon", poke);
+        startActivity(intent);
+    }
+
     public void removePokemonFromView(View v) {
         if (team.size() == 0) return;
         int index = Integer.parseInt(v.getTag().toString());
@@ -283,9 +300,14 @@ public class TeamBuilderActivity extends AppCompatActivity {
     }
 
     public void resetTeam(View v) {
+        Log.d("resetTeam", "Reset team");
         // delete all pokemon from team_list
         LinearLayout team_list = v.findViewById(R.id.team_list);
-        team_list.removeAllViews();
+
+        // delete children from team_list
+        for (int i = team_list.getChildCount() - 1; i >= 0; i--) {
+            team_list.removeViewAt(i);
+        }
     }
 
     public void saveTeam(View view) {
@@ -306,5 +328,23 @@ public class TeamBuilderActivity extends AppCompatActivity {
         teamDatabase.addTeam(team, team_id);
 
         Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
+    }
+
+    // add onClickListener to Save Team button
+    public void addOnClickListenerToSaveTeamButton() {
+        MaterialButton save_team_button = findViewById(R.id.save_team_button);
+
+        save_team_button.setOnClickListener(v -> {
+            saveTeam(v);
+        });
+    }
+
+    // add onClickListener to Reset Team button
+    public void addOnClickListenerToResetTeamButton() {
+        MaterialButton reset_team_button = findViewById(R.id.reset_team_button);
+
+        reset_team_button.setOnClickListener(v -> {
+            resetTeam(v);
+        });
     }
 }
