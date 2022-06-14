@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -48,8 +51,7 @@ public class TeamViewerActivity extends AppCompatActivity implements View.OnClic
         teams = new ArrayList<>();
 
         loadTeamsFromDB();
-
-        TeamViewerListAdapter teamViewerListAdapter = new TeamViewerListAdapter(this);
+        addOnClickListenerToCreateTeamButton();
     }
 
     private void loadTeamsFromDB() {
@@ -81,5 +83,15 @@ public class TeamViewerActivity extends AppCompatActivity implements View.OnClic
         Intent intent = new Intent(this, TeamBuilderActivity.class);
         intent.putExtra("team_id", position);
         startActivity(intent);
+    }
+
+    // add onClickListener to Create Team button
+    public void addOnClickListenerToCreateTeamButton() {
+        MaterialButton create_team_button = findViewById(R.id.create_team_button);
+
+        create_team_button.setOnClickListener(v -> {
+            Intent intent = new Intent(this, TeamBuilderActivity.class);
+            startActivity(intent);
+        });
     }
 }

@@ -110,7 +110,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
         PokemonTeam team = new PokemonTeam();
         ArrayList<PokemonResult> team_pokemons = new ArrayList<>();
 
-        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + ", " + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = " + team_id;
+        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = " + team_id;
         Cursor cursor = db.rawQuery(query, null);
 
         int i = 0;
