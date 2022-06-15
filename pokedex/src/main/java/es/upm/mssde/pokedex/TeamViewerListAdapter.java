@@ -51,7 +51,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
     @Override
     public void onBindViewHolder (ViewHolder holder, int position){
-        ArrayList<PokemonResult> team = teamDatabase.getTeam(position);
+        ArrayList<PokemonResult> team = teamDatabase.getTeam(String.valueOf(position));
         int team_id = position;
         holder.team_name.setText("Team #" + team_id);
 

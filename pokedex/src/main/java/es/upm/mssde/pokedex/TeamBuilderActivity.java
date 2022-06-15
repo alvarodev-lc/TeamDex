@@ -38,7 +38,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
     private TeamDatabase teamDatabase;
     private ArrayList<PokemonResult> team;
     private TeamBuilderListAdapter teamBuilderListAdapter;
-    private int team_id;
+    private String team_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +65,12 @@ public class TeamBuilderActivity extends AppCompatActivity {
         }
 
         if (team_id_extra != null) {
-            team_id = Integer.parseInt(team_id_extra);
+            team_id = team_id_extra;
             team = teamDatabase.getTeam(team_id);
         } else {
             // Give a team_id of last team_id + 1
             ArrayList<PokemonTeam> db_teams = teamDatabase.getAllTeams();
-            team_id = db_teams.size();
+            team_id = String.valueOf(db_teams.size());
         }
 
         SearchView searchBox = findViewById(R.id.search_box);
