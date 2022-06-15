@@ -8,7 +8,8 @@
     app:cardPreventCornerOverlap="true"
     android:clickable="true"
     app:cardUseCompatPadding="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:id="@+id/poke_card_view">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,13 +20,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            android:textColor="@color/colorBlack"/>
+            android:textColor="@color/colorBlack"
+            android:id="@+id/poke_team_name"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:padding="5dp"
             android:id="@+id/relativeLayout1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/poke_image0"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/poke_image1"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/poke_image2"/>
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -33,6 +51,22 @@
             android:layout_height="80dp"
             android:padding="5dp"
             android:id="@+id/relativeLayout2">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/poke_image3"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/poke_image4"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/poke_image5"/>
+
         </RelativeLayout>
 
     </LinearLayout>

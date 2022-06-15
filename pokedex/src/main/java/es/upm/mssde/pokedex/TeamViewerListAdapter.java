@@ -45,7 +45,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pokemon_item, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.team_item, parent,false);
         return new ViewHolder(view, onTeamClickListener);
     }
 
@@ -85,7 +85,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
         public ViewHolder(View v, OnTeamClickListener onTeamClickListener) {
             super(v);
             cardView = v.findViewById(R.id.poke_card_view);
-            team_name = v.findViewById(R.id.poke_num);
+            team_name = v.findViewById(R.id.poke_team_name);
 
             for (int i = 0; i < 6; i++) {
                 ImageView image = v.findViewById(v.getContext().getResources().getIdentifier("poke_image" + i, "id", v.getContext().getPackageName()));
