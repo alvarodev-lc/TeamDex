@@ -44,7 +44,7 @@ public class TeamViewerActivity extends AppCompatActivity implements View.OnClic
         teamViewerListAdapter = new TeamViewerListAdapter(this);
         recyclerView.setAdapter(teamViewerListAdapter);
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
 
         teamDatabase = new TeamDatabase(this);
