@@ -336,8 +336,10 @@ public class TeamBuilderActivity extends AppCompatActivity {
         MaterialButton save_team_button = findViewById(R.id.save_team_button);
 
         save_team_button.setOnClickListener(v -> {
-            saveTeam();
+            saveTeam(v);
         });
+
+        Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
     }
 
     // add onClickListener to Reset Team button
@@ -345,7 +347,9 @@ public class TeamBuilderActivity extends AppCompatActivity {
         MaterialButton reset_team_button = findViewById(R.id.reset_team_button);
 
         reset_team_button.setOnClickListener(v -> {
-            resetTeam();
+            resetTeam(v);
         });
+
+        Toast.makeText(this.getApplicationContext(), "Team reset!", Toast.LENGTH_LONG);
     }
 }
