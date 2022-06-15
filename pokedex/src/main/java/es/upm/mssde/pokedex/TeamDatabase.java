@@ -100,9 +100,12 @@ public class TeamDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void delete(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE name ='" + name + "'");
+    public void addTeam(ArrayList<PokemonResult> team, int team_id) {
+        for (PokemonResult pokemon : team) {
+            addPokemonToTeam(pokemon, team_id);
+        }
+
+        Log.d("DB", "Added team to DB");
     }
 
     public ArrayList<PokemonResult> getTeam(int team_id) {
@@ -210,6 +213,11 @@ public class TeamDatabase extends SQLiteOpenHelper {
         return poke;
     }
 
+    public void delete(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE name ='" + name + "'");
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
@@ -232,13 +240,5 @@ public class TeamDatabase extends SQLiteOpenHelper {
         if (icount == 0) return true;
 
         return false;
-    }
-
-    public void addTeam(ArrayList<PokemonResult> team, int team_id) {
-        for (PokemonResult pokemon : team) {
-            addPokemonToTeam(pokemon, team_id);
-        }
-
-        Log.d("DB", "Added team to DB");
     }
 }

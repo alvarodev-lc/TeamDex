@@ -1,87 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/poke_card_view"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="center_horizontal|center_vertical"
-    app:cardCornerRadius="10dp"
-    app:cardPreventCornerOverlap="true">
+    android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/poke_team_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorBlack"
-            android:textSize="24sp" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/team_card_view"
+        android:layout_width="340dp"
+        android:layout_height="260dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal|center_vertical"
+        app:cardCornerRadius="30dp"
+        app:cardPreventCornerOverlap="true"
+        android:layout_marginTop="15dp">
 
         <LinearLayout
-            android:id="@+id/relativeLayout1"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal">
 
-            <ImageView
-                android:id="@+id/poke_image0"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"/>
+            <TextView
+                android:id="@+id/team_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#515151"
+                android:textSize="21sp"
+                android:paddingTop="20dp"
+                android:paddingLeft="30dp"
+                android:fontFamily="Roboto"/>
 
-            <ImageView
-                android:id="@+id/poke_image1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"/>
+            <GridLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:orientation="horizontal"
+                android:layout_marginStart="5dp">
 
-            <ImageView
-                android:id="@+id/poke_image2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"/>
+                <ImageView
+                    android:id="@+id/poke_image0"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"/>
 
+                <ImageView
+                    android:id="@+id/poke_image1"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"/>
+
+                <ImageView
+                    android:id="@+id/poke_image2"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"/>
+
+            </GridLayout>
+
+            <GridLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:layout_marginStart="5dp">
+
+                <ImageView
+                    android:id="@+id/poke_image3"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
+
+                <ImageView
+                    android:id="@+id/poke_image4"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"/>
+
+                <ImageView
+                    android:id="@+id/poke_image5"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"/>
+            </GridLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/relativeLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/poke_image3"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"/>
-
-            <ImageView
-                android:id="@+id/poke_image4"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"/>
-
-            <ImageView
-                android:id="@+id/poke_image5"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
