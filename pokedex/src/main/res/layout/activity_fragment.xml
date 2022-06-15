@@ -12,40 +12,41 @@
         android:layout_weight="1"
         android:clipToPadding="false" />
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorGray"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-            <RadioButton
-                android:id="@+id/rb_pokedex"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:button="@null"
-                android:drawableTop="@drawable/tab_pokedex_selector"
-                android:drawablePadding="5dp"
-                android:gravity="center"
-                android:scaleType="centerInside"
-                android:text="@string/button_pokedex"
-                android:textSize="13dp" />
+        <RadioButton
+            android:id="@+id/rb_pokedex"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:button="@null"
+            android:drawableTop="@drawable/tab_pokedex_selector"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:scaleType="centerInside"
+            android:text="@string/button_pokedex"
+            android:textSize="13dp" />
 
-            <RadioButton
-                android:id="@+id/rb_team_builder"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:button="@null"
-                android:drawableTop="@drawable/tab_team_builder_selector"
-                android:drawablePadding="5dp"
-                android:gravity="center"
-                android:scaleType="centerInside"
-                android:text="@string/button_team_builder"
-                android:textSize="13dp" />
+        <RadioButton
+            android:id="@+id/rb_team_builder"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:button="@null"
+            android:drawableTop="@drawable/tab_team_builder_selector"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:scaleType="centerInside"
+            android:text="@string/button_team_builder"
+            android:textSize="13dp" />
 
-        </RadioGroup>
+    </RadioGroup>
 
 </LinearLayout>
