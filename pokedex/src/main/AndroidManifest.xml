@@ -18,7 +18,8 @@
 
         <activity
             android:name="es.upm.mssde.pokedex.FragmentActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

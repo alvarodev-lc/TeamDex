@@ -9,10 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import es.upm.mssde.pokedex.R;
 import es.upm.mssde.pokedex.fragment.PokedexFragment;
+import es.upm.mssde.pokedex.fragment.TeamViewerFragment;
 
 public class FragmentActivity extends AppCompatActivity implements View.OnClickListener {
 
     private PokedexFragment pokedexFragment;
+    private TeamViewerFragment teamViewerFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,6 +27,7 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
 
     private void initData() {
         pokedexFragment = new PokedexFragment();
+        teamViewerFragment = new TeamViewerFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, pokedexFragment).commit();
     }
@@ -43,6 +46,8 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v.getId() == R.id.rb_pokedex) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, pokedexFragment).commit();
+        } else if (v.getId() == R.id.rb_team_builder) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, teamViewerFragment).commit();
         }
     }
 }
