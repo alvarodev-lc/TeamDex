@@ -1,11 +1,14 @@
 package es.upm.mssde.pokedex;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import es.upm.mssde.pokedex.R;
 import es.upm.mssde.pokedex.fragment.PokedexFragment;
@@ -15,24 +18,20 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
 
     private PokedexFragment pokedexFragment;
     private TeamViewerFragment teamViewerFragment;
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_fragment);
-        bindViews();
+
+        fm = getFragmentManager();
+
         initData();
+        showFragment(1);
     }
 
     private void initData() {
-        pokedexFragment = new PokedexFragment();
-        teamViewerFragment = new TeamViewerFragment();
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, pokedexFragment).commit();
-    }
-
-    private void bindViews() {
         RadioButton rbTab1 = findViewById(R.id.rb_pokedex);
         RadioButton rbTab2 = findViewById(R.id.rb_team_builder);
 
@@ -42,12 +41,47 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
         rbTab2.setOnClickListener(this);
     }
 
+    public void showFragment(int index) {
+        FragmentTransaction ft = fm.beginTransaction();
+
+        hideFragments(ft);
+
+        switch (index) {
+            case 1:
+                if (pokedexFragment != null)
+                    ft.show(pokedexFragment);
+                else {
+                    pokedexFragment = new PokedexFragment();
+                    ft.add(R.id.fl_container, pokedexFragment);
+                }
+                break;
+
+            case 2:
+                if (teamViewerFragment != null)
+                    ft.show(teamViewerFragment);
+                else {
+                    teamViewerFragment = new TeamViewerFragment();
+                    ft.add(R.id.fl_container, teamViewerFragment);
+                }
+                break;
+        }
+        ft.commit();
+    }
+
+
+    public void hideFragments(FragmentTransaction ft) {
+        if (pokedexFragment != null)
+            ft.hide(pokedexFragment);
+        if (teamViewerFragment != null)
+            ft.hide(teamViewerFragment);
+    }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.rb_pokedex) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, pokedexFragment).commit();
+            showFragment(1);
         } else if (v.getId() == R.id.rb_team_builder) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, teamViewerFragment).commit();
+            showFragment(2);
         }
     }
 }
