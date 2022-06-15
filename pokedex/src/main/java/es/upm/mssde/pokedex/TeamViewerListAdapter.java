@@ -24,6 +24,7 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.upm.mssde.pokedex.fragment.TeamViewerFragment;
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.PokemonTeam;
@@ -37,7 +38,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
     public TeamViewerListAdapter(OnTeamClickListener onTeamClickListener) {
         teams = new ArrayList<>();
         this.onTeamClickListener = onTeamClickListener;
-        teamDatabase = new TeamDatabase(TeamViewerActivity.appContext);
+        teamDatabase = new TeamDatabase(TeamViewerFragment.appContext);
 
         teams = teamDatabase.getAllTeams();
     }
