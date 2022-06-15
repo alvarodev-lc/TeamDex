@@ -56,13 +56,13 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
         int team_id = position;
         holder.team_name.setText("Team #" + team_id);
 
-        for (int i = 0; i < 6; i++) {
-            PokemonResult poke = team.get(i);
+        int i = 0;
 
-            if (poke != null) {
-                //holder.poke_name.setText(pokemon.getName());
-                Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.getNum() + ".png").into(holder.poke_images.get(i));
-            }
+        for (PokemonResult poke : team) {
+            //holder.poke_name.setText(pokemon.getName());
+            Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.getNum() + ".png").into(holder.poke_images.get(i));
+
+            i++;
         }
     }
 
@@ -85,8 +85,8 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
         public ViewHolder(View v, OnTeamClickListener onTeamClickListener) {
             super(v);
-            cardView = v.findViewById(R.id.poke_card_view);
-            team_name = v.findViewById(R.id.poke_team_name);
+            cardView = v.findViewById(R.id.team_card_view);
+            team_name = v.findViewById(R.id.team_name);
 
             for (int i = 0; i < 6; i++) {
                 ImageView image = v.findViewById(v.getContext().getResources().getIdentifier("poke_image" + i, "id", v.getContext().getPackageName()));
