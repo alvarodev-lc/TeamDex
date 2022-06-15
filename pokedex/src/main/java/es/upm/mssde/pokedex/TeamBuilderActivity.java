@@ -197,7 +197,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
             Log.d("addToTeamDB", "Added " + poke.getName() + " to team");
         } else {
-            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG);
+            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -208,7 +208,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
             Log.d("addToTeam", "Added " + poke.getName() + " to team");
         } else {
-            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG);
+            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -299,7 +299,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         teamDatabase.delete(removeMe.getName());
     }
 
-    public void resetTeam() {
+    public void resetTeam(View v) {
         Log.d("resetTeam", "Reset team");
         // delete all pokemon from team_list
         LinearLayout team_list = findViewById(R.id.team_list);
@@ -309,11 +309,13 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         // reset team arraylist
         team.clear();
+
+        Toast.makeText(this.getApplicationContext(), "Team reset!", Toast.LENGTH_LONG).show();
     }
 
-    public void saveTeam() {
+    public void saveTeam(View v) {
         if (team.size() == 0) {
-            Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_LONG);
+            Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -328,7 +330,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         teamDatabase.addTeam(team, team_id);
 
-        Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
+        Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG).show();
     }
 
     // add onClickListener to Save Team button
@@ -338,8 +340,6 @@ public class TeamBuilderActivity extends AppCompatActivity {
         save_team_button.setOnClickListener(v -> {
             saveTeam(v);
         });
-
-        Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG);
     }
 
     // add onClickListener to Reset Team button
@@ -349,7 +349,5 @@ public class TeamBuilderActivity extends AppCompatActivity {
         reset_team_button.setOnClickListener(v -> {
             resetTeam(v);
         });
-
-        Toast.makeText(this.getApplicationContext(), "Team reset!", Toast.LENGTH_LONG);
     }
 }
