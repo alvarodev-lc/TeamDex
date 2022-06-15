@@ -68,7 +68,9 @@ public class TeamBuilderActivity extends AppCompatActivity {
             team_id = Integer.parseInt(team_id_extra);
             team = teamDatabase.getTeam(team_id);
         } else {
-            team_id = 0; // the first team is being created
+            // Give a team_id of last team_id + 1
+            ArrayList<PokemonTeam> db_teams = teamDatabase.getAllTeams();
+            team_id = db_teams.size();
         }
 
         SearchView searchBox = findViewById(R.id.search_box);
