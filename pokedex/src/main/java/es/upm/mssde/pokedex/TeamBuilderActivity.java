@@ -333,7 +333,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
     public void resetTeam(View v) {
         Log.d("resetTeam", "Reset team");
         // delete all pokemon from team_list
-        LinearLayout team_list = findViewById(R.id.team_list);
+        GridLayout team_list = findViewById(R.id.team_list);
 
         // delete all from team_list
         team_list.removeAllViews();
