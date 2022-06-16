@@ -17,7 +17,7 @@
         android:layout_gravity="top|right"
         android:fontFamily="Roboto"
         android:textStyle="bold"
-        android:textSize="18dp"
+        android:textSize="19sp"
         android:layout_marginTop="-7dp"
         android:textColor="#5C5B5B">
     </TextView>
@@ -37,5 +37,5 @@
         android:fontFamily="Roboto"
         android:paddingTop="105dp"
         android:textFontWeight="600"
-        android:textSize="16dp" />
+        android:textSize="15sp" />
 </androidx.cardview.widget.CardView>
