@@ -45,7 +45,6 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
     public void updateDB() {
         teams = teamDatabase.getAllTeams();
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -63,9 +62,14 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
     @Override
     public void onBindViewHolder (ViewHolder holder, int position, @NonNull List<Object> payloads){
         ArrayList<PokemonResult> team = teamDatabase.getTeam(String.valueOf(position));
+        int j = 1;
+        while (team.isEmpty()){
+            team=teamDatabase.getTeam(String.valueOf(position + j));
+            j++;
+            position = j;
+        }
         int team_poke_num = team.size();
-        int team_id = position;
-        holder.team_name.setText("Team #" + team_id);
+        holder.team_name.setText("Team #" + position);
 
         for (int i=0; i<=5; i++ ){
             if (i < team_poke_num){
