@@ -81,10 +81,13 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
 
+        teamViewerListAdapter.updateDB();
         TextView teamsNotFound = view.findViewById(R.id.teams_not_found);
 
         if (teamViewerListAdapter.teams.size() > 0) {
             teamsNotFound.setVisibility(View.GONE);
+        } else {
+            teamsNotFound.setVisibility(View.VISIBLE);
         }
 
         recyclerView.setAdapter(null);
@@ -92,8 +95,6 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
         recyclerView.setAdapter(teamViewerListAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(layoutManager);
-
-        teamViewerListAdapter.updateDB();
     }
 
     @Override
