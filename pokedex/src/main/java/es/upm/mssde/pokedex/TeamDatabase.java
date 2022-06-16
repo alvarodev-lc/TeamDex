@@ -237,6 +237,14 @@ public class TeamDatabase extends SQLiteOpenHelper {
         return false;
     }
 
+    public void deleteTeam( String team_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE team_id = " + team_id;
+
+        db.execSQL(query);
+        Log.d("Erased", "Erased from database");
+    }
+
     public void addTeam(ArrayList<PokemonResult> team, String team_id) {
         for (PokemonResult pokemon : team) {
             addPokemonToTeam(pokemon, team_id);
