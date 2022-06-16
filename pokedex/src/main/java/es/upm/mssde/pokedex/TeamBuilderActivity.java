@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -221,7 +222,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
     }
 
     public void addCardView(int poke_num, String poke_name) {
-        LinearLayout team_list = findViewById(R.id.team_list);
+        GridLayout team_list = findViewById(R.id.team_list);
         // create carddview that contains the pokemon name, its types and its sprite
         CardView cardView = new CardView(this);
         cardView.setRadius(100);
