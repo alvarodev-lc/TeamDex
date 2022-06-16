@@ -218,7 +218,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
             Log.d("addToTeam", "Added " + poke.getName() + " to team");
         } else {
-            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -343,11 +343,12 @@ public class TeamBuilderActivity extends AppCompatActivity {
     }
 
     public void saveTeam(View v) {
-        if (teamDatabase.getTeam(team_id) != null){
-            Log.d("Erase", "Deleting team...");
+        Log.d("Erase", String.valueOf(team));
+        if (!teamDatabase.getTeam(team_id).isEmpty()){
+            Log.d("Erase", "Erasing team");
             teamDatabase.deleteTeam(team_id);
         }
-        else if (team.size() == 0) {
+        else{
             Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
