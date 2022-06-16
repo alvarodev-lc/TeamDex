@@ -20,18 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import es.upm.mssde.pokedex.IPokemonEndpoint;
-import es.upm.mssde.pokedex.PokeAPI;
 import es.upm.mssde.pokedex.PokemonActivity;
 import es.upm.mssde.pokedex.PokemonListAdapter;
 import es.upm.mssde.pokedex.R;
-import es.upm.mssde.pokedex.models.PokemonList;
 import es.upm.mssde.pokedex.models.PokemonResult;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PokedexFragment extends Fragment implements View.OnClickListener, PokemonListAdapter.OnPokemonClickListener {
     private RecyclerView recyclerView;
