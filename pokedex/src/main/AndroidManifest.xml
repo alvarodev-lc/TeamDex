@@ -22,7 +22,6 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -30,6 +29,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -43,21 +43,6 @@
             android:name="es.upm.mssde.pokedex.PokemonActivity"
             android:exported="true"
             android:parentActivityName="es.upm.mssde.pokedex.FragmentActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="es.upm.mssde.pokedex.TeamBuilderActivity"
-            android:exported="true"
-            android:parentActivityName="es.upm.mssde.pokedex.TeamViewerActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="es.upm.mssde.pokedex.TeamViewerActivity"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
