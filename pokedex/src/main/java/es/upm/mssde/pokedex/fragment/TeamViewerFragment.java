@@ -80,6 +80,11 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        teams = teamDatabase.getAllTeams();
+        TextView teamsNotFound = view.findViewById(R.id.teams_not_found);
+        if (teams.size() > 0) {
+            teamsNotFound.setVisibility(View.GONE);
+        }
         updateTeam();
     }
 
