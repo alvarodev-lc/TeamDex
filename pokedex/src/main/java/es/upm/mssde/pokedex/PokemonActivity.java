@@ -25,7 +25,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
