@@ -340,8 +340,6 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         // reset team arraylist
         team.clear();
-
-        Toast.makeText(this.getApplicationContext(), "Team reset!", Toast.LENGTH_LONG).show();
     }
 
     public void saveTeam(View v) {
@@ -350,7 +348,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
             teamDatabase.deleteTeam(team_id);
         }
         else if (team.size() == 0) {
-            Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -366,8 +364,13 @@ public class TeamBuilderActivity extends AppCompatActivity {
         Log.d("saveTeam", "Saving team with team_id: " + team_id);
 
         teamDatabase.addTeam(team, team_id);
+        if (team.isEmpty()){
+            Toast.makeText(this.getApplicationContext(), "Team deleted!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_SHORT).show();
+        }
 
-        Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG).show();
         finish();
     }
 

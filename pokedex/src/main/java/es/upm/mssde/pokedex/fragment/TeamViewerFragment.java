@@ -109,9 +109,6 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
 
         Log.d("team_click", "clicked team: " + clicked_team.getTeamId());
 
-        Toast.makeText(appContext,
-                "Team #" + clicked_team.getTeamId() + " selected" , Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(getActivity(), TeamBuilderActivity.class);
         intent.putExtra("team_id", String.valueOf(position));
         startActivity(intent);
