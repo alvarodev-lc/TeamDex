@@ -1,7 +1,5 @@
 package es.upm.mssde.pokedex;
 
-
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -28,10 +26,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import es.upm.mssde.pokedex.models.PokeDB;
 import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.PokemonTeam;
-import es.upm.mssde.pokedex.models.Type;
 
 public class TeamBuilderActivity extends AppCompatActivity {
 
@@ -164,10 +160,14 @@ public class TeamBuilderActivity extends AppCompatActivity {
             PokemonResult poke = poke_list.get(position);
 
             if (poke != null) {
-                Log.d("search_on_click", "Added " + poke.getName());
-                addToTeam(poke);
+                if (team.contains(poke)) {
+                    Toast.makeText(TeamBuilderActivity.this, "Pokémon already added!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("search_on_click", "Added " + poke.getName());
+                    addToTeam(poke);
 
-                Toast.makeText(TeamBuilderActivity.this, "Added " + poke.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TeamBuilderActivity.this, "Added " + poke.getName(), Toast.LENGTH_SHORT).show();
+                }
 
                 // Remove the pokemon from the list
                 teamBuilderListAdapter.poke_list.remove(position);
@@ -187,20 +187,6 @@ public class TeamBuilderActivity extends AppCompatActivity {
         String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + num + ".png";
 
         return getResources().getIdentifier(sprite_url, "drawable", this.getPackageName());
-    }
-
-    public void addToTeamDB(PokemonResult poke) {
-        if (team.size() < 6) {
-            PokeDB pokeDB = new PokeDB();
-            pokeDB.setNum(String.valueOf(poke.getNum()));
-            pokeDB.setName(poke.getName());
-
-            team.add(poke);
-
-            Log.d("addToTeamDB", "Added " + poke.getName() + " to team");
-        } else {
-            Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_LONG).show();
-        }
     }
 
     public void addToTeam(PokemonResult poke) {
