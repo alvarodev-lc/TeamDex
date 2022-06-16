@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/shadow"
-    tools:context=".PokedexActivity">
+    android:background="@drawable/shadow">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pokedex_recycler_view"

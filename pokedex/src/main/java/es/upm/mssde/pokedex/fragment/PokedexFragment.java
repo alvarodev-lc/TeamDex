@@ -20,23 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import es.upm.mssde.pokedex.IPokemonEndpoint;
-import es.upm.mssde.pokedex.PokeAPI;
 import es.upm.mssde.pokedex.PokemonActivity;
-import es.upm.mssde.pokedex.PokemonListAdapter;
+import es.upm.mssde.pokedex.PokedexListAdapter;
 import es.upm.mssde.pokedex.R;
-import es.upm.mssde.pokedex.models.PokemonList;
 import es.upm.mssde.pokedex.models.PokemonResult;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PokedexFragment extends Fragment implements View.OnClickListener, PokemonListAdapter.OnPokemonClickListener {
+public class PokedexFragment extends Fragment implements View.OnClickListener, PokedexListAdapter.OnPokemonClickListener {
     private RecyclerView recyclerView;
-    private PokemonListAdapter pokemonListAdapter;
-    private ArrayList<PokemonResult> poke_list = new ArrayList<PokemonResult>();
+    private PokedexListAdapter pokedexListAdapter;
     private boolean charge_allowed;
 
     @Override
@@ -44,7 +35,7 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
         super.onCreate(savedInstanceState);
         View view = View.inflate(getActivity(), R.layout.fragment_pokemon_recyclerview, null);
         recyclerView = view.findViewById(R.id.recyclerViewFragment);
-        pokemonListAdapter = new PokemonListAdapter(this);
+        pokedexListAdapter = new PokedexListAdapter(this);
         setHasOptionsMenu(true);
         return view;
     }
@@ -52,32 +43,32 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recyclerView.setAdapter(pokemonListAdapter);
+        recyclerView.setAdapter(pokedexListAdapter);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            super.onScrolled(recyclerView, dx, dy);
 
-                if (dy > 0) {
-                    int totalItemCount = layoutManager.getItemCount();
-                    int visibleItemCount = layoutManager.getChildCount();
-                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+            if (dy > 0) {
+                int totalItemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+                int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
 
-                    if (charge_allowed) {
-                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-                            charge_allowed = false;
-                            pokemonListAdapter.refreshPokemonData();
-                        }
+                if (charge_allowed) {
+                    if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                        charge_allowed = false;
+                        pokedexListAdapter.refreshPokemonData();
                     }
                 }
             }
-        });
+        }
+    });
 
         charge_allowed = true;
-        pokemonListAdapter.refreshPokemonData();
+        pokedexListAdapter.refreshPokemonData();
     }
 
     @Override
@@ -96,6 +87,7 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Log.d("PokedexFragment", "onQueryTextSubmit: " + query);
                 return false;
             }
 
@@ -107,11 +99,40 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
                 return false;
             }
         });
+
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    Log.d("PokedexFragment", "onMenuItemActionExpand");
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    pokedexListAdapter.unfilter();
+                    Log.d("PokedexFragment", "onMenuItemActionCollapse");
+                    return true;
+                }
+            });
+        } else {
+            // do something for phones running an SDK before froyo
+            searchView.setOnCloseListener(() -> {
+                Log.d("PokedexFragment", "onClose");
+                // TODO Auto-generated method stub
+                return false;
+            });
+        }
     }
 
     private void filter(String query) {
         // creating a new array list to filter our data.
-        ArrayList<PokemonResult> filteredlist = new ArrayList<>();
+        ArrayList<PokemonResult> poke_list = pokedexListAdapter.getUnfilteredData();
+        ArrayList<PokemonResult> filtered_list = new ArrayList<>();
+
+        Log.d("PokedexFragment", "filter: " + pokedexListAdapter.getItemCount());
+        Log.d("PokedexFragment", "filter: " + query);
 
         // running a for loop to compare elements.
         for (PokemonResult pokemon : poke_list) {
@@ -119,17 +140,17 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
             if (pokemon.getName().toLowerCase().contains(query.toLowerCase())) {
                 // if the item is matched we are
                 // adding it to our filtered list.
-                filteredlist.add(pokemon);
+                filtered_list.add(pokemon);
             }
         }
-        if (filteredlist.isEmpty()) {
+        if (filtered_list.isEmpty()) {
             // if no item is added in filtered list we are
             // displaying a toast message as no data found.
             Toast.makeText(getActivity(), "No pokémons found...", Toast.LENGTH_SHORT).show();
         } else {
             // at last we are passing that filtered
             // list to our adapter class.
-            pokemonListAdapter.filterList(filteredlist);
+            pokedexListAdapter.filterList(filtered_list);
         }
     }
 
@@ -148,7 +169,7 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
 
     @Override
     public void onPokemonClick(int position) {
-        ArrayList<PokemonResult> poke_list_new = pokemonListAdapter.getData();
+        ArrayList<PokemonResult> poke_list_new = pokedexListAdapter.getData();
         PokemonResult pokemon = poke_list_new.get(position);
 
         String poke_name = pokemon.getName();
