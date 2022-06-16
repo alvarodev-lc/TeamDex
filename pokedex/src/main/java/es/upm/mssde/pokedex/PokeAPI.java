@@ -97,27 +97,6 @@ public class PokeAPI implements MyObservable {
         });
     }
 
-    public Pokemon getPokemonFromName(String name) {
-        Pokemon poke = null;
-
-        Log.d("poke_api_name", name);
-
-        for (PokemonResult poke_ : poke_list) {
-            Log.d("poke_api_name", poke_.getName().toLowerCase(Locale.ROOT));
-            if (poke_.getName().toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT))) {
-                int poke_num = poke_list.indexOf(poke_) + 1;
-                Log.d("poke_api_name", String.valueOf(poke_num));
-                getPokemonData(poke_num, true);
-                Log.d("poke_api_name", "found: " + poke.getName());
-                break;
-            } else {
-                Log.d("poke_api_name", "Pokemon not found");
-            }
-        }
-
-        return poke;
-    }
-
     public Pokemon getQueryPokemon() {
         return queryPokemon;
     }

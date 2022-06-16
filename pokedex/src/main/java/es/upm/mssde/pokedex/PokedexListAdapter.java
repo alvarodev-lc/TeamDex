@@ -129,16 +129,6 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
         return color;
     }
 
-
-    public void addPokemonList(List<PokemonResult> pokemon_list) {
-        data.addAll(pokemon_list);
-        notifyDataSetChanged();
-    }
-
-    public int getPokemonMaxResults() {
-        return POKEMON_MAX_RESULTS;
-    }
-
     @Override
     public int getItemCount() {
         Log.d("poke_api", String.valueOf(data.size()));

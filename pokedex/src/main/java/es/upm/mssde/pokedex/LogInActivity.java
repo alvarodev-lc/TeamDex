@@ -53,9 +53,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        //updateUI(currentUser);
     }
 
 
@@ -64,8 +61,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         int i = v.getId();
         if (i == R.id.buttonLogIn) {
             logInWithCredentials();
-        }
-        else if (i == R.id.buttonSignUp) {
+        } else if (i == R.id.buttonSignUp) {
             Intent sign_up_activity = new Intent(this, SignUpActivity.class);
             startActivity(sign_up_activity);
         }
@@ -89,7 +85,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         } else {
             mPasswordField.setError(null);
         }
-
         return valid;
     }
 
@@ -97,7 +92,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         if (!validateLinkForm()) {
             return;
         }
-
         // Get email and password from form
         String email = mEmailField.getText().toString();
         String password = mPasswordField.getText().toString();
@@ -113,59 +107,18 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.i(LOG_TAG, "logInWithCredentials:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LogInActivity.this,
                                     "Authentication successful", Toast.LENGTH_SHORT).show();
                             Intent api_call_activity = new Intent(LogInActivity.this,
                                     FragmentActivity.class);
                             startActivity(api_call_activity);
-
-                            // Here we should instantiate a new intent to move forward
-                            //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(LOG_TAG, "logInWithCredentials:failure", task.getException());
                             Toast.makeText(LogInActivity.this, "Authentication failed: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
                     }
                 });
-        // [END signin_with_email_and_password]
     }
-
-    private void logOut() {
-        mAuth.signOut();
-        //updateUI(null);
-    }
-
-    /*
-    private void updateUI(FirebaseUser user) {
-        TextView uidView = findViewById(R.id.statusId);
-        TextView emailView = findViewById(R.id.statusEmail);
-
-        Switch mSwitch = findViewById(R.id.statusSwitch);
-        boolean isSignedIn = (user != null);
-
-        // Status text
-        if (isSignedIn) {
-            uidView.setText(R.string.signed_in);
-            emailView.setText(getString(R.string.email_fmt, user.getEmail()));
-            mPasswordField.setText("");
-            mEmailField.setText("");
-            Log.i(LOG_TAG, "signedIn: " + getString(R.string.id_fmt, user.getDisplayName()));
-            // Here you should instantiate an Intent to move forward within you app
-        } else {
-            uidView.setText(R.string.signed_out);
-            emailView.setText(null);
-            Log.i(LOG_TAG, "signOut: " + getString(R.string.signed_out));
-        }
-
-        // Button visibility
-        findViewById(R.id.buttonLogIn).setEnabled(!isSignedIn);
-        findViewById(R.id.buttonLogOut).setEnabled(isSignedIn);
-        mSwitch.setChecked(isSignedIn);
-    }
-    */
-
 }

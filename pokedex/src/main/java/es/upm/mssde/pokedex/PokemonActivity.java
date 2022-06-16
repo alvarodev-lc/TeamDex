@@ -192,7 +192,6 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         LinearLayout type_layout = findViewById(R.id.type_layout);
         List<TypeList> list_type_list = pokemon.getTypes();
         Integer type_list_size = list_type_list.size();
-        String pokemon_type = "";
 
         if (type_list_size == 1) {
             String pokemon_type1 = list_type_list.get(0).getType().getName();
@@ -209,9 +208,6 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
             Log.d(LOG_TAG, "Type 1: " + pokemon_type1);
 
-            //pokemon_type = pokemon_type1_capitalized;
-
-            //addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
 
             addCardView(type_layout, pokemon_type1_capitalized, -1);
         } else if (type_list_size == 2) {
@@ -240,9 +236,6 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
             Log.d(LOG_TAG, "Type 1: " + pokemon_type1);
             Log.d(LOG_TAG, "Type 2: " + pokemon_type2);
 
-            //pokemon_type = pokemon_type1_capitalized + "/" + pokemon_type2_capitalized;
-
-            //addTextViewToLayout(type_layout, pokemon_type, 20, 25, 25);
 
             addCardView(type_layout, pokemon_type1_capitalized, -1);
             addCardView(type_layout, pokemon_type2_capitalized, -1);
@@ -330,29 +323,6 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                     ability_name.substring(1);
             Log.d(LOG_TAG, "Ability: " + ability_name);
 
-            //addTextViewToLayout(ability_layout, "+ " + ability_name, 20, 50, 25);
-            // create round card view and add the ability_name
-            //CardView cardView = new CardView(this);
-            // change width and height of the card
-            //cardView.setRadius(100);
-            //cardView.setCardElevation(4);
-            //cardView.setContentPadding(20, 20, 20, 20);
-            //set background color to material green
-            //cardView.setCardBackgroundColor(getMaterialColor(i));
-            //cardView.setCardBackgroundColor(Color.argb(255, 240, 240, 240));
-            // set margin right in card view
-            //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            //params.setMargins(25, 0, 5, 0);
-            //cardView.setLayoutParams(params);
-            // add the ability_name to the card view
-            //TextView textView = new TextView(this);
-            //textView.setText(ability_name);
-            //textView.setTextSize(16);
-            //textView.setTextColor(getMaterialColor(i));
-            //cardView.addView(textView);
-            // add the card view to the layout
-            //ability_layout.addView(cardView);
-
             addCardView(ability_layout, ability_name, i);
 
             i++;
@@ -385,8 +355,6 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d("Scrapping", "Description: " + pokemon_description);
 
                 runOnUiThread(() -> {
-                    //addTextViewToLayout(pokedex_desc_placeholder_layout, monster_species, 20, 60, 25);
-                    //addTextViewToLayout(pokedex_desc_placeholder_layout, monster_description, 17, 60, 40);
 
                     pokedex_summary_placeholder.setText(pokemon_summary);
                     // underline monster_species
@@ -588,9 +556,5 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
 
-    }
-
-    public Retrofit getRetrofitInstance() {
-        return retrofit;
     }
 }

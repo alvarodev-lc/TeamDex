@@ -60,39 +60,6 @@ public class TeamDatabase extends SQLiteOpenHelper {
         int poke_num = pokemon.getNum();
         values.put(NUM_COL, poke_num);
 
-        /*List<TypeList> types = pokemon.getTypes();
-        Type type1 = types.get(0).getType();
-        Type type2 = types.get(1).getType();
-
-        String type1_capitalized = type1.getName().substring(0, 1).toUpperCase() + type1.getName().substring(1);
-        String type2_capitalized = type2.getName().substring(0, 1).toUpperCase() + type2.getName().substring(1);
-        values.put(TYPE_COL, type1_capitalized + "/" + type2_capitalized);
-
-        List<AbilityList> abilities = pokemon.getAbilities();
-        String ability1 = abilities.get(0).getAbility().getName();
-        String ability2 = abilities.get(1).getAbility().getName();
-
-        String ability1_capitalized = ability1.substring(0, 1).toUpperCase() + ability1.substring(1);
-        String ability2_capitalized = ability2.substring(0, 1).toUpperCase() + ability2.substring(1);
-
-        values.put(ABILITY_COL, ability1_capitalized + "/" + ability2_capitalized);
-
-        List<Stat> stats = pokemon.getStats();
-        int hp = stats.get(0).getBaseStat();
-        int def = stats.get(1).getBaseStat();
-        int atk = stats.get(2).getBaseStat();
-        int spdef = stats.get(3).getBaseStat();
-        int spatk = stats.get(4).getBaseStat();
-        int speed = stats.get(5).getBaseStat();
-
-        values.put(HP_COL, hp);
-        values.put(DEF_COL, def);
-        values.put(ATK_COL, atk);
-        values.put(SPDEF_COL, spdef);
-        values.put(SPATK_COL, spatk);
-        values.put(SPEED_COL, speed);
-        */
-
         db.insert(TABLE_NAME, null, values);
 
         Log.d("DB", "Added pokemon to team in DB: " + name);
@@ -107,7 +74,6 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
     public ArrayList<PokemonResult> getTeam(String team_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        PokemonTeam team = new PokemonTeam();
         ArrayList<PokemonResult> team_pokemons = new ArrayList<>();
 
         Log.d("DB", "Getting team from DB: " + team_id);
@@ -133,8 +99,6 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
             i++;
         }
-
-
         return team_pokemons;
     }
 

@@ -353,15 +353,6 @@ public class TeamBuilderActivity extends AppCompatActivity {
             return;
         }
 
-        /*
-        String teamName = ((EditText) findViewById(R.id.teamName)).getText().toString();
-
-        if (teamName.equals("")) {
-            Toast.makeText(getApplicationContext(), "Team name cannot be empty!", Toast.LENGTH_LONG);
-            return;
-        }
-        */
-
         Log.d("saveTeam", "Saving team with team_id: " + team_id);
 
         teamDatabase.addTeam(team, team_id);
