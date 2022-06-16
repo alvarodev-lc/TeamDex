@@ -110,11 +110,14 @@ public class TeamDatabase extends SQLiteOpenHelper {
         PokemonTeam team = new PokemonTeam();
         ArrayList<PokemonResult> team_pokemons = new ArrayList<>();
 
+        Log.d("DB", "Getting team from DB: " + team_id);
+
         String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = " + team_id;
         Cursor cursor = db.rawQuery(query, null);
 
         int i = 0;
         while (cursor.moveToNext()) {
+            Log.d("DB", "Loading pokemon " + i + ": " + cursor.getString(2));
             int col_num = cursor.getColumnIndex(NUM_COL);
             String num = cursor.getString(col_num);
 

@@ -150,6 +150,8 @@ public class TeamBuilderActivity extends AppCompatActivity {
     private void loadTeamFromDB() {
         ArrayList<PokemonResult> team = teamDatabase.getTeam(team_id);
 
+        Log.d("LOAD_TEAM_DB", "Team size: " + team.size());
+
         for (int i = 0; i < team.size(); i++) {
             PokemonResult pokemon = team.get(i);
             int num = pokemon.getNum();
@@ -333,6 +335,8 @@ public class TeamBuilderActivity extends AppCompatActivity {
             return;
         }
         */
+
+        Log.d("saveTeam", "Saving team with team_id: " + team_id);
 
         teamDatabase.addTeam(team, team_id);
 
