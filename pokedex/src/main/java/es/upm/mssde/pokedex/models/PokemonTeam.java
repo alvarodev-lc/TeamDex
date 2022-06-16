@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PokemonTeam {
     ArrayList<PokemonResult> pokes;
-    int team_id;
+    String team_id;
 
     public PokemonTeam() {
         pokes = new ArrayList<>();
@@ -18,11 +18,11 @@ public class PokemonTeam {
         this.pokes = pokes;
     }
 
-    public int getTeamId() {
+    public String getTeamId() {
         return team_id;
     }
 
-    public void setTeamId(int team_id) {
+    public void setTeamId(String team_id) {
         this.team_id = team_id;
     }
 }

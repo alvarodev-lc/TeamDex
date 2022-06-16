@@ -185,7 +185,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
         for (int team_id : pokemons_by_team.keySet()) {
             PokemonTeam team = new PokemonTeam();
             team.setTeamPokemons(pokemons_by_team.get(team_id));
-            team.setTeamId(team_id);
+            team.setTeamId(String.valueOf(team_id));
             teams.add(team);
         }
 

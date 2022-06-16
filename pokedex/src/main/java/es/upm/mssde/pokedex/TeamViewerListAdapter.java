@@ -62,16 +62,18 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
     @Override
     public void onBindViewHolder (ViewHolder holder, int position, @NonNull List<Object> payloads){
         ArrayList<PokemonResult> team = teamDatabase.getTeam(String.valueOf(position));
+        int team_poke_num = team.size();
         int team_id = position;
         holder.team_name.setText("Team #" + team_id);
 
-        int i = 0;
+        for (int i=0; i<=5; i++ ){
+            if (i < team_poke_num){
+                Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + team.get(i).getNum() + ".png").into(holder.poke_images.get(i));
+            }
+            else{
+                Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + "0" + ".png").into(holder.poke_images.get(i));
+            }
 
-        for (PokemonResult poke : team) {
-            //holder.poke_name.setText(pokemon.getName());
-            Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.getNum() + ".png").into(holder.poke_images.get(i));
-
-            i++;
         }
     }
 

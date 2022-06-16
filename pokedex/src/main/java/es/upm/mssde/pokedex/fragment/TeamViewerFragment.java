@@ -25,6 +25,7 @@ import es.upm.mssde.pokedex.R;
 import es.upm.mssde.pokedex.TeamBuilderActivity;
 import es.upm.mssde.pokedex.TeamDatabase;
 import es.upm.mssde.pokedex.TeamViewerListAdapter;
+import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.PokemonTeam;
 
 public class TeamViewerFragment extends Fragment implements View.OnClickListener, TeamViewerListAdapter.OnTeamClickListener {
@@ -69,6 +70,14 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
 
     private void loadTeamsFromDB() {
         teams = teamDatabase.getAllTeams();
+
+        for (PokemonTeam team : teams){
+            ArrayList<PokemonResult> poke_team = team.getTeamPokemons();
+            Log.d("final_de", "Team id: " + team.getTeamId());
+            for (PokemonResult poke : poke_team){
+                Log.d("final_de", poke.getName());
+            }
+        }
 
         TextView teamsNotFound = view.findViewById(R.id.teams_not_found);
 
