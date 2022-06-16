@@ -348,7 +348,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
             Log.d("Erase", "Erasing team");
             teamDatabase.deleteTeam(team_id);
         }
-        else{
+        else if (team.isEmpty()){
             Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
