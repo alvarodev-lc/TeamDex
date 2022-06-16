@@ -95,7 +95,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
             this.onTeamClickListener = onTeamClickListener;
 
-            v.setOnClickListener(this);
+            v.findViewById(R.id.team_card_view).setOnClickListener(this);
         }
 
         @Override
