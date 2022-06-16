@@ -1,5 +1,6 @@
 package es.upm.mssde.pokedex.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.app.Fragment;
 import android.content.Intent;
@@ -74,6 +75,18 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
         if (teams.size() == 0) {
             teamsNotFound.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateTeam();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateTeam() {
+        teamViewerListAdapter.updateDB();
+        teamViewerListAdapter.notifyDataSetChanged();
     }
 
     @Override

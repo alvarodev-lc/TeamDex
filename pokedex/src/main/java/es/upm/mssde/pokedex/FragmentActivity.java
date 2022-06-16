@@ -8,9 +8,7 @@ import android.widget.RadioButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import es.upm.mssde.pokedex.R;
 import es.upm.mssde.pokedex.fragment.PokedexFragment;
 import es.upm.mssde.pokedex.fragment.TeamViewerFragment;
 
@@ -48,8 +46,9 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
 
         switch (index) {
             case 1:
-                if (pokedexFragment != null)
+                if (pokedexFragment != null) {
                     ft.show(pokedexFragment);
+                }
                 else {
                     pokedexFragment = new PokedexFragment();
                     ft.add(R.id.fl_container, pokedexFragment);
@@ -57,8 +56,9 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case 2:
-                if (teamViewerFragment != null)
+                if (teamViewerFragment != null) {
                     ft.show(teamViewerFragment);
+                }
                 else {
                     teamViewerFragment = new TeamViewerFragment();
                     ft.add(R.id.fl_container, teamViewerFragment);

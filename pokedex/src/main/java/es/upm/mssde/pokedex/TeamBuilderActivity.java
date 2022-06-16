@@ -337,6 +337,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         teamDatabase.addTeam(team, team_id);
 
         Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     // add onClickListener to Save Team button
