@@ -31,7 +31,6 @@ import es.upm.mssde.pokedex.models.PokemonTeam;
 public class TeamViewerFragment extends Fragment implements View.OnClickListener, TeamViewerListAdapter.OnTeamClickListener {
 
     private TeamDatabase teamDatabase;
-    private ArrayList<PokemonTeam> teams;
     private RecyclerView recyclerView;
     private TeamViewerListAdapter teamViewerListAdapter;
     private View view;
@@ -61,17 +60,9 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(layoutManager);
 
-        teamDatabase = new TeamDatabase(getActivity());
-        teams = new ArrayList<>();
-
-        loadTeamsFromDB();
         addOnClickListenerToCreateTeamButton();
-    }
 
-    private void loadTeamsFromDB() {
-        teams = teamDatabase.getAllTeams();
-
-        for (PokemonTeam team : teams){
+        for (PokemonTeam team : teamViewerListAdapter.teams){
             ArrayList<PokemonResult> poke_team = team.getTeamPokemons();
             Log.d("final_de", "Team id: " + team.getTeamId());
             for (PokemonResult poke : poke_team){
@@ -81,7 +72,7 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
 
         TextView teamsNotFound = view.findViewById(R.id.teams_not_found);
 
-        if (teams.size() == 0) {
+        if (teamViewerListAdapter.teams.size() == 0) {
             teamsNotFound.setVisibility(View.VISIBLE);
         }
     }
@@ -89,18 +80,20 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        teams = teamDatabase.getAllTeams();
+
         TextView teamsNotFound = view.findViewById(R.id.teams_not_found);
-        if (teams.size() > 0) {
+
+        if (teamViewerListAdapter.teams.size() > 0) {
             teamsNotFound.setVisibility(View.GONE);
         }
-        updateTeam();
-    }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateTeam() {
+        recyclerView.setAdapter(null);
+        recyclerView.setLayoutManager(null);
+        recyclerView.setAdapter(teamViewerListAdapter);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
+        recyclerView.setLayoutManager(layoutManager);
+
         teamViewerListAdapter.updateDB();
-        teamViewerListAdapter.notifyDataSetChanged();
     }
 
     @Override

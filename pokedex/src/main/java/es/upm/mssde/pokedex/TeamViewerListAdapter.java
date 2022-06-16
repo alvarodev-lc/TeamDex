@@ -45,6 +45,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
     public void updateDB() {
         teams = teamDatabase.getAllTeams();
+        notifyDataSetChanged();
     }
 
     @NonNull
