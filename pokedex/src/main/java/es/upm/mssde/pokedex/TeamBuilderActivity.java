@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -259,6 +260,11 @@ public class TeamBuilderActivity extends AppCompatActivity {
         Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke_num + ".png")
                 .into(poke_sprite_view);
 
+        // add button to delete pokemon
+        Button delete_button = new Button(this);
+        delete_button.setText("X");
+        delete_button.setOnClickListener(v -> deletePokemon(v));
+
         cardViewContent.addView(poke_sprite_view);
         cardViewContent.addView(poke_name_view);
 
@@ -267,12 +273,28 @@ public class TeamBuilderActivity extends AppCompatActivity {
         team_list.addView(cardView);
     }
 
+    private void deletePokemon(View v) {
+        GridLayout team_list = findViewById(R.id.team_list);
+        int child_count = team_list.getChildCount();
+
+        for (int i = 0; i < child_count; i++) {
+            View child = team_list.getChildAt(i);
+            if (child == v.getParent()) {
+                team_list.removeViewAt(i);
+                team.remove(i);
+                break;
+            }
+        }
+    }
+
     public void goToPokemonStats(View v) {
         // get position of cardview in team_list
-        LinearLayout team_list = findViewById(R.id.team_list);
+        GridLayout team_list = findViewById(R.id.team_list);
         int position = team_list.indexOfChild(v);
 
         PokemonResult poke = team.get(position);
+
+        Log.d("goToPokemonStats", "Going to stats for " + poke.getName());
 
         Intent intent = new Intent(this, PokemonActivity.class);
         intent.putExtra("pokemon", poke);
