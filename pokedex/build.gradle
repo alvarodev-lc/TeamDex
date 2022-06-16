@@ -43,7 +43,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:2.2.8"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // For control over item selection of both touch and mouse driven selection
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha02"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
 

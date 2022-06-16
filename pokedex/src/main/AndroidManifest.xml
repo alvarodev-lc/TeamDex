@@ -18,7 +18,8 @@
 
         <activity
             android:name="es.upm.mssde.pokedex.FragmentActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -28,7 +29,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,27 +40,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="es.upm.mssde.pokedex.PokedexActivity"
+            android:name="es.upm.mssde.pokedex.PokemonActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name="es.upm.mssde.pokedex.PokemonActivity"
-            android:exported="true"
-            android:parentActivityName="es.upm.mssde.pokedex.FragmentActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="es.upm.mssde.pokedex.PokemonTeamActivity"
+            android:name="es.upm.mssde.pokedex.TeamBuilderActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

@@ -1,304 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".TeamBuilderActivity">
+    android:orientation="vertical">
 
-    <SearchView
-        android:id="@+id/searchbox"
-        android:layout_width="250dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:hapticFeedbackEnabled="true"
-        app:layout_constraintBottom_toTopOf="@+id/dexView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/teamrow1"
-        android:layout_width="372dp"
-        android:layout_height="74dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal"
-        android:paddingRight="85dp"
-        app:layout_constraintBottom_toBottomOf="@+id/dexView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.006">
-
-        <ImageButton
-            android:id="@+id/hamburger"
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
-            android:minWidth="48dp"
-            android:scaleType="centerCrop"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/member1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:backgroundTint="#FFFFFF"
-                android:onClick="removePokemonFromView"
-                android:scaleType="centerCrop"
-                android:tag="1"
-                app:srcCompat="@drawable/pokeball"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/member1_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#00000000"
-                android:clickable="false"
-                android:enabled="false"
-                android:gravity="center"
-                android:text="HOLA"
-                android:textColor="#000000"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/member2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:backgroundTint="#FFFFFF"
-                android:onClick="removePokemonFromView"
-                android:scaleType="centerCrop"
-                android:tag="1"
-                app:srcCompat="@drawable/pokeball"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/member2_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#00000000"
-                android:clickable="false"
-                android:enabled="false"
-                android:gravity="center"
-                android:text="HOLA"
-                android:textColor="#000000"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/member3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:backgroundTint="#FFFFFF"
-                android:onClick="removePokemonFromView"
-                android:scaleType="centerCrop"
-                android:tag="1"
-                app:srcCompat="@drawable/pokeball"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/member3_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#00000000"
-                android:clickable="false"
-                android:enabled="false"
-                android:gravity="center"
-                android:text="HOLA"
-                android:textColor="#000000"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/teamrow2"
-        android:layout_width="372dp"
-        android:layout_height="74dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:paddingRight="80dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="@+id/teamrow1"
-        app:layout_constraintTop_toBottomOf="@+id/teamrow1">>
-
-        <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/member4"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:backgroundTint="#FFFFFF"
-                android:onClick="removePokemonFromView"
-                android:scaleType="centerCrop"
-                android:tag="1"
-                app:srcCompat="@drawable/pokeball"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/member4_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#00000000"
-                android:clickable="false"
-                android:enabled="false"
-                android:gravity="center"
-                android:text="HOLA"
-                android:textColor="#000000"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/member5"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:backgroundTint="#FFFFFF"
-                android:onClick="removePokemonFromView"
-                android:scaleType="centerCrop"
-                android:tag="1"
-                app:srcCompat="@drawable/pokeball"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/member5_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#00000000"
-                android:clickable="false"
-                android:enabled="false"
-                android:gravity="center"
-                android:text="HOLA"
-                android:textColor="#000000"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="80dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/member6"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
-            android:onClick="removePokemonFromView"
-            android:scaleType="centerCrop"
-            android:tag="1"
-            app:srcCompat="@drawable/pokeball"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/member6_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:clickable="false"
-            android:enabled="false"
-            android:gravity="center"
-            android:text="HOLA"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
-    <ListView
-        android:id="@+id/dexView"
-        android:layout_width="wrap_content"
-        android:layout_height="333dp"
-        android:divider="#000"
-        android:dividerHeight="1dp"
-        android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/save_team_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:text="Save"
+                        android:textColor="@color/colorWhite"
+                        android:theme="@style/Theme.MaterialComponents"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:cornerRadius="10dp" />
 
-    </ListView>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/reset_team_button"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="Reset"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:theme="@style/Theme.MaterialComponents"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="@android:color/holo_red_dark" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginLeft="140dp"
-        android:layout_marginTop="176dp"
-        android:onClick="resetTeam"
-        android:text="Reset"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                </RelativeLayout>
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:onClick="saveTeam"
-        android:text="Save"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+                <SearchView
+                    android:id="@+id/search_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:iconifiedByDefault="false" />
+            </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ListView
+                android:id="@+id/poke_search_list"
+                android:layout_width="230dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center_horizontal"
+                android:divider="#C8C8C8"
+                android:dividerHeight="1dp"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <GridLayout
+                    android:id="@+id/team_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:rowCount="3"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

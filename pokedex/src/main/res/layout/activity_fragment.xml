@@ -15,6 +15,7 @@
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/shadow"
             android:orientation="horizontal"
             android:padding="10dp">
 
@@ -45,7 +46,5 @@
                 android:scaleType="centerInside"
                 android:text="@string/button_team_builder"
                 android:textSize="13dp" />
-
-        </RadioGroup>
-
+</RadioGroup>
 </LinearLayout>

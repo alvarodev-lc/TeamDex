@@ -25,6 +25,7 @@ public class PokeAPI implements MyObservable {
     public int POKEMON_MAX_RESULTS = 100;
     public ArrayList<PokemonResult> poke_list;
     private Pokemon queryPokemon;
+    private Pokemon queryPokemonFromName;
     private List<MyObserver> myObservers;
 
     public PokeAPI() {
@@ -39,7 +40,7 @@ public class PokeAPI implements MyObservable {
         myObservers = new ArrayList<>();
     }
 
-    public void getPokemonData(int poke_num) {
+    public void getPokemonData(int poke_num, boolean from_name) {
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
         String poke_id = String.valueOf(poke_num);
         Call<Pokemon> pokemonResultCall = apiService.getPokemon(poke_id);
@@ -52,7 +53,13 @@ public class PokeAPI implements MyObservable {
                     Log.d("poke_request_db", response.message());
                     assert pokemon != null;
 
-                    queryPokemon = pokemon;
+                    if (from_name) {
+                        queryPokemonFromName = pokemon;
+                        notifyObserversPokemonDataFromName();
+                    } else {
+                        queryPokemon = pokemon;
+                        notifyObserversPokemonData();
+                    }
                 }
             }
 
@@ -64,7 +71,7 @@ public class PokeAPI implements MyObservable {
         });
     }
 
-    public void getPokemons(int offset){
+    public void getPokemonsData(int offset){
         Log.d("getPokemonData", "offset: " + offset);
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
         Call<PokemonList> pokemonResultCall = apiService.getAllPokemon(POKEMON_MAX_RESULTS, offset);
@@ -78,7 +85,8 @@ public class PokeAPI implements MyObservable {
                     assert Pokemons != null;
                     ArrayList<PokemonResult> Pokemon_list = Pokemons.getResults();
                     poke_list.addAll(Pokemon_list);
-                    notifyObserversPokemonData();
+                    Log.d("poke_api_all", "poke_list size: " + poke_list.size());
+                    notifyObserversPokemonsData();
                 }
             }
             @Override
@@ -99,8 +107,7 @@ public class PokeAPI implements MyObservable {
             if (poke_.getName().toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT))) {
                 int poke_num = poke_list.indexOf(poke_) + 1;
                 Log.d("poke_api_name", String.valueOf(poke_num));
-                getPokemonData(poke_num);
-                queryPokemon = poke;
+                getPokemonData(poke_num, true);
                 Log.d("poke_api_name", "found: " + poke.getName());
                 break;
             } else {
@@ -127,14 +134,31 @@ public class PokeAPI implements MyObservable {
 
     @Override
     public void removeObserver(MyObserver myObserver) {
+        Log.d("removeObserver", "Observer removed");
         this.myObservers.remove(myObserver);
+    }
+
+    @Override
+    public void notifyObserversPokemonsData() {
+        for (MyObserver myObserver : myObservers) {
+            Log.d("notifyObserversPokemonsData", "Notifying observer");
+            myObserver.onPokemonsDataChanged(poke_list);
+        }
     }
 
     @Override
     public void notifyObserversPokemonData() {
         for (MyObserver myObserver : myObservers) {
             Log.d("notifyObserversPokemonData", "Notifying observer");
-            myObserver.onPokemonDataChanged(poke_list);
+            myObserver.onPokemonDataChanged(queryPokemon);
+        }
+    }
+
+    @Override
+    public void notifyObserversPokemonDataFromName() {
+        for (MyObserver myObserver : myObservers) {
+            Log.d("notifyObserversPokemonDataFromName", "Notifying observer");
+            myObserver.onPokemonDataFromNameChanged(queryPokemonFromName);
         }
     }
 }

@@ -11,39 +11,46 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 
-public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder> implements MyObserver {
+public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.ViewHolder> implements MyObserver {
 
     public ArrayList<PokemonResult> data;
+    public ArrayList<PokemonResult> unfilteredData;
     private OnPokemonClickListener onPokemonClickListener;
     private PokeAPI pokeAPI;
     public final int POKEMON_MAX_RESULTS = 100;
     int offset = 0;
 
-    public PokemonListAdapter(OnPokemonClickListener onPokemonClickListener) {
+    public PokedexListAdapter(OnPokemonClickListener onPokemonClickListener) {
         data = new ArrayList<>();
+        unfilteredData = new ArrayList<>();
         pokeAPI = new PokeAPI();
         this.onPokemonClickListener = onPokemonClickListener;
         pokeAPI.addObserver(this);
         pokeAPI.setPokemonMaxResults(POKEMON_MAX_RESULTS);
     }
 
+    public void unfilter() {
+        if (unfilteredData.size() > 0) {
+            Log.d("PokedexListAdapter", "unfilteredData.size() > 0");
+            data = unfilteredData;
+            notifyDataSetChanged();
+        }
+    }
+
     public void refreshPokemonData() {
         Log.d("POKEMON_LIST_ADAPTER", "Refreshing pokemon data");
         Log.d("POKEMON_LIST_ADAPTER", "Offset: " + offset);
-        pokeAPI.getPokemons(offset);
+        pokeAPI.getPokemonsData(offset);
         offset += POKEMON_MAX_RESULTS;
     }
 
@@ -144,10 +151,21 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     }
 
     @Override
-    public void onPokemonDataChanged(ArrayList<PokemonResult> pokemon_list) {
+    public void onPokemonsDataChanged(ArrayList<PokemonResult> pokemon_list) {
         Log.d("POKEMON_LIST_ADAPTER", "onPokemonDataChanged");
         data = pokemon_list;
+        unfilteredData = pokemon_list;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPokemonDataChanged(Pokemon pokemon) {
+
+    }
+
+    @Override
+    public void onPokemonDataFromNameChanged(Pokemon pokemon) {
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -182,5 +200,9 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
     public ArrayList<PokemonResult> getData() {
         return data;
+    }
+
+    public ArrayList<PokemonResult> getUnfilteredData() {
+        return unfilteredData;
     }
 }

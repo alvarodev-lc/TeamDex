@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/team_view"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal"
+    android:layout_marginBottom="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/team_card_view"
+        android:layout_width="340dp"
+        android:layout_height="270dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal|center_vertical"
+        app:cardCornerRadius="30dp"
+        app:cardPreventCornerOverlap="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/team_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#515151"
+                android:textSize="21sp"
+                android:paddingTop="20dp"
+                android:paddingLeft="30dp"
+                android:fontFamily="Roboto"/>
+
+            <GridLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:orientation="horizontal"
+                android:layout_marginStart="5dp">
+
+                <ImageView
+                    android:id="@+id/poke_image0"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"/>
+
+                <ImageView
+                    android:id="@+id/poke_image1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"/>
+
+                <ImageView
+                    android:id="@+id/poke_image2"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"/>
+
+            </GridLayout>
+
+            <GridLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginStart="5dp">
+
+                <ImageView
+                    android:id="@+id/poke_image3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
+
+                <ImageView
+                    android:id="@+id/poke_image4"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"/>
+
+                <ImageView
+                    android:id="@+id/poke_image5"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"/>
+            </GridLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

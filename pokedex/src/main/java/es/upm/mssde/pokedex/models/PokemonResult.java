@@ -39,8 +39,12 @@ public class PokemonResult implements Serializable {
     }
 
     public int getNum() {
-        String[] split_url = url.split("/");
-        return Integer.parseInt(split_url[split_url.length - 1]);
+        if (url == null) {
+            return num;
+        } else {
+            String[] split_url = url.split("/");
+            return Integer.parseInt(split_url[split_url.length - 1]);
+        }
     }
 
     public void setNum(int num) {
