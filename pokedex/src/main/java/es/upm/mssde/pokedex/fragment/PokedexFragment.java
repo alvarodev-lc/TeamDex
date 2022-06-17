@@ -63,6 +63,9 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
                         pokedexListAdapter.refreshPokemonData();
                     }
                 }
+                else {
+                    charge_allowed = true;
+                }
             }
         }
     });
