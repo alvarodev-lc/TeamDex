@@ -1,0 +1,4 @@
+<data-extraction-rule
+    type="file"
+    key="database"
+    path="databases/TEAM" />
