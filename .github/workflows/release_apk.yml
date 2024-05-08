@@ -33,4 +33,4 @@ jobs:
         uses: sangatdesai/release-apk@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APP_FOLDER: pokedex
+          APP_FOLDER: app
