@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: checkout code
       uses: actions/checkout@v2
+    - name: Create google services JSON
+        run: cat /home/runner/work/PAS-Pokedex/pokedex/google-services.json | base64
     - name: setup jdk
       uses: actions/setup-java@v1
       with:
