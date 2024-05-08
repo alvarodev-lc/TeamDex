@@ -5,29 +5,32 @@ on:
     branches:
       - master
 
-
 jobs:
   Gradle:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout code
-      uses: actions/checkout@v2
-    - name: Create google services JSON
-        run: cat /home/runner/work/PAS-Pokedex/pokedex/google-services.json | base64
-    - name: Putting data
+      - name: checkout code
+        uses: actions/checkout@v2
+
+      # Decode and store google-services.json in the app folder
+      - name: Decode and store google-services.json
         env:
-            DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo $DATA > /home/runner/work/<Project-Name>/<Project-Name>/app/google-services.json
-    - name: setup jdk
-      uses: actions/setup-java@v1
-      with:
-        java-version: 17
-    - name: Make Gradle executable
-      run: chmod +x ./gradlew
-    - name: Build Release APK
-      run: ./gradlew assembleRelease
-    - name: Releasing using Hub
-      uses: sangatdesai/release-apk@main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-        APP_FOLDER: pokedex
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > /home/runner/work/PAS-Pokedex/pokedex/app/google-services.json
+
+      - name: setup jdk
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Releasing using Hub
+        uses: sangatdesai/release-apk@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_FOLDER: pokedex
