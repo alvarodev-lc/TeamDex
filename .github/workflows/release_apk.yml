@@ -11,12 +11,13 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v2
+      - name: Create file
+        run: cat /home/runner/work/Pas-Pokedex/pokedex/google-services.json | base64
 
-      # Decode and store google-services.json in the app folder
-      - name: Decode and store google-services.json
+      - name: Putting data
         env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > /home/runner/work/PAS-Pokedex/pokedex/app/google-services.json
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA > /home/runner/work/Pas-Pokedex/pokedex/google-services.json
 
       - name: setup jdk
         uses: actions/setup-java@v1
