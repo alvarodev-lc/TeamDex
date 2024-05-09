@@ -29,6 +29,10 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
+      - name: Extract Tag Name
+        id: extract_tag_name
+        run: echo "::set-output name=tag_name::$(basename ${GITHUB_REF})"
+
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
@@ -38,8 +42,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.extract_tag_name.outputs.tag_name }}
+          release_name: Release ${{ steps.extract_tag_name.outputs.tag_name }}
           body: |
             Changes in this Release
             - First Change
