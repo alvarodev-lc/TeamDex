@@ -11,10 +11,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file(RELEASE_STORE_FILE)
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
+            storeFile file(SIGNING_KEY_STORE_PATH)
+            storePassword SIGNING_STORE_PASSWORD
+            keyAlias SIGNING_KEY_ALIAS
+            keyPassword SIGNING_KEY_PASSWORD
         }
     }
     buildTypes {
