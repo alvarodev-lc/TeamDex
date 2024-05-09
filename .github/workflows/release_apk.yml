@@ -30,10 +30,9 @@ jobs:
         env:
           ENCODED_STRING: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
           SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
-
-
         run: |
-          echo $ENCODED_STRING | base64 -di > ./pokedex/SIGNING_KEY_STORE_PATH
+          echo $ENCODED_STRING > keystore-b64.txt
+          base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
