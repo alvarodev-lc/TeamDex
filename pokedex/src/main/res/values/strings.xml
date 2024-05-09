@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PAS - Pokédex</string>
+    <string name="app_name">TeamDex</string>
 
     <string name="label_emailpassword">Email/Password Authentication</string>
     <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
@@ -17,7 +17,7 @@
     <string name="signed_out">Signed Out</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="desc_logo">PAS - Pokédex</string>
+    <string name="desc_logo">TeamDex</string>
     <string name="auth_failed">Authentication failed</string>
     <string name="start_phone_auth">Start</string>
     <string name="hint_verification_code">Verification Code</string>
