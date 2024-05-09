@@ -2,7 +2,7 @@
   <img width="450" height="300" src="/pokedex/src/main/res/drawable-xxhdpi/logo.png">
 </p>
 
-# PAS - Pokédex
+# TeamDex
  
  This is an application made for Pokémon lovers. It consists of 2 main parts:
  
