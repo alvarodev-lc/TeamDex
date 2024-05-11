@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+' # Version
+    branches:
+      - develop
 
 jobs:
   Gradle:
@@ -26,9 +28,6 @@ jobs:
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
-
-      - name: Build Release apk
-        run: ./gradlew assembleRelease
 
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
