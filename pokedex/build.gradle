@@ -6,8 +6,8 @@ android {
         applicationId "es.upm.mssde.pokedex"
         minSdkVersion 24
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "0.0.1"
     }
     signingConfigs {
         release {
