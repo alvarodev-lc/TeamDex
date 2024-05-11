@@ -27,7 +27,7 @@ jobs:
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
         with:
-          releaseDirectory: pokedex/build/outputs/apk/release/pokedex-release.apk
+          releaseDirectory: pokedex/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -40,12 +40,19 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build Release apk
-        env:
-          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
         run: ./gradlew assembleRelease
+
+      - uses: r0adkll/sign-android-release@v1
+        name: Sign app APK
+        with:
+          releaseDirectory: pokedex/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          # override default build-tools version (33.0.0) -- optional
+          BUILD_TOOLS_VERSION: "34.0.0"
 
       - name: Create Release
         id: create_release
