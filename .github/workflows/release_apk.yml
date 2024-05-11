@@ -2,10 +2,10 @@ name: Build & Publish Release APK
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+' # Version
     branches:
       - develop
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   Gradle:
@@ -26,24 +26,21 @@ jobs:
         with:
           java-version: 17
 
+      - name: Decode Keystore
+        run: |
+          echo ${{ secrets.SIGNING_KEY }} > keystore-b64.txt
+          base64 -d keystore-b64.txt > ${{ secrets.SIGNING_KEY_STORE_PATH }}
+
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Build Release APK
-        run: |
-          ./gradlew assembleRelease
-
-      - uses: r0adkll/sign-android-release@v1
-        name: Sign app APK
-        with:
-          releaseDirectory: pokedex/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
+      - name: Build Release apk
         env:
-          # override default build-tools version (33.0.0) -- optional
-          BUILD_TOOLS_VERSION: "34.0.0"
+          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
+          SIGNING_KEY_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+        run: ./gradlew assembleRelease
 
       - name: Create Release
         id: create_release
