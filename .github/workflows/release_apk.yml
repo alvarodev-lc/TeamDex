@@ -1,15 +1,12 @@
 name: Build & Publish Release APK
 
 on:
-  push:
-    branches:
-      - develop
+  create:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+' # Version
 
 jobs:
   Gradle:
-    if: startsWith(github.ref, 'refs/tags/v')
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
