@@ -85,6 +85,4 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
-# Gradle
-
-gradle.properties
+.env

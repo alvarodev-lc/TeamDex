@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 
-def isGitHubActions = System.getenv("GITHUB_ACTIONS") == "true"
-
 android {
     compileSdk 34
     defaultConfig {
@@ -13,18 +11,10 @@ android {
     }
     signingConfigs {
         release {
-            if (isGitHubActions) {
-                keyAlias System.getenv("SIGNING_KEY_ALIAS")
-                keyPassword System.getenv("SIGNING_KEY_PASSWORD")
-                storeFile file(System.getenv("SIGNING_KEY_STORE_PATH"))
-                storePassword System.getenv("SIGNING_STORE_PASSWORD")
-            }
-            else{
-                keyAlias SIGNING_KEY_PASSWORD
-                keyPassword SIGNING_STORE_PASSWORD
-                storeFile file(SIGNING_KEY_STORE_PATH)
-                storePassword SIGNING_STORE_PASSWORD
-            }
+            keyAlias System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+            storeFile file(System.getenv("SIGNING_KEY_STORE_PATH"))
+            storePassword System.getenv("SIGNING_STORE_PASSWORD")
         }
     }
     buildTypes {
