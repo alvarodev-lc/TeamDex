@@ -28,6 +28,7 @@ jobs:
 
       - name: Decode Keystore
         run: |
+          echo "Current directory: $(pwd)"
           echo ${{ secrets.SIGNING_KEY }} > keystore-b64.txt
           base64 -d keystore-b64.txt > ${{ secrets.SIGNING_KEY_STORE_PATH }}
 
@@ -40,7 +41,9 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-        run: ./gradlew assembleRelease
+        run: |
+          echo "Current directory: $(pwd)"
+          ./gradlew assembleRelease
 
       - name: Create Release
         id: create_release
