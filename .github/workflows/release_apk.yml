@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "Current directory: $(pwd)"
           echo ${{ secrets.SIGNING_KEY }} > keystore-b64.txt
-          base64 -d keystore-b64.txt > ${{ secrets.SIGNING_KEY_STORE_PATH }}
+          base64 -d keystore-b64.txt > pokedex/${{ secrets.SIGNING_KEY_STORE_PATH }}
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
