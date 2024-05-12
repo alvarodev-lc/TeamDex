@@ -2,7 +2,6 @@ name: Build & Publish Release APK
 
 env:
   main_project_module: pokedex
-
   playstore_name: TeamDex
 
 on:
@@ -14,24 +13,21 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set Current Date As Env Variable
-      - name: Set current date as env variable
+      - name: Set Current Date As Env Variable
         run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      # Set Repository Name As Env Variable
-      - name: Set repository name as env variable
+      - name: Set Repository Name As Env Variable
         run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
 
       - name: Create Google Services JSON File
         env:
-          # Stored as repo secret coded as base64
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo $GOOGLE_SERVICES_JSON | base64 -di > ./pokedex/google-services.json
 
-      - name: setup jdk
+      - name: Setup JDK
         uses: actions/setup-java@v1
         with:
           java-version: 17
@@ -44,7 +40,7 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Build Release apk
+      - name: Build Release APK
         env:
           SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
           SIGNING_KEY_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
@@ -61,34 +57,27 @@ jobs:
           SIGNING_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
         run: ./gradlew ${{ env.main_project_module }}:bundleRelease
 
-      - name: Upload APK Release - ${{ env.repository_name }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) release generated
-          path: ${{ env.main_project_module }}/build/outputs/apk/release/
-
-      - name: Upload AAB (App Bundle) Release - ${{ env.repository_name }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - App bundle(s) AAB release generated
-          path: ${{ env.main_project_module }}/build/outputs/bundle/release/
-
       - name: Set Dist Version
         run: |
           BUILD_NUMBER="${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"
           echo "${BUILD_NUMBER}"
           VERSION="$(mvn -q -U -Dexpression=project.build.finalName help:evaluate -DforceStdout=true -DbuildNumber=${BUILD_NUMBER})"
           echo "DIST_VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Read Tag Version from Markdown File
+        id: read_tag_version
+        run: echo "::set-output name=tag_version::$(cat TAG_VERSION.md)"
+
       - name: Create Tag
         uses: actions/github-script@v6
         with:
           script: |
-            const {DIST_VERSION} = process.env          
+            const { tag_version } = process.env;
             github.rest.git.createRef({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                ref: `refs/tags/${DIST_VERSION}`,
-                sha: context.sha
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${tag_version}`,
+              sha: context.sha
             })
 
       - name: Create Release
@@ -97,11 +86,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.DIST_VERSION }}
-          release_name: Release ${{ env.DIST_VERSION }}
+          tag_name: ${{ steps.read_tag_version.outputs.tag_version }}
+          release_name: Release ${{ steps.read_tag_version.outputs.tag_version }}
           body_path: CHANGELOG.md
           draft: false
           prerelease: false
+
       - name: Upload APK
         uses: actions/upload-release-asset@v1
         env:
