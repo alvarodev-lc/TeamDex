@@ -72,11 +72,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const { tag_version } = process.env;
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: `refs/tags/${tag_version}`,
+              ref: `refs/tags/${{ steps.read_tag_version.outputs.tag_version }}`,
               sha: context.sha
             })
 
