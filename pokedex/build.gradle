@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 
+
 android {
     compileSdk 34
     defaultConfig {
@@ -11,10 +12,22 @@ android {
     }
     signingConfigs {
         release {
-            keyAlias System.getenv("SIGNING_KEY_ALIAS")
-            keyPassword System.getenv("SIGNING_KEY_PASSWORD")
-            storeFile file(System.getenv("SIGNING_KEY_STORE_PATH"))
-            storePassword System.getenv("SIGNING_STORE_PASSWORD")
+            Properties properties = new Properties()
+            def propertiesFile = project.rootProject.file('local.properties')
+            if (System.getenv("GITHUB_ACTIONS") == "true") {
+                keyAlias System.getenv("SIGNING_KEY_ALIAS")
+                keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+                storeFile file(System.getenv("SIGNING_KEY_STORE_PATH"))
+                storePassword System.getenv("SIGNING_STORE_PASSWORD")
+            } else if (propertiesFile.exists()) {
+                properties.load(propertiesFile.newDataInputStream())
+                keyAlias properties.getProperty("SIGNING_KEY_ALIAS")
+                keyPassword properties.getProperty("SIGNING_KEY_PASSWORD")
+                storeFile file(properties.getProperty("SIGNING_KEY_STORE_PATH"))
+                storePassword properties.getProperty("SIGNING_STORE_PASSWORD")
+            } else {
+                throw new GradleException("local.properties file not found. Please create one.")
+            }
         }
     }
     buildTypes {
@@ -71,5 +84,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.google.android.material:material:1.12.0'
 }
+
+tasks.register("testClasses")
 
 apply plugin: 'com.google.gms.google-services'
