@@ -99,10 +99,7 @@ jobs:
         with:
           tag_name: ${{ env.DIST_VERSION }}
           release_name: Release ${{ env.DIST_VERSION }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+          body_path: CHANGELOG.md
           draft: false
           prerelease: false
       - name: Upload APK
