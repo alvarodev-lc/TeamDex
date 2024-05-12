@@ -97,8 +97,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: $DIST_VERSION
-          release_name: Release $DIST_VERSION
+          tag_name: ${{ env.DIST_VERSION }}
+          release_name: Release ${{ env.DIST_VERSION }}
           body: |
             Changes in this Release
             - First Change
