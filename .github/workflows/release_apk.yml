@@ -1,18 +1,29 @@
 name: Build & Publish Release APK
 
+env:
+  main_project_module: pokedex
+
+  playstore_name: TeamDex
+
 on:
   push:
-    branches:
-      - master
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+' # Tags
+    branches: [ master ]
 
 jobs:
   Gradle:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
         uses: actions/checkout@v2
+
+      # Set Current Date As Env Variable
+      - name: Set current date as env variable
+        run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      # Set Repository Name As Env Variable
+      - name: Set repository name as env variable
+        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
 
       - name: Create Google Services JSON File
         env:
@@ -25,34 +36,25 @@ jobs:
         with:
           java-version: 17
 
+      - name: Decode Keystore
+        run: |
+          echo ${{ secrets.SIGNING_KEY }} > keystore-b64.txt
+          base64 -d keystore-b64.txt > pokedex/${{ secrets.SIGNING_KEY_STORE_PATH }}
+
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Build Release APK
-        run: ./gradlew assembleRelease
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Build Release apk
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v0.0.1
-          release_name: Release v0.0.1
-          draft: false
-          prerelease: false
+          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
+          SIGNING_KEY_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+        run: |
+          ./gradlew assembleRelease
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      - name: Upload APK Release - ${{ env.repository_name }}
+        uses: actions/upload-artifact@v3
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: false
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) release generated
+          path: ${{ env.main_project_module }}/build/outputs/apk/release/
