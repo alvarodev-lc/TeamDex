@@ -11,7 +11,7 @@ on:
 
 jobs:
   Gradle:
-    permissions: write-all
+    permissions: write-all # test
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
