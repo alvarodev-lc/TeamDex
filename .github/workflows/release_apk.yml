@@ -90,7 +90,6 @@ jobs:
                 ref: `refs/tags/${DIST_VERSION}`,
                 sha: context.sha
             })
-              
 
       - name: Create Release
         id: create_release
