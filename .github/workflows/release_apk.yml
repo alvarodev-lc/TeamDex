@@ -3,7 +3,7 @@ name: Build & Publish Release APK
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+' # Version tags
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   Gradle:
