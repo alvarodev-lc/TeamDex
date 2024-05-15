@@ -92,8 +92,11 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivityForResult(myIntent, 0);
-        return true;
+        if (item.getItemId() == android.R.id.home) {
+            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivityForResult(myIntent, 0);
+            return true;
+        }
+        return false;
     }
 }
