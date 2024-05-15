@@ -6,6 +6,9 @@
 
     <string name="label_anonymous_auth">gatgito</string>
 
+    <string name="desc_no_acc_continue">TeamDex</string>
+    <string name="desc_acc_continue">Account management</string>
+
     <string name="hint_user_id">User ID</string>
     <string name="sign_in">Sign In</string>
     <string name="create_account">Create Account</string>
@@ -46,6 +49,8 @@
     <string name="email_fmt">Email: %s</string>
     <string name="anonymous_sign_in">Anonymous Sign In</string>
     <string name="account_linking">Login</string>
+    <string name="no_acc_continue">Use the app right now!</string>
+    <string name="acc_continue">I want to use an account</string>
     <string name="already_have_account">Already have an account? Log in!</string>
     <string name="dont_have_account">Don\'t have an account? Sign up!</string>
     <string name="logout">Logout</string>
