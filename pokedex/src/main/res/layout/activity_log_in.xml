@@ -19,55 +19,57 @@
             android:layout_width="wrap_content"
             android:layout_height="160dp"
             android:src="@drawable/logo"
+            android:contentDescription="@string/desc_logo"
             android:gravity="center"
             android:textColor="#000000"/>
         <TextView
             android:id="@+id/LogIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/account_linking"
+            android:text="@string/welcome"
             android:layout_marginTop="15dp"
             android:textColor="#016C4E"
             android:textSize="25sp"
-            android:fontFamily="Roboto"
-            android:textFontWeight="600"
+            android:fontFamily="@font/roboto_regular"
             />
         <EditText
             android:id="@+id/fieldEmail"
             android:layout_marginTop="15dp"
+            android:autofillHints="emailAddress"
             android:gravity="center"
             android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:hint="@string/hint_email"
+            android:inputType="textEmailAddress"
             android:textColorHint="#1C1C1C"
             android:background="@drawable/custombutton"
             android:textSize="16sp"
-            android:fontFamily="Roboto"
+            android:fontFamily="@font/roboto_regular"
             />
         <EditText
             android:id="@+id/fieldPassword"
             android:layout_marginTop="15dp"
             android:gravity="center"
             android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:importantForAutofill="no"
             android:inputType="textPassword"
             android:hint="@string/hint_password"
             android:textColorHint="#1C1C1C"
             android:background="@drawable/custombutton"
             android:textSize="16sp"
-            android:fontFamily="Roboto"/>
+            android:fontFamily="@font/roboto_regular"/>
         <Button
             android:id="@+id/buttonLogIn"
             android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:text="@string/account_linking"
             android:textAllCaps="false"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/custombutton2"
-            android:textColor="#FFFBF6"
+            android:textColor="#000000"
             android:textSize="14sp"
-            android:fontFamily="Roboto"/>
+            android:fontFamily="@font/roboto_regular"/>
         <View
             android:layout_width="fill_parent"
             android:layout_height="2dp"
@@ -77,15 +79,17 @@
 
         <Button
             android:id="@+id/buttonSignUp"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:minWidth="250dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/custombutton3"
-            android:fontFamily="Roboto"
-            android:text="@string/dont_have_account"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/do_not_have_account"
             android:textAllCaps="false"
             android:textColor="#333"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         <View
             android:layout_width="fill_parent"
             android:layout_height="2dp"

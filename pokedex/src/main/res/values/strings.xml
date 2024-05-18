@@ -52,12 +52,12 @@
     <string name="no_acc_continue">Use the app right now!</string>
     <string name="acc_continue">I want to use an account</string>
     <string name="already_have_account">Already have an account? Log in!</string>
-    <string name="dont_have_account">Don\'t have an account? Sign up!</string>
+    <string name="do_not_have_account">Don\'t have an account? Sign up!</string>
     <string name="logout">Logout</string>
     <string name="status_logged">Logged</string>
     <string name="field_required">Field required.</string>
 
-    <string name="sign_up">Sign up</string>
+    <string name="sign_up">Sign Up</string>
     <string name="welcome">Welcome!</string>
 
     <string name="poke_type">Type(s):</string>
@@ -72,6 +72,7 @@
     <string name="poke_stats">Stats</string>
 
     <string name="button_pokedex">Pokédex</string>
+    <string name="button_sign_up">Sign up</string>
     <string name="button_team_builder">Team Builder</string>
     <string name="title_activity_main">Pokédex</string>
     <string name="title_home">Home</string>
@@ -79,6 +80,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="no_teams_found">No teams found :(</string>
     <string name="create_team">Create Team</string>
+
+    <string name="desc_app_logo">TeamDex Logo</string>
 
 </resources>
 
