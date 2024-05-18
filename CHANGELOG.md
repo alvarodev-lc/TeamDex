@@ -1,1 +1,2 @@
-First Alpha release
+- Adding new page as main layout
+- Addressing several accessibility issues
