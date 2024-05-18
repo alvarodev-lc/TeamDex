@@ -2,12 +2,17 @@ package es.upm.mssde.pokedex;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Objects;
 
 import es.upm.mssde.pokedex.fragment.PokedexFragment;
 import es.upm.mssde.pokedex.fragment.TeamViewerFragment;
@@ -21,6 +26,7 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_fragment);
 
         fm = getFragmentManager();
@@ -83,5 +89,14 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
         } else if (v.getId() == R.id.rb_team_builder) {
             showFragment(2);
         }
+    }
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        if (item.getItemId() == android.R.id.home) {
+            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivityForResult(myIntent, 0);
+            return true;
+        }
+        return false;
     }
 }

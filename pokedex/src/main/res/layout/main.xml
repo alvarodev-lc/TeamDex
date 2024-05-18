@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#3fff"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="10dp"
+        tools:layout_editor_absoluteX="500dp"
+        tools:layout_editor_absoluteY="198dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="160dp"
+            android:gravity="center"
+            android:src="@drawable/logo"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/NoAcc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="Roboto"
+            android:text="@string/no_acc_continue"
+            android:textColor="#000000"
+            android:textFontWeight="600"
+            android:textSize="25sp" />
+
+
+        <Button
+            android:id="@+id/buttonNoAccContinue"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custombutton2"
+            android:fontFamily="Roboto"
+            android:text="@string/desc_no_acc_continue"
+            android:textAllCaps="false"
+            android:textColor="#FFFBF6"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="15dp"
+            android:background="#3fff" />
+
+        <TextView
+            android:id="@+id/accContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="Roboto"
+            android:text="@string/acc_continue"
+            android:textColor="#000000"
+            android:textFontWeight="600"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/buttonAccContinue"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:text="@string/desc_acc_continue"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custombutton2"
+            android:textColor="#FFFBF6"
+            android:textSize="14sp"
+            android:fontFamily="Roboto"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="15dp"
+            android:background="#3fff" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

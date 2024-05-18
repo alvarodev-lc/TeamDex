@@ -15,6 +15,15 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
+            android:name="es.upm.mssde.pokedex.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="es.upm.mssde.pokedex.FragmentActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
@@ -23,15 +32,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="es.upm.mssde.pokedex.LogInActivity"
+            android:name="es.upm.mssde.pokedex.SignUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="es.upm.mssde.pokedex.SignUpActivity"
+            android:name="es.upm.mssde.pokedex.LogInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,5 +63,8 @@
         <meta-data
             android:name="android.app.backup.dataExtractionRules"
             android:resource="@xml/data_extraction_rules" />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".FragmentActivity" />
     </application>
 </manifest>
