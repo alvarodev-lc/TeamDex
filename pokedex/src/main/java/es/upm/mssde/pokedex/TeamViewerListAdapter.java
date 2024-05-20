@@ -23,8 +23,8 @@ import es.upm.mssde.pokedex.models.PokemonTeam;
 public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAdapter.ViewHolder> {
 
     public ArrayList<PokemonTeam> teams;
-    private OnTeamClickListener onTeamClickListener;
-    private TeamDatabase teamDatabase;
+    private final OnTeamClickListener onTeamClickListener;
+    private final TeamDatabase teamDatabase;
 
     public TeamViewerListAdapter(OnTeamClickListener onTeamClickListener) {
         teams = new ArrayList<>();
@@ -51,7 +51,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
     }
 
     @Override
-    public void onBindViewHolder (ViewHolder holder, int position, @NonNull List<Object> payloads){
+    public void onBindViewHolder (@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads){
         ArrayList<PokemonResult> team = teamDatabase.getTeam(String.valueOf(position));
         int j = 1;
         while (team.isEmpty()){
@@ -83,11 +83,11 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
         return teams;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public CardView cardView;
         public TextView team_name;
-        private ArrayList<ImageView> poke_images = new ArrayList<>();
-        private OnTeamClickListener onTeamClickListener;
+        private final ArrayList<ImageView> poke_images = new ArrayList<>();
+        private final OnTeamClickListener onTeamClickListener;
 
 
         public ViewHolder(View v, OnTeamClickListener onTeamClickListener) {

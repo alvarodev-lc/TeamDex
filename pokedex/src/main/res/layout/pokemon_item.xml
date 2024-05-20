@@ -14,7 +14,7 @@
         android:id="@+id/poke_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
+        android:layout_gravity="top|end"
         android:fontFamily="Roboto"
         android:textStyle="bold"
         android:textSize="19sp"
@@ -26,6 +26,7 @@
         android:id="@+id/poke_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:contentDescription="@string/desc_app_logo"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="12dp" />
 

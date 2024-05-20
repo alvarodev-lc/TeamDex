@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F8F8"
     android:orientation="vertical">
 
     <FrameLayout
@@ -31,7 +30,7 @@
                 android:gravity="center"
                 android:scaleType="centerInside"
                 android:text="@string/button_pokedex"
-                android:textSize="13dp" />
+                android:textSize="13sp" />
 
             <RadioButton
                 android:id="@+id/rb_team_builder"
@@ -45,6 +44,6 @@
                 android:gravity="center"
                 android:scaleType="centerInside"
                 android:text="@string/button_team_builder"
-                android:textSize="13dp" />
+                android:textSize="13sp" />
 </RadioGroup>
 </LinearLayout>

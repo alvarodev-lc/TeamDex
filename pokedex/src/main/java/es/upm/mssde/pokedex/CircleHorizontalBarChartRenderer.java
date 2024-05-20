@@ -37,8 +37,6 @@ public class CircleHorizontalBarChartRenderer extends HorizontalBarChartRenderer
 
         trans.pointValuesToPixel(buffer.buffer);
 
-        int timeToChange = buffer.size() / 4;
-
         for (int j = 0; j < buffer.size(); j += 4) {
             if (!mViewPortHandler.isInBoundsTop(buffer.buffer[j + 3]))
                 break;

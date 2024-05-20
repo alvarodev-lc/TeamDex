@@ -198,9 +198,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
                 SearchView searchBox = findViewById(R.id.search_box);
                 searchBox.setQuery("", false);
 
-                // close the list view
-                ListView lv_ = findViewById(R.id.poke_search_list);
-                lv_.setVisibility(View.GONE);
+                lv.setVisibility(View.GONE);
             }
         });
     }
