@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="1701" height="1134" src="/pokedex/src/main/res/drawable-xxhdpi/logo.png" alt="TeamDex">
+  <img width="450" height="300" src="/pokedex/src/main/res/drawable-xxhdpi/logo.png" alt="TeamDex">
 </p>
 
 # TeamDex
