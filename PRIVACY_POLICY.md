@@ -17,7 +17,7 @@ The list of permissions required by the app can be found in the `AndroidManifest
 <br/>
 
 | Permission | Why it is required |
-| :---: | --- |
+|:----------:|--------------------|
 
 | `android.permission.INTERNET` | To access API data for the app. Also used for sign in/log in |
 | `android.permission.WAKE_LOCK` | Automatically granted by the system, required for internet connections while device is sleeping.
