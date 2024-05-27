@@ -1,7 +1,6 @@
 package es.upm.mssde.pokedex;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,6 +10,7 @@ import android.widget.RadioButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_fragment);
 
-        fm = getFragmentManager();
+        fm = getSupportFragmentManager();
 
         initData();
         showFragment(1);
@@ -54,8 +54,7 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
             case 1:
                 if (pokedexFragment != null) {
                     ft.show(pokedexFragment);
-                }
-                else {
+                } else {
                     pokedexFragment = new PokedexFragment();
                     ft.add(R.id.fl_container, pokedexFragment);
                 }
@@ -64,8 +63,7 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
             case 2:
                 if (teamViewerFragment != null) {
                     ft.show(teamViewerFragment);
-                }
-                else {
+                } else {
                     teamViewerFragment = new TeamViewerFragment();
                     ft.add(R.id.fl_container, teamViewerFragment);
                 }
@@ -73,7 +71,6 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
         }
         ft.commit();
     }
-
 
     public void hideFragments(FragmentTransaction ft) {
         if (pokedexFragment != null)
@@ -91,10 +88,11 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivityForResult(myIntent, 0);
+            startActivity(myIntent);
             return true;
         }
         return false;

@@ -3,12 +3,9 @@ package es.upm.mssde.pokedex;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Observable;
 
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonList;
@@ -21,12 +18,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PokeAPI implements MyObservable {
 
-    private Retrofit retrofit;
+    private final Retrofit retrofit;
     public int POKEMON_MAX_RESULTS = 100;
     public ArrayList<PokemonResult> poke_list;
     private Pokemon queryPokemon;
     private Pokemon queryPokemonFromName;
-    private List<MyObserver> myObservers;
+    private final List<MyObserver> myObservers;
 
     public PokeAPI() {
         String base_url = "https://pokeapi.co/api/v2/";
@@ -65,8 +62,7 @@ public class PokeAPI implements MyObservable {
 
             @Override
             public void onFailure(@NonNull Call<Pokemon> call, @NonNull Throwable t) {
-                Log.d("poke_request_db", "Error");
-                t.printStackTrace();
+                Log.d("poke_request_db", t.toString());
             }
         });
     }
@@ -91,8 +87,7 @@ public class PokeAPI implements MyObservable {
             }
             @Override
             public void onFailure(@NonNull Call<PokemonList> call, @NonNull Throwable t) {
-                Log.d("poke_api_all", "Error");
-                t.printStackTrace();
+                Log.d("poke_api_all", t.toString());
             }
         });
     }

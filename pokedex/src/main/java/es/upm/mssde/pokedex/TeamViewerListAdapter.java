@@ -107,7 +107,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
         @Override
         public void onClick(View v) {
-            onTeamClickListener.onTeamClick(getAdapterPosition());
+            onTeamClickListener.onTeamClick(getBindingAdapterPosition());
         }
     }
 
