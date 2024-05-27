@@ -20,7 +20,7 @@ public class PokeAPI implements MyObservable {
 
     private final Retrofit retrofit;
     public int POKEMON_MAX_RESULTS = 100;
-    public ArrayList<PokemonResult> poke_list;
+    public final ArrayList<PokemonResult> poke_list;
     private Pokemon queryPokemon;
     private Pokemon queryPokemonFromName;
     private final List<MyObserver> myObservers;

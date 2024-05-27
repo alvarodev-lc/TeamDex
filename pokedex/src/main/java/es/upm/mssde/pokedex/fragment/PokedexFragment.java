@@ -155,11 +155,6 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onClick(View v) {
         int i = v.getId();
         Log.d("Pokedex Fragment", "onClick: " + i);

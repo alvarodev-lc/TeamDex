@@ -24,8 +24,8 @@ import es.upm.mssde.pokedex.models.PokemonResult;
 
 public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.ViewHolder> implements MyObserver {
 
-    public ArrayList<PokemonResult> data;
-    public ArrayList<PokemonResult> unfilteredData;
+    public final ArrayList<PokemonResult> data;
+    public final ArrayList<PokemonResult> unfilteredData;
     private final OnPokemonClickListener onPokemonClickListener;
     private final PokeAPI pokeAPI;
     public final int POKEMON_MAX_RESULTS = 100;
@@ -175,8 +175,8 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public CardView cardView;
-        public TextView poke_num;
+        public final CardView cardView;
+        public final TextView poke_num;
         private final ImageView poke_image;
         private final TextView poke_name;
         private final OnPokemonClickListener onPokemonClickListener;

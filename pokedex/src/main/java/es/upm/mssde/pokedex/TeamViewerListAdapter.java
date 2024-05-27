@@ -84,8 +84,8 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public CardView cardView;
-        public TextView team_name;
+        public final CardView cardView;
+        public final TextView team_name;
         private final ArrayList<ImageView> poke_images = new ArrayList<>();
         private final OnTeamClickListener onTeamClickListener;
 
