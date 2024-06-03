@@ -1,7 +1,6 @@
 package es.upm.mssde.pokedex;
 
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -35,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import es.upm.mssde.pokedex.models.Ability;
 import es.upm.mssde.pokedex.models.AbilityList;
@@ -53,20 +53,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PokemonActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Retrofit retrofit;
-    private String LOG_TAG = "pokemon_activity";
+    private final String LOG_TAG = "pokemon_activity";
     private PokemonResult poke;
 
-    // variable for our bar chart
-    private BarChart barChart;
-
-    // variable for our bar data.
-    private BarData barData;
-
-    // variable for our bar data set.
-    private BarDataSet barDataSet;
-
     // array list for storing entries.
-    ArrayList barEntriesArrayList;
+    List<BarEntry> barEntriesArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +71,8 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         Intent intent = getIntent();
-        PokemonResult pokemon_result = (PokemonResult) intent.getExtras().getSerializable("pokemon");
 
-        poke = pokemon_result;
+        poke = (PokemonResult) Objects.requireNonNull(intent.getExtras()).getSerializable("pokemon");
 
         String base_url = "https://pokeapi.co/api/v2/";
 
@@ -96,10 +86,9 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish(); // back button
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            this.finish(); // back button
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -133,9 +122,9 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                     loadPokemonAbilities(resp);
 
                     try {
-                        scrapPokemonPokedexInfo(resp);
+                        scrapPokemonPokedexInfo();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.e(LOG_TAG, "An error occurred", e);
                     }
 
                     TextView poke_exp = findViewById(R.id.poke_exp);
@@ -154,8 +143,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(@NonNull Call<Pokemon> call, @NonNull Throwable t) {
-                Log.d(LOG_TAG, "Error");
-                t.printStackTrace();
+                Log.d(LOG_TAG, t.toString());
             }
         });
     }
@@ -170,7 +158,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                 if (response.isSuccessful()) {
                     Species resp = response.body();
                     assert resp != null;
-                    Log.d(LOG_TAG, "Capture rate: " + String.valueOf(resp.getCaptureRate()));
+                    Log.d(LOG_TAG, "Capture rate: " + resp.getCaptureRate());
 
                     TextView poke_capt_rate = findViewById(R.id.poke_capt_rate);
                     setTextViewText(poke_capt_rate, resp.getCaptureRate() + " %");
@@ -182,8 +170,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(@NonNull Call<Species> call, @NonNull Throwable t) {
-                Log.d(LOG_TAG, "Error");
-                t.printStackTrace();
+                Log.d(LOG_TAG, t.toString());
             }
         });
     }
@@ -191,7 +178,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     public void loadPokemonTypes(Pokemon pokemon) {
         LinearLayout type_layout = findViewById(R.id.type_layout);
         List<TypeList> list_type_list = pokemon.getTypes();
-        Integer type_list_size = list_type_list.size();
+        int type_list_size = list_type_list.size();
 
         if (type_list_size == 1) {
             String pokemon_type1 = list_type_list.get(0).getType().getName();
@@ -243,34 +230,50 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void addCardView(LinearLayout layout, String text, int i) {
-        // create round card view and add the ability_name
+        // Create round CardView and add the ability_name
         CardView cardView = new CardView(this);
-        // change width and height of the card
+
+        // Change width and height of the card
         cardView.setRadius(100);
         cardView.setCardElevation(4);
         cardView.setContentPadding(20, 20, 20, 20);
-        //set background color to material color
+
+        // Set background color to material color
         cardView.setCardBackgroundColor(Color.parseColor("#FAFAFA"));
-        // set margin right in card view
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+
+        // Set margin right in CardView
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        params.setMargins(25, 0, 5, 0);
-        cardView.setLayoutParams(params);
-        // add the ability_name to the card view
+        cardParams.setMargins(25, 0, 5, 0);
+        cardView.setLayoutParams(cardParams);
+
+        // Add the ability_name to the CardView
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextSize(16);
+
         if (i != -1) {
             textView.setTextColor(getMaterialColorSeq(i));
         } else {
             textView.setTextColor(getMaterialColorType(text));
         }
+
+        // Set layout parameters for TextView
+        LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        textView.setLayoutParams(textParams);
+
+        // Add the TextView to the CardView
         cardView.addView(textView);
-        // add the card view to the layout
+
+        // Add the CardView to the layout
         layout.addView(cardView);
     }
+
 
     // function that given a type of pokemon, returns a material design color
     public int getMaterialColorType(String typeColor) {
@@ -306,7 +309,10 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         matColor.put(2, Color.parseColor("#ef4d46"));
         matColor.put(3, Color.parseColor("#f4e7e3"));
 
-        return matColor.get(index);
+        // Return the value associated with the index
+        // Handle the case where the index is not present
+        // For example, you could return a default color
+        return matColor.getOrDefault(index, Color.BLACK);
     }
 
     public void loadPokemonAbilities(Pokemon pokemon) {
@@ -329,18 +335,18 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void scrapPokemonPokedexInfo(Pokemon pokemon) throws IOException {
+    public void scrapPokemonPokedexInfo() throws IOException {
         LinearLayout pokedex_description_layout = findViewById(R.id.pokedex_desc_layout);
         TextView pokedex_summary = findViewById(R.id.pokedex_summary);
         TextView pokedex_description = findViewById(R.id.pokedex_description);
         TextView pokedex_summary_placeholder = findViewById(R.id.pokedex_summary_placeholder);
         TextView pokedex_description_placeholder = findViewById(R.id.pokedex_description_placeholder);
 
-        Integer pokemon_num = poke.getNum();
+        int pokemon_num = poke.getNum();
 
         Log.d("Scrapping", "Pokemon num: " + pokemon_num);
 
-        String url = "https://pokemon.gameinfo.io/en/pokemon/" + pokemon_num.toString() + "-" + poke.getName().toLowerCase();
+        String url = "https://pokemon.gameinfo.io/en/pokemon/" + pokemon_num + "-" + poke.getName().toLowerCase();
 
         Log.d("Scrapping", "URL: " + url);
 
@@ -377,7 +383,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
                 });
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(LOG_TAG, "An error occurred", e);
             }
         }).start();
     }
@@ -385,7 +391,8 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     public void loadStats(Pokemon pokemon) {
         List<Stat> list_stat_list = pokemon.getStats();
         // initializing variable for bar chart.
-        barChart = findViewById(R.id.stats_bar_chart);
+        // variable for our bar chart
+        BarChart barChart = findViewById(R.id.stats_bar_chart);
 
         barEntriesArrayList = new ArrayList<>();
 
@@ -433,11 +440,13 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         // creating a new bar data set.
-        barDataSet = new BarDataSet(barEntriesArrayList, "Stats");
+        // variable for our bar data set.
+        BarDataSet barDataSet = new BarDataSet(barEntriesArrayList, "Stats");
 
         // creating a new bar data and
         // passing our bar data set.
-        barData = new BarData(barDataSet);
+        // variable for our bar data.
+        BarData barData = new BarData(barDataSet);
 
         // below line is to set data
         // to our bar chart.
@@ -523,20 +532,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         barChart.invalidate();
         barChart.refreshDrawableState();
     }
-
-    public void addTextViewToLayout(LinearLayout layout, String name, int text_size, int left_margin, int top_margin) {
-        TextView type_view = new TextView(PokemonActivity.this);
-        type_view.setText(name);
-        type_view.setTextSize(text_size);
-        LinearLayout.LayoutParams lp =
-                new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-        lp.setMargins(left_margin, top_margin, 7, 0);
-        type_view.setLayoutParams(lp);
-        layout.addView(type_view);
-    }
+    
 
     public void addImageView(String url, ImageView sprite_view) {
         Picasso.get().load(url).into(sprite_view);

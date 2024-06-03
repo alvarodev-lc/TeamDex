@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import es.upm.mssde.pokedex.models.PokemonResult;
@@ -89,7 +90,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
                 InputMethodManager inputManager = (InputMethodManager)
                         getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
 
                 return false;
@@ -114,10 +115,9 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish(); // back button
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            this.finish(); // back button
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -168,12 +168,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         ListView lv = findViewById(R.id.poke_search_list);
 
-        lv.post(new Runnable() {
-            @Override
-            public void run() {
-                lv.setAdapter(adapter);
-            }
-        });
+        lv.post(() -> lv.setAdapter(adapter));
 
         lv.setOnItemClickListener((parent, view, position, id) -> {
             Log.d("search_on_click", "Clicked on " + position);
@@ -198,9 +193,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
                 SearchView searchBox = findViewById(R.id.search_box);
                 searchBox.setQuery("", false);
 
-                // close the list view
-                ListView lv_ = findViewById(R.id.poke_search_list);
-                lv_.setVisibility(View.GONE);
+                lv.setVisibility(View.GONE);
             }
         });
     }
@@ -233,7 +226,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         cardView.setContentPadding(30, 30, 30, 30);
         cardView.setPreventCornerOverlap(false);
 
-        cardView.setOnClickListener(v -> goToPokemonStats(v));
+        cardView.setOnClickListener(this::goToPokemonStats);
 
         //add content to cardview
         LinearLayout cardViewContent = new LinearLayout(this);
@@ -263,7 +256,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         // add button to delete pokemon
         Button delete_button = new Button(this);
         delete_button.setText("X");
-        delete_button.setOnClickListener(v -> deletePokemon(v));
+        delete_button.setOnClickListener(this::deletePokemon);
 
         cardViewContent.addView(poke_sprite_view);
         cardViewContent.addView(poke_name_view);
@@ -302,18 +295,14 @@ public class TeamBuilderActivity extends AppCompatActivity {
     }
 
     public void removePokemonFromView(View v) {
-        if (team.size() == 0) return;
+        if (team.isEmpty()) return;
         int index = Integer.parseInt(v.getTag().toString());
 
         if (index > team.size()) return;
 
         int[] teamRes = new int[team.size() - 1];
 
-        List<PokemonResult> myList = new CopyOnWriteArrayList<>();
-
-        for (PokemonResult p : team) {
-            myList.add(p);
-        }
+        List<PokemonResult> myList = new CopyOnWriteArrayList<>(team);
 
         PokemonResult removeMe = myList.get(index - 1);
 
@@ -370,17 +359,13 @@ public class TeamBuilderActivity extends AppCompatActivity {
     public void addOnClickListenerToSaveTeamButton() {
         MaterialButton save_team_button = findViewById(R.id.save_team_button);
 
-        save_team_button.setOnClickListener(v -> {
-            saveTeam(v);
-        });
+        save_team_button.setOnClickListener(this::saveTeam);
     }
 
     // add onClickListener to Reset Team button
     public void addOnClickListenerToResetTeamButton() {
         MaterialButton reset_team_button = findViewById(R.id.reset_team_button);
 
-        reset_team_button.setOnClickListener(v -> {
-            resetTeam(v);
-        });
+        reset_team_button.setOnClickListener(this::resetTeam);
     }
 }

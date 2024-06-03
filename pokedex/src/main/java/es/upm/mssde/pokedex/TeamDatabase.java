@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
@@ -81,6 +82,11 @@ public class TeamDatabase extends SQLiteOpenHelper {
         String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = " + team_id;
         Cursor cursor = db.rawQuery(query, null);
 
+        if (cursor.getCount() == 0) {
+            Log.d("DB", "Team is empty");
+            return team_pokemons;
+        }
+
         int i = 0;
         while (cursor.moveToNext()) {
             Log.d("DB", "Loading pokemon " + i + ": " + cursor.getString(2));
@@ -99,6 +105,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
             i++;
         }
+        cursor.close();
         return team_pokemons;
     }
 
@@ -143,7 +150,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
             if (!pokemons_by_team.containsKey(team_id)) {
                 pokemons_by_team.put(team_id, new ArrayList<>());
             }
-            pokemons_by_team.get(team_id).add(pokemon);
+            Objects.requireNonNull(pokemons_by_team.get(team_id)).add(pokemon);
 
             j++;
         }
@@ -155,7 +162,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
             team.setTeamId(String.valueOf(team_id));
             teams.add(team);
         }
-
+        cursor.close();
         return teams;
     }
 
@@ -172,8 +179,8 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
         pokeAPI.getPokemonData(num, false);
         Pokemon poke = pokeAPI.getQueryPokemon();
-        Log.d("DB", "getPokemon: " + poke.getName().toString());
-
+        Log.d("DB", "getPokemon: " + poke.getName());
+        cursor.close();
         return poke;
     }
 
@@ -195,10 +202,9 @@ public class TeamDatabase extends SQLiteOpenHelper {
         Cursor mcursor = db.rawQuery(count, null);
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
+        mcursor.close();
 
-        if (icount == 0) return true;
-
-        return false;
+        return icount == 0;
     }
 
     public void deleteTeam( String team_id){

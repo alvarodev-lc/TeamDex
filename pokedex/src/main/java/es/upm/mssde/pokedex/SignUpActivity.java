@@ -8,13 +8,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -94,23 +92,20 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String password = mPasswordField.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, firebase account created
-                            Log.d(LOG_TAG, "createUserWithEmail:success");
-                            Toast.makeText(SignUpActivity.this, "Successfully created your account. Please Log in!",
-                                    Toast.LENGTH_LONG).show();
-                            Intent api_call_activity = new Intent(SignUpActivity.this,
-                                    LogInActivity.class);
-                            startActivity(api_call_activity);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Authentication failed." + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, firebase account created
+                        Log.d(LOG_TAG, "createUserWithEmail:success");
+                        Toast.makeText(SignUpActivity.this, "Successfully created your account. Please Log in!",
+                                Toast.LENGTH_LONG).show();
+                        Intent api_call_activity = new Intent(SignUpActivity.this,
+                                LogInActivity.class);
+                        startActivity(api_call_activity);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
+                        Toast.makeText(SignUpActivity.this, "Authentication failed." + Objects.requireNonNull(task.getException()).getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -34,7 +34,8 @@
                 android:textColor="#515151"
                 android:textSize="21sp"
                 android:paddingTop="20dp"
-                android:paddingLeft="30dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp"
                 android:fontFamily="Roboto"/>
 
             <GridLayout
@@ -47,17 +48,20 @@
                 <ImageView
                     android:id="@+id/poke_image0"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"/>
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/desc_image_pokemon" />
 
                 <ImageView
                     android:id="@+id/poke_image1"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"/>
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/desc_image_pokemon"/>
 
                 <ImageView
                     android:id="@+id/poke_image2"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"/>
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/desc_image_pokemon"/>
 
             </GridLayout>
 
@@ -71,17 +75,20 @@
                 <ImageView
                     android:id="@+id/poke_image3"
                     android:layout_width="100dp"
-                    android:layout_height="100dp" />
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/desc_image_pokemon"/>
 
                 <ImageView
                     android:id="@+id/poke_image4"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"/>
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/desc_image_pokemon"/>
 
                 <ImageView
                     android:id="@+id/poke_image5"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"/>
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/desc_image_pokemon"/>
             </GridLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

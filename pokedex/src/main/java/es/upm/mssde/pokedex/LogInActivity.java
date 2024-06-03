@@ -8,18 +8,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import es.upm.mssde.pokedex.fragment.TeamViewerFragment;
+import java.util.Objects;
+
 
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -99,25 +95,22 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         // Create EmailAuthCredential with email and password
         AuthCredential credential = EmailAuthProvider.getCredential(email, password);
 
-        // [START signin_with_email_and_password]
+        // [START sign_in_with_email_and_password]
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.i(LOG_TAG, "logInWithCredentials:success");
-                            Toast.makeText(LogInActivity.this,
-                                    "Authentication successful", Toast.LENGTH_SHORT).show();
-                            Intent api_call_activity = new Intent(LogInActivity.this,
-                                    FragmentActivity.class);
-                            startActivity(api_call_activity);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(LOG_TAG, "logInWithCredentials:failure", task.getException());
-                            Toast.makeText(LogInActivity.this, "Authentication failed: " + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.i(LOG_TAG, "logInWithCredentials:success");
+                        Toast.makeText(LogInActivity.this,
+                                "Authentication successful", Toast.LENGTH_SHORT).show();
+                        Intent api_call_activity = new Intent(LogInActivity.this,
+                                FragmentActivity.class);
+                        startActivity(api_call_activity);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(LOG_TAG, "logInWithCredentials:failure", task.getException());
+                        Toast.makeText(LogInActivity.this, "Authentication failed: " + Objects.requireNonNull(task.getException()).getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }

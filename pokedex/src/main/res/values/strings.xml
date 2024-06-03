@@ -59,12 +59,16 @@
 
     <string name="sign_up">Sign Up</string>
     <string name="welcome">Welcome!</string>
+    <string name="search">Search</string>
 
     <string name="poke_type">Type(s):</string>
     <string name="poke_ability">Abilities:</string>
     <string name="poke_height">Height:</string>
     <string name="poke_weight">Weight:</string>
     <string name="poke_exp">XP:</string>
+    <string name="poke_description">Description</string>
+    <string name="poke_summary">Summary</string>
+    <string name="poke_name">Name</string>
     <string name="poke_capt_rate">Capture rate:</string>
     <string name="poke_happiness">Base happiness:</string>
     <string name="shiny_version">Shiny version:</string>
@@ -82,6 +86,11 @@
     <string name="create_team">Create Team</string>
 
     <string name="desc_app_logo">TeamDex Logo</string>
+    <string name="desc_image_pokeball">Pokeball</string>
+    <string name="desc_image_pokemon">Pokemon Image</string>
+    <string name="desc_image_pokemon_shiny">Pokemon Shiny Image</string>
+    <string name="team_save">Save</string>
+    <string name="team_reset">Reset</string>
 
 </resources>
 

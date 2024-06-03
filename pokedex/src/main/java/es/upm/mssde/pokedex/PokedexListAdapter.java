@@ -16,17 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 
 public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.ViewHolder> implements MyObserver {
 
-    public ArrayList<PokemonResult> data;
-    public ArrayList<PokemonResult> unfilteredData;
-    private OnPokemonClickListener onPokemonClickListener;
-    private PokeAPI pokeAPI;
+    public final ArrayList<PokemonResult> data;
+    public final ArrayList<PokemonResult> unfilteredData;
+    private final OnPokemonClickListener onPokemonClickListener;
+    private final PokeAPI pokeAPI;
     public final int POKEMON_MAX_RESULTS = 100;
     int offset = 0;
 
@@ -40,10 +41,12 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
     }
 
     public void unfilter() {
-        if (unfilteredData.size() > 0) {
+        if (!unfilteredData.isEmpty()) {
             Log.d("PokedexListAdapter", "unfilteredData.size() > 0");
-            data = unfilteredData;
-            notifyDataSetChanged();
+            int previousSize = data.size();
+            data.clear();
+            data.addAll(unfilteredData);
+            notifyItemRangeInserted(previousSize, unfilteredData.size());
         }
     }
 
@@ -67,7 +70,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
         holder.poke_name.setText(poke.getName());
         int poke_num = poke.getNum();
         // fill with zeros until the number is 3 digits
-        String poke_num_str = "#" + String.format("%03d", poke_num);
+        String poke_num_str = "#" + String.format(Locale.getDefault(), "%03d", poke_num);
         holder.poke_num.setText(poke_num_str);
 
         Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.getNum() + ".png")
@@ -88,7 +91,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
                 // Log.d("POKEMON_LIST_ADAPTER", "color: " + mutedColor);
                 holder.cardView.setCardBackgroundColor(mutedColor);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
+                Log.e("Error", Objects.requireNonNull(e.getMessage()));
             }
         }).start();
     }
@@ -100,7 +103,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         int size = width * height;
-        int pixels[] = new int[size];
+        int[] pixels = new int[size];
         //Bitmap bitmap2 = bitmap.copy(Bitmap.Config.ARGB_4444, false);
         bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
         int color;
@@ -109,8 +112,8 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
         int b = 0;
         int a;
         int count = 0;
-        for (int i = 0; i < pixels.length; i++) {
-            color = pixels[i];
+        for (int pixel : pixels) {
+            color = pixel;
             a = Color.alpha(color);
             if (a > 0) {
                 r += Color.red(color);
@@ -136,17 +139,30 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
     }
 
     public void filterList(ArrayList<PokemonResult> filteredList) {
-        data = filteredList;
-        notifyDataSetChanged();
+        int previousSize = data.size();
+        data.clear();
+        data.addAll(filteredList);
+        if (previousSize > 0) {
+            notifyItemRangeRemoved(0, previousSize);
+        }
+        notifyItemRangeInserted(0, filteredList.size());
     }
+
 
     @Override
     public void onPokemonsDataChanged(ArrayList<PokemonResult> pokemon_list) {
+        int previousSize = data.size();
+        data.clear();
+        data.addAll(pokemon_list);
+        unfilteredData.clear();
+        unfilteredData.addAll(pokemon_list);
+        if (previousSize > 0) {
+            notifyItemRangeRemoved(0, previousSize);
+        }
+        notifyItemRangeInserted(0, pokemon_list.size());
         Log.d("POKEMON_LIST_ADAPTER", "onPokemonDataChanged");
-        data = pokemon_list;
-        unfilteredData = pokemon_list;
-        notifyDataSetChanged();
     }
+
 
     @Override
     public void onPokemonDataChanged(Pokemon pokemon) {
@@ -158,12 +174,12 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
 
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public CardView cardView;
-        public TextView poke_num;
-        private ImageView poke_image;
-        private TextView poke_name;
-        private OnPokemonClickListener onPokemonClickListener;
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public final CardView cardView;
+        public final TextView poke_num;
+        private final ImageView poke_image;
+        private final TextView poke_name;
+        private final OnPokemonClickListener onPokemonClickListener;
 
 
         public ViewHolder(View v, OnPokemonClickListener onPokemonClickListener) {
@@ -180,7 +196,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
 
         @Override
         public void onClick(View v) {
-            onPokemonClickListener.onPokemonClick(getAdapterPosition());
+            onPokemonClickListener.onPokemonClick(getBindingAdapterPosition());
         }
     }
 
