@@ -1,3 +1,1 @@
-- Code quality improvements
-- Deprecation changes
-- Upgrading gradle plugin
+- Refactor Team Builder to fix several bugs
