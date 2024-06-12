@@ -1,6 +1,7 @@
 package es.upm.mssde.pokedex;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -181,12 +182,6 @@ public class TeamBuilderActivity extends AppCompatActivity {
         });
     }
 
-    public int getPokemonSprite(String num) {
-        String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + num + ".png";
-
-        return getResources().getIdentifier(sprite_url, "drawable", this.getPackageName());
-    }
-
     public void addToTeam(PokemonResult poke) {
         if (team.size() < 6) {
             addCardView(poke.getNum(), poke.getName());
@@ -263,8 +258,18 @@ public class TeamBuilderActivity extends AppCompatActivity {
         team_list.addView(cardView);
     }
 
-    public void goToPokemonStats(View view) {
-        Toast.makeText(this, "Show stats or details of the clicked Pokemon", Toast.LENGTH_SHORT).show();
+    public void goToPokemonStats(View v) {
+        // get position of cardview in team_list
+        GridLayout team_list = findViewById(R.id.team_list);
+        int position = team_list.indexOfChild(v);
+
+        PokemonResult poke = team.get(position);
+
+        Log.d("goToPokemonStats", "Going to stats for " + poke.getName());
+
+        Intent intent = new Intent(this, PokemonActivity.class);
+        intent.putExtra("pokemon", poke);
+        startActivity(intent);
     }
 
     private void addOnClickListenerToResetTeamButton() {
