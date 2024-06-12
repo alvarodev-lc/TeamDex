@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import es.upm.mssde.pokedex.fragment.TeamViewerFragment;
 import es.upm.mssde.pokedex.models.PokemonResult;
@@ -47,31 +46,24 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        PokemonTeam pokemonTeam = teams.get(position);
+        String teamId = pokemonTeam.getTeamId();
 
-    }
+        holder.bindTeam(teamId);
 
-    @Override
-    public void onBindViewHolder (@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads){
-        ArrayList<PokemonResult> team = teamDatabase.getTeam(String.valueOf(position));
-        int j = 1;
-        while (team.isEmpty()){
-            team=teamDatabase.getTeam(String.valueOf(position + j));
-            j++;
-            position = j;
-        }
+        ArrayList<PokemonResult> team = teamDatabase.getTeam(teamId);
         int team_poke_num = team.size();
-        holder.team_name.setText("Team #" + position);
+        holder.team_name.setText("Team #" + (teamId));
 
-        for (int i=0; i<=5; i++ ){
-            if (i < team_poke_num){
+        for (int i = 0; i <= 5; i++) {
+            if (i < team_poke_num) {
                 Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + team.get(i).getNum() + ".png").into(holder.poke_images.get(i));
+            } else {
+                Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png").into(holder.poke_images.get(i));
             }
-            else{
-                Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + "0" + ".png").into(holder.poke_images.get(i));
-            }
-
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -79,16 +71,12 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
         return teams.size();
     }
 
-    public ArrayList<PokemonTeam> getAllTeams() {
-        return teams;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final CardView cardView;
         public final TextView team_name;
         private final ArrayList<ImageView> poke_images = new ArrayList<>();
         private final OnTeamClickListener onTeamClickListener;
-
+        private String teamId;
 
         public ViewHolder(View v, OnTeamClickListener onTeamClickListener) {
             super(v);
@@ -101,17 +89,21 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
             }
 
             this.onTeamClickListener = onTeamClickListener;
-
             v.findViewById(R.id.team_card_view).setOnClickListener(this);
+        }
+
+        public void bindTeam(String teamId) {
+            this.teamId = teamId;
         }
 
         @Override
         public void onClick(View v) {
-            onTeamClickListener.onTeamClick(getBindingAdapterPosition());
+            onTeamClickListener.onTeamClick(teamId);
         }
     }
 
-    public interface OnTeamClickListener{
-        void onTeamClick(int position);
+
+    public interface OnTeamClickListener {
+        void onTeamClick(String teamId);
     }
 }

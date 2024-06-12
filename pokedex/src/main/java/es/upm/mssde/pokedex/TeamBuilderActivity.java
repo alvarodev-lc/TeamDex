@@ -1,7 +1,6 @@
 package es.upm.mssde.pokedex;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,20 +25,16 @@ import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import es.upm.mssde.pokedex.models.PokemonResult;
-import es.upm.mssde.pokedex.models.PokemonTeam;
 
 public class TeamBuilderActivity extends AppCompatActivity {
 
     private TeamDatabase teamDatabase;
     private ArrayList<PokemonResult> team;
     private TeamBuilderListAdapter teamBuilderListAdapter;
-    private String team_id;
+    private String teamID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,30 +49,17 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
         team = new ArrayList<>();
         teamDatabase = new TeamDatabase(TeamBuilderActivity.this);
-
         teamBuilderListAdapter = new TeamBuilderListAdapter(this);
-
-        String team_id_extra;
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-
-            if(extras == null) {
-                team_id_extra = null;
+            if (extras != null && extras.getString("team_id") != null) {
+                teamID = extras.getString("team_id");
             } else {
-                team_id_extra = extras.getString("team_id");
+                teamID = String.valueOf(teamDatabase.getLatestTeamId() + 1);
             }
         } else {
-            team_id_extra = (String) savedInstanceState.getSerializable("team_id");
-        }
-
-        if (team_id_extra != null) {
-            team_id = team_id_extra;
-            team = teamDatabase.getTeam(team_id);
-        } else {
-            // Give a team_id of last team_id + 1
-            ArrayList<PokemonTeam> db_teams = teamDatabase.getAllTeams();
-            team_id = String.valueOf(db_teams.size());
+            teamID = savedInstanceState.getString("team_id");
         }
 
         SearchView searchBox = findViewById(R.id.search_box);
@@ -113,10 +95,12 @@ public class TeamBuilderActivity extends AppCompatActivity {
         addOnClickListenerToSaveTeamButton();
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            this.finish(); // back button
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -135,7 +119,6 @@ public class TeamBuilderActivity extends AppCompatActivity {
             }
         }
 
-        // limit to 5 results
         if (results.size() > 5) {
             results.subList(5, results.size()).clear();
         }
@@ -150,7 +133,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
     }
 
     private void loadTeamFromDB() {
-        ArrayList<PokemonResult> team = teamDatabase.getTeam(team_id);
+        ArrayList<PokemonResult> team = teamDatabase.getTeam(teamID);
 
         Log.d("LOAD_TEAM_DB", "Team size: " + team.size());
 
@@ -161,6 +144,8 @@ public class TeamBuilderActivity extends AppCompatActivity {
             Log.d("TeamBuilderFragment", "Loading team from DB: " + name);
             addCardView(num, name);
         }
+
+        this.team = team;
     }
 
     private void updateTeamBuilderListView(ArrayList<PokemonResult> poke_list) {
@@ -186,10 +171,8 @@ public class TeamBuilderActivity extends AppCompatActivity {
                     Toast.makeText(TeamBuilderActivity.this, "Added " + poke.getName(), Toast.LENGTH_SHORT).show();
                 }
 
-                // Remove the pokemon from the list
                 teamBuilderListAdapter.poke_list.remove(position);
 
-                // clear the search box
                 SearchView searchBox = findViewById(R.id.search_box);
                 searchBox.setQuery("", false);
 
@@ -212,6 +195,20 @@ public class TeamBuilderActivity extends AppCompatActivity {
             Log.d("addToTeam", "Added " + poke.getName() + " to team");
         } else {
             Toast.makeText(this.getApplicationContext(), "Team already has 6 members!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void deletePokemon(View v) {
+        GridLayout team_list = findViewById(R.id.team_list);
+        int child_count = team_list.getChildCount();
+
+        for (int i = 0; i < child_count; i++) {
+            View child = team_list.getChildAt(i);
+            if (child == v.getParent()) {
+                team_list.removeViewAt(i);
+                team.remove(i);
+                break;
+            }
         }
     }
 
@@ -266,106 +263,33 @@ public class TeamBuilderActivity extends AppCompatActivity {
         team_list.addView(cardView);
     }
 
-    private void deletePokemon(View v) {
-        GridLayout team_list = findViewById(R.id.team_list);
-        int child_count = team_list.getChildCount();
+    public void goToPokemonStats(View view) {
+        Toast.makeText(this, "Show stats or details of the clicked Pokemon", Toast.LENGTH_SHORT).show();
+    }
 
-        for (int i = 0; i < child_count; i++) {
-            View child = team_list.getChildAt(i);
-            if (child == v.getParent()) {
-                team_list.removeViewAt(i);
-                team.remove(i);
-                break;
+    private void addOnClickListenerToResetTeamButton() {
+        Button resetButton = findViewById(R.id.reset_team_button);
+        resetButton.setOnClickListener(v -> {
+            team.clear();
+            GridLayout team_list = findViewById(R.id.team_list);
+            team_list.removeAllViews();
+            Toast.makeText(this, "Team reset!", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void addOnClickListenerToSaveTeamButton() {
+        MaterialButton saveButton = findViewById(R.id.save_team_button);
+        saveButton.setOnClickListener(v -> {
+            if (!team.isEmpty()) {
+                teamDatabase.addTeam(team, teamID);
+                Toast.makeText(this, "Team saved!", Toast.LENGTH_SHORT).show();
+            } else {
+                teamDatabase.deleteTeam(teamID);
+                Toast.makeText(this, "Team deleted!", Toast.LENGTH_SHORT).show();
             }
-        }
+            finish();
+        });
     }
 
-    public void goToPokemonStats(View v) {
-        // get position of cardview in team_list
-        GridLayout team_list = findViewById(R.id.team_list);
-        int position = team_list.indexOfChild(v);
 
-        PokemonResult poke = team.get(position);
-
-        Log.d("goToPokemonStats", "Going to stats for " + poke.getName());
-
-        Intent intent = new Intent(this, PokemonActivity.class);
-        intent.putExtra("pokemon", poke);
-        startActivity(intent);
-    }
-
-    public void removePokemonFromView(View v) {
-        if (team.isEmpty()) return;
-        int index = Integer.parseInt(v.getTag().toString());
-
-        if (index > team.size()) return;
-
-        int[] teamRes = new int[team.size() - 1];
-
-        List<PokemonResult> myList = new CopyOnWriteArrayList<>(team);
-
-        PokemonResult removeMe = myList.get(index - 1);
-
-        myList.remove(index - 1);
-
-        team = new ArrayList<>();
-
-        for (int i = 0; i < myList.size(); i++) {
-            PokemonResult tempP = myList.get(i);
-            team.add(tempP);
-            teamRes[i] = getPokemonSprite(tempP.getName().toLowerCase(Locale.ROOT));
-        }
-
-        teamDatabase.delete(removeMe.getName());
-    }
-
-    public void resetTeam(View v) {
-        Log.d("resetTeam", "Reset team");
-        // delete all pokemon from team_list
-        GridLayout team_list = findViewById(R.id.team_list);
-
-        // delete all from team_list
-        team_list.removeAllViews();
-
-        // reset team arraylist
-        team.clear();
-    }
-
-    public void saveTeam(View v) {
-        Log.d("Erase", String.valueOf(team));
-        if (!teamDatabase.getTeam(team_id).isEmpty()){
-            Log.d("Erase", "Erasing team");
-            teamDatabase.deleteTeam(team_id);
-        }
-        else if (team.isEmpty()){
-            Toast.makeText(this.getApplicationContext(), "Team is empty!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Log.d("saveTeam", "Saving team with team_id: " + team_id);
-
-        teamDatabase.addTeam(team, team_id);
-        if (team.isEmpty()){
-            Toast.makeText(this.getApplicationContext(), "Team deleted!", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(this.getApplicationContext(), "Team saved!", Toast.LENGTH_SHORT).show();
-        }
-
-        finish();
-    }
-
-    // add onClickListener to Save Team button
-    public void addOnClickListenerToSaveTeamButton() {
-        MaterialButton save_team_button = findViewById(R.id.save_team_button);
-
-        save_team_button.setOnClickListener(this::saveTeam);
-    }
-
-    // add onClickListener to Reset Team button
-    public void addOnClickListenerToResetTeamButton() {
-        MaterialButton reset_team_button = findViewById(R.id.reset_team_button);
-
-        reset_team_button.setOnClickListener(this::resetTeam);
-    }
 }

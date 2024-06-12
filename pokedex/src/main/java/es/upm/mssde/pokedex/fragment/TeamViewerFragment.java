@@ -98,14 +98,11 @@ public class TeamViewerFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onTeamClick(int position) {
-        ArrayList<PokemonTeam> all_teams = teamViewerListAdapter.getAllTeams();
-        PokemonTeam clicked_team = all_teams.get(position);
-
-        Log.d("team_click", "clicked team: " + clicked_team.getTeamId());
-
+    public void onTeamClick(String teamId) {
+        // Handle the click event with the team ID
+        // For example, start a new activity or fragment with the team details
         Intent intent = new Intent(getActivity(), TeamBuilderActivity.class);
-        intent.putExtra("team_id", String.valueOf(position));
+        intent.putExtra("team_id", teamId);
         startActivity(intent);
     }
 
