@@ -220,6 +220,26 @@ public class TeamDatabase extends SQLiteOpenHelper {
             addPokemonToTeam(pokemon, team_id);
         }
 
-        Log.d("DB", "Added team to DB");
+        Log.d("DB", "Added team to DB with ID: " + team_id);
     }
+
+    public int getLatestTeamId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int latestTeamId = 0;
+
+        String query = "SELECT MAX(" + TEAM_ID_COL + ") FROM " + TABLE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            latestTeamId = cursor.getInt(0);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return latestTeamId;
+    }
+
+
 }
