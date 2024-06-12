@@ -1,1 +1,7 @@
 - Refactor Team Builder to fix several bugs
+- Improve build speed with cache and disabling Jetifier
+- Bump com.android.tools.build:gradle 8.4.1 to 8.4.2
+- Bump com.google.gms:google-services 4.4.1 to 4.4.2
+- Bump androidx.appcompat:appcompat 1.6.1 to 1.7.0
+- Bump androidx.lifecycle:lifecycle-livedata-ktx 2.8.0 to 2.8.1
+- Bump androidx.lifecycle:lifecycle-viewmodel-ktx 2.8.0 to 2.8.1
