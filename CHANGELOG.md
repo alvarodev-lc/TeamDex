@@ -1,2 +1,4 @@
 - Upgrade AGP dependency from 8.4.2 to 8.5.0
 - Upgrade Gradle version to 8.7
+- Fix pokemon views with names too big where image would be pushed out of screen boundaries
+- Add tooltip for pokemon names to be able to visualize full names
