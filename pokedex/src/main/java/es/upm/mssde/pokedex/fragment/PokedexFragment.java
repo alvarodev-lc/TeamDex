@@ -181,8 +181,6 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
         int poke_id_num = Integer.parseInt(poke_id);
         Log.d("poke_click", poke_name + " " + poke_id_num);
 
-        Toast.makeText(getActivity(), pokemon.getName() + " selected", Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(getActivity(), PokemonActivity.class);
         intent.putExtra("pokemon", pokemon);
         startActivity(intent);
