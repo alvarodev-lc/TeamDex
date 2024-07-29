@@ -59,6 +59,13 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="es.upm.mssde.pokedex.ChangeLogActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="android.app.backup.dataExtractionRules"
