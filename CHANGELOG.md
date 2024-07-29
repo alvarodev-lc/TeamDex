@@ -1,7 +1,12 @@
-- Refactor Team Builder to fix several bugs
-- Improve build speed with cache and disabling Jetifier
-- Bump com.android.tools.build:gradle 8.4.1 to 8.4.2
-- Bump com.google.gms:google-services 4.4.1 to 4.4.2
-- Bump androidx.appcompat:appcompat 1.6.1 to 1.7.0
-- Bump androidx.lifecycle:lifecycle-livedata-ktx 2.8.0 to 2.8.1
-- Bump androidx.lifecycle:lifecycle-viewmodel-ktx 2.8.0 to 2.8.1
+- Upgrade AGP dependency from 8.4.2 to 8.5.0
+- Upgrade Gradle version to 8.7
+- Bump androidx.lifecycle:lifecycle-livedata-ktx from 2.8.1 to 2.8.4
+- Bump androidx.lifecycle:lifecycle-viewmodel-ktx from 2.8.1 to 2.8.4
+- Bump androidx.test.ext:junit from 1.1.5 to 1.2.1
+- Bump androidx.test.espresso:espresso-core from 3.5.1 to 3.6.1
+- Bump androidx.lifecycle:lifecycle-livedata-ktx from 2.8.1 to 2.8.4
+- Fix pokemon views with names too big where image would be pushed out of screen boundaries
+- Remove toast notification when clicking pokemon
+- Add tooltip for pokemon names to be able to visualize full names
+- Add navbar
+- Add changelog page to the navbar to fetch changes dynamically from github

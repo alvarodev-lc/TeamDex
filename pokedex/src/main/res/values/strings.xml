@@ -91,6 +91,12 @@
     <string name="desc_image_pokemon_shiny">Pokemon Shiny Image</string>
     <string name="team_save">Save</string>
     <string name="team_reset">Reset</string>
+    <string name="nav_name">Navigation Drawer</string>
+    <!-- to toggle the open close button of the navigation drawer -->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+    <string name="home_button">Home</string>
+    <string name="back_button">Back</string>
 
 </resources>
 

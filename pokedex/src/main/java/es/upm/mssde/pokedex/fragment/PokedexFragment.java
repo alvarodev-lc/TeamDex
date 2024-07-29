@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import es.upm.mssde.pokedex.ChangeLogActivity;
 import es.upm.mssde.pokedex.PokemonActivity;
 import es.upm.mssde.pokedex.PokedexListAdapter;
 import es.upm.mssde.pokedex.R;
@@ -83,6 +84,7 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.search_menu, menu);
+        menuInflater.inflate(R.menu.nav_menu, menu);
 
         // Get the menu item.
         MenuItem searchItem = menu.findItem(R.id.actionSearch);
@@ -125,6 +127,14 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
+
+        if (id == R.id.nav_changelog) {
+            Intent intent = new Intent(getActivity(), ChangeLogActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         return false;
     }
 
@@ -170,8 +180,6 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
         String poke_id = poke_url.substring(poke_url.length() - 2, poke_url.length() - 1);
         int poke_id_num = Integer.parseInt(poke_id);
         Log.d("poke_click", poke_name + " " + poke_id_num);
-
-        Toast.makeText(getActivity(), pokemon.getName() + " selected", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(getActivity(), PokemonActivity.class);
         intent.putExtra("pokemon", pokemon);

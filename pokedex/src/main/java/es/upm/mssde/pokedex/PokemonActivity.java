@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.TooltipCompat;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -105,7 +107,18 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
                     assert resp != null;
 
                     TextView poke_name = findViewById(R.id.poke_name);
-                    setTextViewText(poke_name, resp.getName());
+                    String name = resp.getName();
+                    setTextViewText(poke_name, name);
+
+                    // Set an OnClickListener to show the tooltip when the TextView is clicked
+                    poke_name.setOnClickListener(v -> {
+                        TooltipCompat.setTooltipText(poke_name, name);
+
+                        // To programmatically show the tooltip, we need to manually trigger it
+                        // This method is private, so there's no direct way to show it programmatically
+                        // Instead, we'll simulate a long click
+                        poke_name.performLongClick();
+                    });
 
                     ImageView sprite_view = findViewById(R.id.poke_image);
                     String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/" +
