@@ -53,7 +53,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
         ArrayList<PokemonResult> team = teamDatabase.getTeam(teamId);
         int team_poke_num = team.size();
-        holder.team_name.setText("Team #" + (teamId));
+        holder.team_name.setText(holder.itemView.getContext().getString(R.string.team_number, teamId));
 
         for (int i = 0; i <= 5; i++) {
             if (i < team_poke_num) {
@@ -83,8 +83,17 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
             cardView = v.findViewById(R.id.team_card_view);
             team_name = v.findViewById(R.id.team_name);
 
-            for (int i = 0; i < 6; i++) {
-                ImageView image = v.findViewById(v.getContext().getResources().getIdentifier("poke_image" + i, "id", v.getContext().getPackageName()));
+            int[] pokeImageIds = {
+                    R.id.poke_image0,
+                    R.id.poke_image1,
+                    R.id.poke_image2,
+                    R.id.poke_image3,
+                    R.id.poke_image4,
+                    R.id.poke_image5
+            };
+
+            for (int id : pokeImageIds) {
+                ImageView image = v.findViewById(id);
                 poke_images.add(image);
             }
 

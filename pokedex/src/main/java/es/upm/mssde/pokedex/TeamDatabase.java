@@ -230,13 +230,11 @@ public class TeamDatabase extends SQLiteOpenHelper {
         String query = "SELECT MAX(" + TEAM_ID_COL + ") FROM " + TABLE_NAME;
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor != null && cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             latestTeamId = cursor.getInt(0);
         }
 
-        if (cursor != null) {
-            cursor.close();
-        }
+        cursor.close();
 
         return latestTeamId;
     }

@@ -18,6 +18,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -231,16 +232,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         poke_name_view.setTypeface(null, Typeface.BOLD);
         poke_name_view.setGravity(Gravity.CENTER);
 
-        ImageView poke_sprite_view = new ImageView(this);
-        poke_sprite_view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        poke_sprite_view.setAdjustViewBounds(true);
-        poke_sprite_view.setMaxHeight(300);
-        poke_sprite_view.setMaxWidth(300);
-
-        // align sprite to left
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 0, 10, 0);
-        poke_sprite_view.setLayoutParams(params);
+        ImageView poke_sprite_view = getImageView();
 
         Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke_num + ".png")
                 .into(poke_sprite_view);
@@ -256,6 +248,21 @@ public class TeamBuilderActivity extends AppCompatActivity {
         cardView.addView(cardViewContent);
 
         team_list.addView(cardView);
+    }
+
+    @NonNull
+    private ImageView getImageView() {
+        ImageView poke_sprite_view = new ImageView(this);
+        poke_sprite_view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        poke_sprite_view.setAdjustViewBounds(true);
+        poke_sprite_view.setMaxHeight(300);
+        poke_sprite_view.setMaxWidth(300);
+
+        // align sprite to left
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 10, 0);
+        poke_sprite_view.setLayoutParams(params);
+        return poke_sprite_view;
     }
 
     public void goToPokemonStats(View v) {

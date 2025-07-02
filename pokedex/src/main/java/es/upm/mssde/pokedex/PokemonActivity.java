@@ -100,7 +100,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
         Call<Pokemon> pokemonCall = apiService.getPokemon(String.valueOf(poke.getNum()));
 
-        pokemonCall.enqueue(new Callback<Pokemon>() {
+        pokemonCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<Pokemon> call, @NonNull Response<Pokemon> response) {
                 if (response.isSuccessful()) {
@@ -166,7 +166,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
         Call<Species> pokemonCall = apiService.getPokemonSpecies(String.valueOf(poke.getNum()));
 
-        pokemonCall.enqueue(new Callback<Species>() {
+        pokemonCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<Species> call, @NonNull Response<Species> response) {
                 if (response.isSuccessful()) {
@@ -323,10 +323,11 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         matColor.put(2, Color.parseColor("#ef4d46"));
         matColor.put(3, Color.parseColor("#f4e7e3"));
 
-        // Return the value associated with the index
-        // Handle the case where the index is not present
-        // For example, you could return a default color
-        return matColor.getOrDefault(index, Color.BLACK);
+        Integer color = matColor.get(index);
+        if (color == null) {
+            return Color.BLACK;
+        }
+        return color;
     }
 
     public void loadPokemonAbilities(Pokemon pokemon) {
@@ -368,13 +369,13 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
             try {
                 Document document = Jsoup.connect(url).get();
                 Elements description = document.select("meta[name=description]");
-                Element about = document.select("h2:contains(About)").first().nextElementSibling();
+                Element about = Objects.requireNonNull(document.select("h2:contains(About)").first()).nextElementSibling();
 
-                String pokemon_about = "";
-                String pokemon_description = "";
+                String pokemon_about;
+                String pokemon_description;
 
                 if (!description.isEmpty()) {
-                    pokemon_description = description.first().attr("content");
+                    pokemon_description = Objects.requireNonNull(description.first()).attr("content");
                 } else {
                     pokemon_description = "Description not available.";
                 }
@@ -451,8 +452,16 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         for (Stat stat_value : list_stat_list) {
             StatName stat = stat_value.getStat();
             String stat_name = stat.getName();
-            Log.d("reorder", "Stat name: " + stat_name + "Position: " + stats_order_hashmap.get(stat.getName()));
-            ordered_list_stat_list.add(stats_order_hashmap.get(stat_name), stat_value);
+
+            Integer position = stats_order_hashmap.get(stat_name);
+            if (position == null) {
+
+                Log.w("reorder", "Position for stat_name '" + stat_name + "' not found. Skipping.");
+                continue;
+            }
+
+            Log.d("reorder", "Stat name: " + stat_name + " Position: " + position);
+            ordered_list_stat_list.add(position, stat_value);
         }
 
         for (Stat stat_value : ordered_list_stat_list) {

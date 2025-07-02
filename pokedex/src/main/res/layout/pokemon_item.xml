@@ -37,6 +37,6 @@
         android:layout_gravity="bottom|center_horizontal"
         android:fontFamily="Roboto"
         android:paddingTop="105dp"
-        android:textFontWeight="600"
+        android:fontWeight="600"
         android:textSize="15sp" />
 </androidx.cardview.widget.CardView>

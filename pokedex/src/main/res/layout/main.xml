@@ -33,7 +33,7 @@
             android:fontFamily="Roboto"
             android:text="@string/no_acc_continue"
             android:textColor="#000000"
-            android:textFontWeight="600"
+            android:fontWeight="600"
             android:textSize="25sp" />
 
 
@@ -63,7 +63,7 @@
             android:fontFamily="Roboto"
             android:text="@string/acc_continue"
             android:textColor="#000000"
-            android:textFontWeight="600"
+            android:fontWeight="600"
             android:textSize="25sp" />
 
         <Button

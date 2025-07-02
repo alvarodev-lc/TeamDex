@@ -98,6 +98,9 @@
     <string name="home_button">Home</string>
     <string name="back_button">Back</string>
 
+    <string name="failed_to_load_changelog">Failed to load changelog.</string>
+    <string name="team_number">Team #%1$s</string>
+
 </resources>
 
 

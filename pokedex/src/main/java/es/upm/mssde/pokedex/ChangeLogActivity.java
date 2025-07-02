@@ -37,7 +37,7 @@ public class ChangeLogActivity extends AppCompatActivity {
         GithubService service = retrofit.create(GithubService.class);
         Call<GithubService.GitHubContent> call = service.getChangelog("alvarodev-lc", "TeamDex", "CHANGELOG.md");
 
-        call.enqueue(new Callback<GithubService.GitHubContent>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<GithubService.GitHubContent> call, @NonNull Response<GithubService.GitHubContent> response) {
                 if (response.isSuccessful()) {
@@ -50,7 +50,7 @@ public class ChangeLogActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<GithubService.GitHubContent> call, @NonNull Throwable t) {
-                changelogTextView.setText("Failed to load changelog.");
+                changelogTextView.setText(R.string.failed_to_load_changelog);
             }
         });
 
