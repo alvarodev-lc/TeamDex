@@ -1,1 +1,3 @@
-- First production release
+- Updated several libraries
+- Fixed pokemon data scraping that caused crashing
+- Optimized codebase for faster experience
