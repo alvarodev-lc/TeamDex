@@ -42,7 +42,7 @@ public class PokeAPI implements MyObservable {
         String poke_id = String.valueOf(poke_num);
         Call<Pokemon> pokemonResultCall = apiService.getPokemon(poke_id);
 
-        pokemonResultCall.enqueue(new Callback<Pokemon>() {
+        pokemonResultCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<Pokemon> call, @NonNull Response<Pokemon> response) {
                 if (response.isSuccessful()) {
@@ -72,7 +72,7 @@ public class PokeAPI implements MyObservable {
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
         Call<PokemonList> pokemonResultCall = apiService.getAllPokemon(POKEMON_MAX_RESULTS, offset);
 
-        pokemonResultCall.enqueue(new Callback<PokemonList>() {
+        pokemonResultCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<PokemonList> call, @NonNull Response<PokemonList> response) {
                 if (response.isSuccessful()){

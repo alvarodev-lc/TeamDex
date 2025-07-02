@@ -67,7 +67,7 @@
     <string name="poke_weight">Weight:</string>
     <string name="poke_exp">XP:</string>
     <string name="poke_description">Description</string>
-    <string name="poke_summary">Summary</string>
+    <string name="poke_about">About</string>
     <string name="poke_name">Name</string>
     <string name="poke_capt_rate">Capture rate:</string>
     <string name="poke_happiness">Base happiness:</string>
@@ -97,6 +97,9 @@
     <string name="nav_close">Close</string>
     <string name="home_button">Home</string>
     <string name="back_button">Back</string>
+
+    <string name="failed_to_load_changelog">Failed to load changelog.</string>
+    <string name="team_number">Team #%1$s</string>
 
 </resources>
 
