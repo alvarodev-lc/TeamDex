@@ -1,3 +1,3 @@
 - Updated several libraries
-- Fixed pokemon data scraping that caused crashing
-- Optimized codebase for faster experience
+- Updated SDK to 37
+- Fixed issues with top/bottom layout on some devices.
