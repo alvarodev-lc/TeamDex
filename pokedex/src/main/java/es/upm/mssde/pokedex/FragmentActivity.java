@@ -6,13 +6,18 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.Objects;
 
 import es.upm.mssde.pokedex.fragment.PokedexFragment;
 import es.upm.mssde.pokedex.fragment.TeamViewerFragment;
@@ -25,9 +30,36 @@ public class FragmentActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         setContentView(R.layout.activity_fragment);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        RadioGroup radioGroup = findViewById(R.id.rg_navigation); // I'll add this ID to XML
+        if (radioGroup == null) {
+            // Fallback if ID is different, let's find it by type if possible or just use the parent of a button
+            radioGroup = (RadioGroup) findViewById(R.id.rb_pokedex).getParent();
+        }
+
+        RadioGroup finalRadioGroup = radioGroup;
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            toolbar.setPadding(0, insets.top, 0, 0);
+            if (finalRadioGroup != null) {
+                finalRadioGroup.setPadding(
+                        finalRadioGroup.getPaddingLeft(),
+                        finalRadioGroup.getPaddingTop(),
+                        finalRadioGroup.getPaddingRight(),
+                        insets.bottom
+                );
+            }
+            return windowInsets;
+        });
 
         fm = getSupportFragmentManager();
 

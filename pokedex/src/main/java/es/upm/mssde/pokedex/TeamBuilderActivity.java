@@ -21,6 +21,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.cardview.widget.CardView;
 
 import com.google.android.material.button.MaterialButton;
@@ -39,8 +44,21 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.team_builder);
+
+        Toolbar toolbar = findViewById(R.id.toolbar_builder);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Team Builder");
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(0, insets.top, 0, 0);
+            return windowInsets;
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
