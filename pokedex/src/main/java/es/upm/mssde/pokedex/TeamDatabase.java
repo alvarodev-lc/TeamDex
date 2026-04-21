@@ -9,10 +9,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Objects;
 
-import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.PokemonTeam;
 
@@ -29,8 +27,6 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
     private static final String NAME_COL = "name";
 
-    private PokeAPI pokeAPI;
-
     public TeamDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -45,7 +41,6 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
         db.execSQL(query);
 
-        pokeAPI = new PokeAPI();
     }
 
     public void addPokemonToTeam(PokemonResult pokemon, String team_id) {
@@ -55,7 +50,7 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
         values.put(TEAM_ID_COL, team_id);
 
-        String name = pokemon.getName().substring(0, 1).toUpperCase() + pokemon.getName().substring(1);
+        String name = pokemon.getName().substring(0, 1).toUpperCase(java.util.Locale.ROOT) + pokemon.getName().substring(1);
         values.put(NAME_COL, name);
 
         int poke_num = pokemon.getNum();
@@ -66,11 +61,6 @@ public class TeamDatabase extends SQLiteOpenHelper {
         Log.d("DB", "Added pokemon to team in DB: " + name);
 
         db.close();
-    }
-
-    public void delete(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE name ='" + name + "'");
     }
 
     public ArrayList<PokemonResult> getTeam(String team_id) {
@@ -166,45 +156,10 @@ public class TeamDatabase extends SQLiteOpenHelper {
         return teams;
     }
 
-    public Pokemon getPokemon(String givenName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String name = givenName.toLowerCase(Locale.ROOT);
-
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + TABLE_NAME + ".name LIKE " + "'" + name + "'";
-        Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToNext();
-
-        int colIndex = cursor.getColumnIndex(NUM_COL);
-        int num = cursor.getInt(colIndex);
-
-        pokeAPI.getPokemonData(num, false);
-        Pokemon poke = pokeAPI.getQueryPokemon();
-        Log.d("DB", "getPokemon: " + poke.getName());
-        cursor.close();
-        return poke;
-    }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
-    }
-
-    public void dropTable() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
-    }
-
-    public boolean isEmpty() {
-        SQLiteDatabase db = getReadableDatabase();
-        String count = "SELECT count(*) FROM " + TABLE_NAME;
-        Cursor mcursor = db.rawQuery(count, null);
-        mcursor.moveToFirst();
-        int icount = mcursor.getInt(0);
-        mcursor.close();
-
-        return icount == 0;
     }
 
     public void deleteTeam( String team_id){

@@ -21,13 +21,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.cardview.widget.CardView;
 
 import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import es.upm.mssde.pokedex.models.PokemonResult;
 
@@ -40,8 +44,21 @@ public class TeamBuilderActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.team_builder);
+
+        Toolbar toolbar = findViewById(R.id.toolbar_builder);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Team Builder");
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(0, insets.top, 0, 0);
+            return windowInsets;
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -71,11 +88,15 @@ public class TeamBuilderActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 updateTeamBuilderListView(searchPokemon(query));
-                InputMethodManager inputManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                InputMethodManager inputManager =
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                View view = getCurrentFocus();
+
+                if (view != null && inputManager != null) {
+                    inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
 
                 return false;
             }
@@ -115,7 +136,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         Log.d("POKEDEX_SEARCH", teamBuilderListAdapter.poke_list.size() + " pokemons in list");
 
         for (PokemonResult pokemon : teamBuilderListAdapter.poke_list) {
-            if (pokemon.getName().toLowerCase().contains(query.toLowerCase())) {
+            if (pokemon.getName().toLowerCase(java.util.Locale.ROOT).contains(query.toLowerCase(java.util.Locale.ROOT))) {
                 Log.d("POKEMON_FOUND", pokemon.getName());
                 results.add(pokemon);
             }

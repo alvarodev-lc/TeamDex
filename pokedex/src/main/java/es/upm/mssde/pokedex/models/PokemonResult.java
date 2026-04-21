@@ -22,7 +22,7 @@ public class PokemonResult implements Serializable {
 
     public String getName() {
         // Capitalize first letter
-        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        name = name.substring(0, 1).toUpperCase(java.util.Locale.ROOT) + name.substring(1);
         return name;
     }
 

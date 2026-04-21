@@ -72,7 +72,7 @@ public class Pokemon {
     }
 
     public String getName() {
-        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        name = name.substring(0, 1).toUpperCase(java.util.Locale.ROOT) + name.substring(1);
         return name;
     }
 
