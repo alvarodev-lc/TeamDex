@@ -27,7 +27,6 @@ import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import es.upm.mssde.pokedex.models.PokemonResult;
 
@@ -71,11 +70,15 @@ public class TeamBuilderActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 updateTeamBuilderListView(searchPokemon(query));
-                InputMethodManager inputManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                InputMethodManager inputManager =
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                View view = getCurrentFocus();
+
+                if (view != null && inputManager != null) {
+                    inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
 
                 return false;
             }
@@ -115,7 +118,7 @@ public class TeamBuilderActivity extends AppCompatActivity {
         Log.d("POKEDEX_SEARCH", teamBuilderListAdapter.poke_list.size() + " pokemons in list");
 
         for (PokemonResult pokemon : teamBuilderListAdapter.poke_list) {
-            if (pokemon.getName().toLowerCase().contains(query.toLowerCase())) {
+            if (pokemon.getName().toLowerCase(java.util.Locale.ROOT).contains(query.toLowerCase(java.util.Locale.ROOT))) {
                 Log.d("POKEMON_FOUND", pokemon.getName());
                 results.add(pokemon);
             }

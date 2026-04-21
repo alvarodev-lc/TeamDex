@@ -149,7 +149,7 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
         // Running a for loop to compare elements.
         for (PokemonResult pokemon : poke_list) {
             // Checking if the entered string matches with any item of our RecyclerView.
-            if (pokemon.getName().toLowerCase().contains(query.toLowerCase())) {
+            if (pokemon.getName().toLowerCase(java.util.Locale.ROOT).contains(query.toLowerCase(java.util.Locale.ROOT))) {
                 // If the item matches, add it to the filtered list.
                 filtered_list.add(pokemon);
             }

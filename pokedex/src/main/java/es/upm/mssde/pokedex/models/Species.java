@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Generated("jsonschema2pojo")
 public class Species {
@@ -28,7 +29,7 @@ public class Species {
         // 255 is 100%, parse integer to percentage
         Float perc = (Float) (captureRate * 100) / 255;
         captureRate = BigDecimal.valueOf(
-                perc).setScale(2, BigDecimal.ROUND_HALF_DOWN).floatValue();
+                perc).setScale(2, RoundingMode.HALF_DOWN).floatValue();
         return captureRate;
     }
 

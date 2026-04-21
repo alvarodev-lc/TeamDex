@@ -75,7 +75,9 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
         Intent intent = getIntent();
 
-        poke = (PokemonResult) Objects.requireNonNull(intent.getExtras()).getSerializable("pokemon");
+        poke = Objects.requireNonNull(
+                intent.getExtras()
+        ).getSerializable("pokemon", PokemonResult.class);
 
         String base_url = "https://pokeapi.co/api/v2/";
 
@@ -289,7 +291,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    // function that given a type of pokemon, returns a material design color
+    // function that given a type of Pokémon, returns a material design color
     public int getMaterialColorType(String typeColor) {
         Log.d("COLOR_REQUEST_POKE_TYPE", "Type: " + typeColor);
         HashMap<String, String> matColor = new HashMap<>();
@@ -340,7 +342,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         for (AbilityList ability_list : list_ability_list) {
             Ability ability = ability_list.getAbility();
             String ability_name = ability.getName();
-            ability_name = ability_name.substring(0, 1).toUpperCase() +
+            ability_name = ability_name.substring(0, 1).toUpperCase(java.util.Locale.ROOT) +
                     ability_name.substring(1);
             Log.d(LOG_TAG, "Ability: " + ability_name);
 
@@ -361,7 +363,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
 
         Log.d("Scrapping", "Pokemon num: " + pokemon_num);
 
-        String url = "https://pokemon.gameinfo.io/en/pokemon/" + pokemon_num + "-" + poke.getName().toLowerCase();
+        String url = "https://pokemon.gameinfo.io/en/pokemon/" + pokemon_num + "-" + poke.getName().toLowerCase(java.util.Locale.ROOT);
 
         Log.d("Scrapping", "URL: " + url);
 
@@ -473,7 +475,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
             Log.d("poke_stats", "Index: " + index + " Stat: " + stat_name + " - " + stat_base_stat);
 
             // adding new entry to our array list with bar
-            // entry and passing x and y axis value to it.
+            // entry and passing x and y-axis value to it.
             barEntriesArrayList.add(new BarEntry(index, stat_base_stat));
 
             stat_names[index] = stat_name;
@@ -529,7 +531,7 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         // remove description
         barChart.getDescription().setEnabled(false);
 
-        // make it non interactive
+        // make it non-interactive
         barChart.setTouchEnabled(false);
         barChart.setPinchZoom(false);
 
