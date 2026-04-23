@@ -19,7 +19,10 @@ android {
             if (System.getenv("GITHUB_ACTIONS") == "true") {
                 keyAlias System.getenv("SIGNING_KEY_ALIAS")
                 keyPassword System.getenv("SIGNING_KEY_PASSWORD")
-                storeFile file(System.getenv("SIGNING_KEY_STORE_PATH"))
+                def keystorePath = System.getenv("SIGNING_KEY_STORE_PATH")
+                if (keystorePath != null) {
+                    storeFile file(keystorePath)
+                }
                 storePassword System.getenv("SIGNING_STORE_PASSWORD")
             } else if (propertiesFile.exists()) {
                 properties.load(propertiesFile.newDataInputStream())
