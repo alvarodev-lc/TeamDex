@@ -21,19 +21,22 @@ android {
             Properties properties = new Properties()
             def propertiesFile = project.rootProject.file('local.properties')
             if (System.getenv("GITHUB_ACTIONS") == "true") {
-                keyAlias System.getenv("SIGNING_KEY_ALIAS")
-                keyPassword System.getenv("SIGNING_KEY_PASSWORD")
                 def keystorePath = System.getenv("SIGNING_KEY_STORE_PATH")
-                storeFile file(keystorePath)
-                storePassword System.getenv("SIGNING_STORE_PASSWORD")
+                if (keystorePath != null) {
+                    keyAlias System.getenv("SIGNING_KEY_ALIAS")
+                    keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+                    storeFile file(keystorePath)
+                    storePassword System.getenv("SIGNING_STORE_PASSWORD")
+                }
             } else if (propertiesFile.exists()) {
                 properties.load(propertiesFile.newDataInputStream())
-                keyAlias properties.getProperty("SIGNING_KEY_ALIAS")
-                keyPassword properties.getProperty("SIGNING_KEY_PASSWORD")
-                storeFile file(properties.getProperty("SIGNING_KEY_STORE_PATH"))
-                storePassword properties.getProperty("SIGNING_STORE_PASSWORD")
-            } else {
-                throw new GradleException("local.properties file not found. Please create one.")
+                def keystorePath = properties.getProperty("SIGNING_KEY_STORE_PATH")
+                if (keystorePath != null) {
+                    keyAlias properties.getProperty("SIGNING_KEY_ALIAS")
+                    keyPassword properties.getProperty("SIGNING_KEY_PASSWORD")
+                    storeFile file(keystorePath)
+                    storePassword properties.getProperty("SIGNING_STORE_PASSWORD")
+                }
             }
         }
     }
