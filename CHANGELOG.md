@@ -1,3 +1,1 @@
-- Updated several libraries
-- Updated SDK to 37
-- Fixed issues with top/bottom layout on some devices.
+- Fixed pokemon data top layout
