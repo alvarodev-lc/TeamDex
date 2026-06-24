@@ -32,4 +32,14 @@
         android:background="@color/colorPrimary"
         android:textColor="@color/colorWhite"
         android:text="@string/home_button"/>
+
+    <Button
+        android:id="@+id/button_buy_me_a_coffee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:background="#FFDD00"
+        android:textColor="@android:color/white"
+        android:text="@string/buy_me_a_coffee"/>
 </LinearLayout>

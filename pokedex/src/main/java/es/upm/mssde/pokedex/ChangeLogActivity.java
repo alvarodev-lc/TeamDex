@@ -1,6 +1,7 @@
 package es.upm.mssde.pokedex;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.widget.Button;
@@ -28,6 +29,7 @@ public class ChangeLogActivity extends AppCompatActivity {
         changelogTextView = findViewById(R.id.changelogTextView);
         ImageButton buttonBack = findViewById(R.id.button_back);
         Button buttonHome = findViewById(R.id.button_home);
+        Button buttonCoffee = findViewById(R.id.button_buy_me_a_coffee);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
@@ -61,8 +63,15 @@ public class ChangeLogActivity extends AppCompatActivity {
         });
 
         buttonHome.setOnClickListener(v -> {
-            Intent intent = new Intent(ChangeLogActivity.this, MainActivity.class); // Replace MainActivity with your target Activity
+            Intent intent = new Intent(ChangeLogActivity.this, MainActivity.class);
             startActivity(intent);
         });
+
+        buttonCoffee.setOnClickListener(v -> openBuyMeACoffee(this));
+    }
+
+    public static void openBuyMeACoffee(android.content.Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://buymeacoffee.com/alvarodevlc"));
+        context.startActivity(intent);
     }
 }

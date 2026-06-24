@@ -11,6 +11,14 @@
         android:id="@+id/actionSearch"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/search"
+        android:orderInCategory="1"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
+
+    <item
+        android:id="@+id/actionCoffee"
+        android:icon="@drawable/ic_coffee"
+        android:title="@string/buy_me_a_coffee"
+        android:orderInCategory="2"
+        app:showAsAction="always" />
 </menu>
