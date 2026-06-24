@@ -41,9 +41,9 @@ public class ChangeLogActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<GithubService.GitHubContent> call, @NonNull Response<GithubService.GitHubContent> response) {
                 if (response.isSuccessful()) {
-                    assert response.body() != null;
-                    String content = response.body().content;
-                    String decodedContent = new String(Base64.decode(content, Base64.DEFAULT));
+                    GithubService.GitHubContent body = response.body();
+                    if (body == null || body.content == null) return;
+                    String decodedContent = new String(Base64.decode(body.content, Base64.DEFAULT));
                     changelogTextView.setText(decodedContent);
                 }
             }

@@ -16,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
+import java.util.Map;
 
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
@@ -28,6 +30,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
     public final ArrayList<PokemonResult> unfilteredData;
     private final OnPokemonClickListener onPokemonClickListener;
     private final PokeAPI pokeAPI;
+    private final Map<Integer, Integer> colorCache = new HashMap<>();
     public final int POKEMON_MAX_RESULTS = 100;
     int offset = 0;
 
@@ -46,7 +49,10 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
             int previousSize = data.size();
             data.clear();
             data.addAll(unfilteredData);
-            notifyItemRangeInserted(previousSize, unfilteredData.size());
+            if (previousSize > 0) {
+                notifyItemRangeRemoved(0, previousSize);
+            }
+            notifyItemRangeInserted(0, unfilteredData.size());
         }
     }
 
@@ -69,31 +75,39 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
         PokemonResult poke = data.get(position);
         holder.poke_name.setText(poke.getName());
         int poke_num = poke.getNum();
-        // fill with zeros until the number is 3 digits
         String poke_num_str = "#" + String.format(Locale.getDefault(), "%03d", poke_num);
         holder.poke_num.setText(poke_num_str);
 
-        Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.getNum() + ".png")
-            .into(holder.poke_image);
+        String spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke_num + ".png";
+        Picasso.get().load(spriteUrl).into(holder.poke_image);
 
-        new Thread(() -> {
-            try {
-                // set cardview background color to the dominant color of the image
-                Bitmap bitmap = Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.getNum() + ".png").get();
-                int color = getDominantColor(bitmap);
-                // calculate a muted version of the color
-                int mutedColor = Color.argb(
-                        (int) (Color.alpha(color) * 0.9),
-                        (int) (Color.red(color) * 1.1 + 20),
-                        (int) (Color.green(color) * 1.1 + 20),
-                        (int) (Color.blue(color) * 1.1 + 20)
-                );
-                // Log.d("POKEMON_LIST_ADAPTER", "color: " + mutedColor);
-                holder.cardView.setCardBackgroundColor(mutedColor);
-            } catch (Exception e) {
-                Log.e("Error", Objects.requireNonNull(e.getMessage()));
-            }
-        }).start();
+        Integer cachedColor = colorCache.get(poke_num);
+        if (cachedColor != null) {
+            holder.cardView.setCardBackgroundColor(cachedColor);
+        } else {
+            holder.cardView.setCardBackgroundColor(Color.LTGRAY);
+            new Thread(() -> {
+                try {
+                    Bitmap bitmap = Picasso.get().load(spriteUrl).get();
+                    int color = getDominantColor(bitmap);
+                    int mutedColor = Color.argb(
+                            (int) (Color.alpha(color) * 0.9),
+                            (int) (Color.red(color) * 1.1 + 20),
+                            (int) (Color.green(color) * 1.1 + 20),
+                            (int) (Color.blue(color) * 1.1 + 20)
+                    );
+                    colorCache.put(poke_num, mutedColor);
+                    holder.cardView.post(() -> {
+                        int current = holder.getBindingAdapterPosition();
+                        if (current != RecyclerView.NO_POSITION && data.get(current).getNum() == poke_num) {
+                            holder.cardView.setCardBackgroundColor(mutedColor);
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage() != null ? e.getMessage() : "Unknown error");
+                }
+            }).start();
+        }
     }
 
     public static int getDominantColor(Bitmap bitmap) {
@@ -151,15 +165,19 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
 
     @Override
     public void onPokemonsDataChanged(ArrayList<PokemonResult> pokemon_list) {
-        int previousSize = data.size();
-        data.clear();
-        data.addAll(pokemon_list);
-        unfilteredData.clear();
-        unfilteredData.addAll(pokemon_list);
-        if (previousSize > 0) {
-            notifyItemRangeRemoved(0, previousSize);
+        int previousUnfilteredSize = unfilteredData.size();
+        int newItemsCount = pokemon_list.size() - previousUnfilteredSize;
+        if (newItemsCount <= 0) return;
+
+        List<PokemonResult> newItems = pokemon_list.subList(previousUnfilteredSize, pokemon_list.size());
+        unfilteredData.addAll(newItems);
+
+        // Only append to visible data when not currently filtering
+        boolean isFiltered = data.size() != previousUnfilteredSize;
+        if (!isFiltered) {
+            data.addAll(newItems);
+            notifyItemRangeInserted(previousUnfilteredSize, newItemsCount);
         }
-        notifyItemRangeInserted(0, pokemon_list.size());
         Log.d("POKEMON_LIST_ADAPTER", "onPokemonDataChanged");
     }
 
@@ -196,7 +214,10 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
 
         @Override
         public void onClick(View v) {
-            onPokemonClickListener.onPokemonClick(getBindingAdapterPosition());
+            int position = getBindingAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                onPokemonClickListener.onPokemonClick(position);
+            }
         }
     }
 
@@ -204,11 +225,27 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
         void onPokemonClick(int position);
     }
 
+    public void loadAllPokemonNames() {
+        pokeAPI.loadAllPokemonNames();
+    }
+
+    public ArrayList<PokemonResult> searchAll(String query) {
+        if (pokeAPI.isAllNamesLoaded()) {
+            return pokeAPI.searchByName(query);
+        }
+        // Names still loading — fall back to local filter
+        String lowerQuery = query.toLowerCase(Locale.ROOT);
+        ArrayList<PokemonResult> results = new ArrayList<>();
+        for (PokemonResult p : unfilteredData) {
+            if (p.getName().toLowerCase(Locale.ROOT).contains(lowerQuery)) {
+                results.add(p);
+            }
+        }
+        return results;
+    }
+
     public ArrayList<PokemonResult> getData() {
         return data;
     }
 
-    public ArrayList<PokemonResult> getUnfilteredData() {
-        return unfilteredData;
-    }
 }

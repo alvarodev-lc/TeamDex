@@ -78,6 +78,7 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
 
         charge_allowed = true;
         pokedexListAdapter.refreshPokemonData();
+        pokedexListAdapter.loadAllPokemonNames();
     }
 
     @Override
@@ -139,28 +140,15 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
     }
 
     private void filter(String query) {
-        // Creating a new array list to filter our data.
-        ArrayList<PokemonResult> poke_list = pokedexListAdapter.getUnfilteredData();
-        ArrayList<PokemonResult> filtered_list = new ArrayList<>();
-
-        Log.d("PokedexFragment", "filter: " + pokedexListAdapter.getItemCount());
-        Log.d("PokedexFragment", "filter: " + query);
-
-        // Running a for loop to compare elements.
-        for (PokemonResult pokemon : poke_list) {
-            // Checking if the entered string matches with any item of our RecyclerView.
-            if (pokemon.getName().toLowerCase(java.util.Locale.ROOT).contains(query.toLowerCase(java.util.Locale.ROOT))) {
-                // If the item matches, add it to the filtered list.
-                filtered_list.add(pokemon);
-            }
+        if (query.isEmpty()) {
+            pokedexListAdapter.unfilter();
+            return;
         }
-
-        if (filtered_list.isEmpty()) {
-            // If no item is added to the filtered list, display a toast message.
+        ArrayList<PokemonResult> results = pokedexListAdapter.searchAll(query);
+        if (results.isEmpty()) {
             Toast.makeText(getActivity(), "No pokémon found...", Toast.LENGTH_SHORT).show();
         } else {
-            // Pass the filtered list to the adapter class.
-            pokedexListAdapter.filterList(filtered_list);
+            pokedexListAdapter.filterList(results);
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonList;
@@ -21,6 +22,8 @@ public class PokeAPI implements MyObservable {
     private final Retrofit retrofit;
     public int POKEMON_MAX_RESULTS = 100;
     public final ArrayList<PokemonResult> poke_list;
+    private final ArrayList<PokemonResult> allPokemonNames = new ArrayList<>();
+    private boolean allNamesLoaded = false;
     private Pokemon queryPokemon;
     private Pokemon queryPokemonFromName;
     private final List<MyObserver> myObservers;
@@ -92,9 +95,42 @@ public class PokeAPI implements MyObservable {
         });
     }
 
-    public Pokemon getQueryPokemon() {
-        return queryPokemon;
+    public void loadAllPokemonNames() {
+        if (allNamesLoaded) return;
+        IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
+        Call<PokemonList> call = apiService.getAllPokemon(10000, 0);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<PokemonList> call, @NonNull Response<PokemonList> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    allPokemonNames.addAll(response.body().getResults());
+                    allNamesLoaded = true;
+                    Log.d("poke_api_all_names", "Loaded " + allPokemonNames.size() + " pokemon names");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PokemonList> call, @NonNull Throwable t) {
+                Log.d("poke_api_all_names", t.toString());
+            }
+        });
     }
+
+    public boolean isAllNamesLoaded() {
+        return allNamesLoaded;
+    }
+
+    public ArrayList<PokemonResult> searchByName(String query) {
+        ArrayList<PokemonResult> results = new ArrayList<>();
+        String lowerQuery = query.toLowerCase(Locale.ROOT);
+        for (PokemonResult p : allPokemonNames) {
+            if (p.getName().toLowerCase(Locale.ROOT).contains(lowerQuery)) {
+                results.add(p);
+            }
+        }
+        return results;
+    }
+
 
     public void setPokemonMaxResults(int POKEMON_MAX_RESULTS) {
         this.POKEMON_MAX_RESULTS = POKEMON_MAX_RESULTS;

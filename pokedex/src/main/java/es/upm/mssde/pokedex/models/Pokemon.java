@@ -72,6 +72,7 @@ public class Pokemon {
     }
 
     public String getName() {
+        if (name == null || name.isEmpty()) return name != null ? name : "";
         name = name.substring(0, 1).toUpperCase(java.util.Locale.ROOT) + name.substring(1);
         return name;
     }
@@ -81,7 +82,7 @@ public class Pokemon {
     }
 
     public String getHeight() {
-        // Height comes in decimeters, parse to meters
+        if (height == null) return "";
         float meters = Float.parseFloat(height) / 10;
         return String.valueOf(meters);
     }
@@ -91,7 +92,7 @@ public class Pokemon {
     }
 
     public String getWeight() {
-        // Weight comes in hectograms, parse into kilograms
+        if (weight == null) return "";
         float kg = Float.parseFloat(weight) / 10;
         return String.valueOf(kg);
     }

@@ -51,7 +51,7 @@ public class TeamViewerListAdapter extends RecyclerView.Adapter<TeamViewerListAd
 
         holder.bindTeam(teamId);
 
-        ArrayList<PokemonResult> team = teamDatabase.getTeam(teamId);
+        ArrayList<PokemonResult> team = pokemonTeam.getTeamPokemons();
         int team_poke_num = team.size();
         holder.team_name.setText(holder.itemView.getContext().getString(R.string.team_number, teamId));
 

@@ -27,10 +27,8 @@ public class Species {
 
     public Float getCaptureRate() {
         // 255 is 100%, parse integer to percentage
-        Float perc = (Float) (captureRate * 100) / 255;
-        captureRate = BigDecimal.valueOf(
-                perc).setScale(2, RoundingMode.HALF_DOWN).floatValue();
-        return captureRate;
+        float perc = (captureRate * 100) / 255;
+        return BigDecimal.valueOf(perc).setScale(2, RoundingMode.HALF_DOWN).floatValue();
     }
 
     public void setCaptureRate(Float captureRate) {

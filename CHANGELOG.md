@@ -1,1 +1,12 @@
-- Fixed pokemon data top layout
+v1.3.0
+- Search now queries the full Pokémon list from the API (not just locally loaded data)
+- Fixed team save bug: removing a Pokémon from a team now correctly removes it from the database
+- Fixed Pokédex scroll jumping back to top when loading the next batch of Pokémon
+- Fixed SQL injection vulnerability in team database queries
+- Pokédex card colors are now cached — smoother scrolling and no duplicate image downloads
+- Fixed team ID loss on screen rotation in team builder
+- Fixed crash when login or sign-up fails with a null error message
+- Fixed crash when changelog fails to load from the network
+- Fixed Pokémon name, height and weight displaying incorrectly when data is missing
+- Fixed capture rate calculation running twice and returning wrong results
+- Fixed team viewer querying the database on the UI thread

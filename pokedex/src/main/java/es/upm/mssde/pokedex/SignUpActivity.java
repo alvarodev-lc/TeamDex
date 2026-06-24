@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Objects;
-
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     static final String LOG_TAG = "vg";
@@ -104,7 +102,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(SignUpActivity.this, "Authentication failed." + Objects.requireNonNull(task.getException()).getMessage(),
+                        String errorMsg = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                        Toast.makeText(SignUpActivity.this, "Authentication failed." + errorMsg,
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
