@@ -79,6 +79,9 @@ public class TeamBuilderActivity extends AppCompatActivity {
             }
         } else {
             teamID = savedInstanceState.getString("team_id");
+            if (teamID == null) {
+                teamID = String.valueOf(teamDatabase.getLatestTeamId() + 1);
+            }
         }
 
         SearchView searchBox = findViewById(R.id.search_box);
@@ -119,6 +122,12 @@ public class TeamBuilderActivity extends AppCompatActivity {
     }
 
 
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("team_id", teamID);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -313,11 +322,11 @@ public class TeamBuilderActivity extends AppCompatActivity {
     private void addOnClickListenerToSaveTeamButton() {
         MaterialButton saveButton = findViewById(R.id.save_team_button);
         saveButton.setOnClickListener(v -> {
+            teamDatabase.deleteTeam(teamID);
             if (!team.isEmpty()) {
                 teamDatabase.addTeam(team, teamID);
                 Toast.makeText(this, "Team saved!", Toast.LENGTH_SHORT).show();
             } else {
-                teamDatabase.deleteTeam(teamID);
                 Toast.makeText(this, "Team deleted!", Toast.LENGTH_SHORT).show();
             }
             finish();

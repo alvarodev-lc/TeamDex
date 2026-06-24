@@ -15,14 +15,25 @@ public class SpeciesTest {
 
     @Test
     public void getCaptureRate_shouldConvertToPercentage() {
-        // Un ratio de captura de 255 (como Caterpie) debería ser 100%
         species.setCaptureRate(255f);
         assertEquals(100.0f, species.getCaptureRate(), 0.01f);
 
-        // Un ratio de captura de 3 (como Mewtwo)
-        // (3 * 100) / 255 = 1.1764... redondeado a 1.18 o 1.17 según RoundingMode
         species.setCaptureRate(3f);
         assertEquals(1.17f, species.getCaptureRate(), 0.01f);
+    }
+
+    @Test
+    public void getCaptureRate_shouldReturnSameValueOnRepeatedCalls() {
+        species.setCaptureRate(45f);
+        float first = species.getCaptureRate();
+        float second = species.getCaptureRate();
+        assertEquals("getCaptureRate() must be idempotent", first, second, 0.001f);
+    }
+
+    @Test
+    public void getCaptureRate_shouldReturnZeroForZeroCaptureRate() {
+        species.setCaptureRate(0f);
+        assertEquals(0.0f, species.getCaptureRate(), 0.001f);
     }
 
     @Test

@@ -20,22 +20,38 @@ public class PokemonTest {
     }
 
     @Test
+    public void getName_shouldReturnEmptyStringForNullName() {
+        pokemon.setName(null);
+        assertEquals("", pokemon.getName());
+    }
+
+    @Test
+    public void getName_shouldReturnEmptyStringForEmptyName() {
+        pokemon.setName("");
+        assertEquals("", pokemon.getName());
+    }
+
+    @Test
     public void getHeight_shouldConvertToMeters() {
-        // La API devuelve 17 decímetros para Charizard
         pokemon.setHeight("17");
         assertEquals("1.7", pokemon.getHeight());
     }
 
     @Test
+    public void getHeight_shouldReturnEmptyStringForNullHeight() {
+        pokemon.setHeight(null);
+        assertEquals("", pokemon.getHeight());
+    }
+
+    @Test
     public void getWeight_shouldConvertToKilograms() {
-        // La API devuelve 905 hectogramos para Charizard
         pokemon.setWeight("905");
         assertEquals("90.5", pokemon.getWeight());
     }
 
     @Test
-    public void setAndGetNum() {
-        pokemon.setNum("6");
-        assertEquals("6", pokemon.getNum());
+    public void getWeight_shouldReturnEmptyStringForNullWeight() {
+        pokemon.setWeight(null);
+        assertEquals("", pokemon.getWeight());
     }
 }

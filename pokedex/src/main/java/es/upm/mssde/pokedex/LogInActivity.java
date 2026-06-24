@@ -14,8 +14,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Objects;
-
 
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -109,7 +107,8 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(LOG_TAG, "logInWithCredentials:failure", task.getException());
-                        Toast.makeText(LogInActivity.this, "Authentication failed: " + Objects.requireNonNull(task.getException()).getMessage(),
+                        String errorMsg = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                        Toast.makeText(LogInActivity.this, "Authentication failed: " + errorMsg,
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -69,8 +69,8 @@ public class TeamDatabase extends SQLiteOpenHelper {
 
         Log.d("DB", "Getting team from DB: " + team_id);
 
-        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = " + team_id;
-        Cursor cursor = db.rawQuery(query, null);
+        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{team_id});
 
         if (cursor.getCount() == 0) {
             Log.d("DB", "Team is empty");
@@ -162,11 +162,9 @@ public class TeamDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void deleteTeam( String team_id){
+    public void deleteTeam(String team_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM " + TABLE_NAME + " WHERE team_id = " + team_id;
-
-        db.execSQL(query);
+        db.delete(TABLE_NAME, TEAM_ID_COL + " = ?", new String[]{team_id});
         Log.d("Erased", "Erased from database");
     }
 

@@ -20,6 +20,24 @@ public class PokemonResultTest {
     }
 
     @Test
+    public void getName_shouldReturnEmptyStringForEmptyName() {
+        pokemonResult.setName("");
+        assertEquals("", pokemonResult.getName());
+    }
+
+    @Test
+    public void getName_shouldReturnEmptyStringForNullName() {
+        pokemonResult.setName(null);
+        assertEquals("", pokemonResult.getName());
+    }
+
+    @Test
+    public void getName_shouldHandleSingleCharacterName() {
+        pokemonResult.setName("a");
+        assertEquals("A", pokemonResult.getName());
+    }
+
+    @Test
     public void getNum_shouldExtractIdFromUrl() {
         pokemonResult.setUrl("https://pokeapi.co/api/v2/pokemon/25/");
         assertEquals(25, pokemonResult.getNum());
