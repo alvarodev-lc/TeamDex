@@ -131,9 +131,6 @@ public class PokeAPI implements MyObservable {
         return results;
     }
 
-    public Pokemon getQueryPokemon() {
-        return queryPokemon;
-    }
 
     public void setPokemonMaxResults(int POKEMON_MAX_RESULTS) {
         this.POKEMON_MAX_RESULTS = POKEMON_MAX_RESULTS;

@@ -248,7 +248,4 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
         return data;
     }
 
-    public ArrayList<PokemonResult> getUnfilteredData() {
-        return unfilteredData;
-    }
 }
