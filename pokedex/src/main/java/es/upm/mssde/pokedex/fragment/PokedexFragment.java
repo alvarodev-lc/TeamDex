@@ -136,6 +136,11 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
             return true;
         }
 
+        if (id == R.id.actionCoffee) {
+            if (getActivity() != null) ChangeLogActivity.openBuyMeACoffee(getActivity());
+            return true;
+        }
+
         return false;
     }
 
