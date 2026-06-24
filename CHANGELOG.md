@@ -1,4 +1,4 @@
-v1.3.0
+v1.3.x
 - Search now queries the full Pokémon list from the API (not just locally loaded data)
 - Fixed team save bug: removing a Pokémon from a team now correctly removes it from the database
 - Fixed Pokédex scroll jumping back to top when loading the next batch of Pokémon
@@ -10,3 +10,4 @@ v1.3.0
 - Fixed Pokémon name, height and weight displaying incorrectly when data is missing
 - Fixed capture rate calculation running twice and returning wrong results
 - Fixed team viewer querying the database on the UI thread
+- Added Buy Me a Coffee button to the Pokédex toolbar and changelog screen

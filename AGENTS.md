@@ -66,12 +66,16 @@ Search fetches all Pokémon names once at fragment creation (`getAllPokemon(1000
 
 ## Versioning
 
-- `versionCode` in `pokedex/build.gradle` — integer, increment by 1 on each release
-- `versionName` — semver `major.minor.patch`
+On every release, update ALL of the following:
+
+- `versionCode` in `pokedex/build.gradle` — integer, increment by 1
+- `versionName` in `pokedex/build.gradle` — semver `major.minor.patch`
   - **patch**: bug fixes
   - **minor**: new features
   - **major**: architectural changes or breaking changes
-- Release commit message: `V{versionName}` (e.g. `V1.3.0`)
+- `TAG_VERSION.md` — must match `versionName` with a `v` prefix (e.g. `v1.3.1`)
+- `CHANGELOG.md` — add a new entry at the top with the version and changes
+- Release commit message: `V{versionName}` (e.g. `V1.3.1`)
 
 ## Build environment
 
