@@ -6,8 +6,4 @@ public interface MyObservable {
     void removeObserver(MyObserver myObserver);
 
     void notifyObserversPokemonsData();
-
-    void notifyObserversPokemonData();
-
-    void notifyObserversPokemonDataFromName();
 }
