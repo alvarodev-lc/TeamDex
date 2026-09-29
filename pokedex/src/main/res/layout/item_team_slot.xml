@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <FrameLayout
+        android:id="@+id/slot_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="148dp">
+
+        <LinearLayout
+            android:id="@+id/slot_filled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/slot_image"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:contentDescription="@string/desc_image_pokemon"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:id="@+id/slot_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/textPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/slot_types"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:minHeight="20dp"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/slot_remove"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_close"
+            app:tint="@color/textSecondary"
+            tools:ignore="ContentDescription" />
+        <!-- contentDescription is set per member in TeamBuilderActivity. -->
+
+        <TextView
+            android:id="@+id/slot_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="4dp"
+            android:gravity="center_horizontal"
+            android:text="@string/team_add_pokemon"
+            android:textColor="@color/textSecondary"
+            android:textSize="13sp"
+            app:drawableTint="@color/textSecondary"
+            app:drawableTopCompat="@drawable/ic_add" />
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>

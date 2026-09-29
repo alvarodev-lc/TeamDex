@@ -1,71 +1,109 @@
 package es.upm.mssde.pokedex;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.cardview.widget.CardView;
-import androidx.appcompat.widget.TooltipCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.core.widget.NestedScrollView;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.DoublePredicate;
 
-import es.upm.mssde.pokedex.models.Ability;
 import es.upm.mssde.pokedex.models.AbilityList;
+import es.upm.mssde.pokedex.models.Cries;
+import es.upm.mssde.pokedex.models.EvolutionChain;
+import es.upm.mssde.pokedex.models.FlavorTextEntry;
+import es.upm.mssde.pokedex.models.NamedApiResource;
 import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.Species;
 import es.upm.mssde.pokedex.models.Stat;
-import es.upm.mssde.pokedex.models.StatName;
+import es.upm.mssde.pokedex.models.TypeDetail;
 import es.upm.mssde.pokedex.models.TypeList;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PokemonActivity extends AppCompatActivity implements View.OnClickListener {
+public class PokemonActivity extends AppCompatActivity {
 
-    private Retrofit retrofit;
-    private final String LOG_TAG = "pokemon_activity";
+    private static final String LOG_TAG = "pokemon_activity";
+    private static final String[] STAT_ORDER = PokeFormat.STAT_ORDER;
+    private static final String STATE_SHINY = "showing_shiny";
+    private static final String STATE_PIXEL_ART = "showing_pixel_art";
+
+    private final CallTracker calls = new CallTracker(this);
+    private IPokemonEndpoint api;
     private PokemonResult poke;
+    private Pokemon pokemon;
+    private MediaPlayer cryPlayer;
 
-    // array list for storing entries.
-    List<BarEntry> barEntriesArrayList;
+    private int currentSpeciesId;
+    private String displayName;
+    private boolean showingShiny;
+    private boolean showingPixelArt;
+    private boolean titleShown;
+    private int headerColor;
+    private int onHeaderColor = Color.WHITE;
+    private final List<String> headerTypes = new ArrayList<>();
+    private final List<String> headerBadges = new ArrayList<>();
+
+    private Toolbar toolbar;
+    private View header;
+    private View nameRow;
+    private TextView nameView;
+    private TextView numberView;
+    private TextView genusView;
+    private ChipGroup headerChips;
+    private ImageView artworkView;
+    private ImageView watermarkView;
+    private MaterialButton cryButton;
+    private MaterialButton shinyButton;
+    private MaterialButton pixelButton;
+    private View loadingView;
+    private View errorView;
+    private View sectionsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,542 +111,699 @@ public class PokemonActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pokemon_stats);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_pokemon);
+        poke = getIntent().getSerializableExtra("pokemon", PokemonResult.class);
+        if (poke == null) {
+            finish();
+            return;
+        }
+        api = PokeApiClient.getRetrofit().create(IPokemonEndpoint.class);
+
+        bindViews();
+        setUpToolbar();
+        setUpInsets();
+        initTiles();
+
+        currentSpeciesId = poke.getNum();
+        displayName = NamedApiResource.prettify(poke.getName());
+        nameView.setText(displayName);
+        numberView.setText(getString(R.string.pokemon_number, poke.getNum()));
+        headerColor = ContextCompat.getColor(this, R.color.colorPrimary);
+        applyHeaderColor(headerColor);
+        if (savedInstanceState != null) {
+            showingShiny = savedInstanceState.getBoolean(STATE_SHINY);
+            showingPixelArt = savedInstanceState.getBoolean(STATE_PIXEL_ART);
+        }
+        updateArtButtons();
+        loadArtwork();
+
+        setCryButtonEnabled(false);
+        shinyButton.setOnClickListener(v -> toggleShiny());
+        pixelButton.setOnClickListener(v -> togglePixelArt());
+        findViewById(R.id.button_retry).setOnClickListener(v -> loadPokemon());
+
+        loadPokemon();
+    }
+
+    private void bindViews() {
+        toolbar = findViewById(R.id.toolbar_pokemon);
+        header = findViewById(R.id.header_layout);
+        nameRow = findViewById(R.id.header_name_row);
+        nameView = findViewById(R.id.poke_name);
+        numberView = findViewById(R.id.poke_number);
+        genusView = findViewById(R.id.poke_genus);
+        headerChips = findViewById(R.id.header_chips);
+        artworkView = findViewById(R.id.poke_image);
+        watermarkView = findViewById(R.id.poke_watermark);
+        cryButton = findViewById(R.id.button_play_cry);
+        shinyButton = findViewById(R.id.button_toggle_shiny);
+        pixelButton = findViewById(R.id.button_toggle_pixel);
+        loadingView = findViewById(R.id.poke_loading);
+        errorView = findViewById(R.id.poke_error);
+        sectionsView = findViewById(R.id.poke_sections);
+    }
+
+    private void setUpToolbar() {
         setSupportActionBar(toolbar);
-
-        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(0, insets.top, 0, 0);
-            return windowInsets;
-        });
-
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle("Pokemon Stats");
-            actionBar.setHomeButtonEnabled(true);
+        if (actionBar != null) {
+            actionBar.setTitle("");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intent = getIntent();
+        NestedScrollView scroll = findViewById(R.id.poke_scroll);
+        scroll.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
+                (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                    int nameBottom = header.getTop() + nameRow.getTop() + nameView.getBottom();
+                    boolean showTitle = scrollY > nameBottom;
+                    if (showTitle != titleShown) {
+                        titleShown = showTitle;
+                        toolbar.setTitle(showTitle ? displayName : "");
+                    }
+                });
+    }
 
-        poke = Objects.requireNonNull(
-                intent.getExtras()
-        ).getSerializable("pokemon", PokemonResult.class);
+    private void setUpInsets() {
+        View scroll = findViewById(R.id.poke_scroll);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.pokemon_root), (v, windowInsets) -> {
+            Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            toolbar.setPadding(0, bars.top, 0, 0);
+            scroll.setPadding(0, 0, 0, bars.bottom);
+            return windowInsets;
+        });
+    }
 
-        String base_url = "https://pokeapi.co/api/v2/";
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(base_url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        getPokemonData();
+    private void initTiles() {
+        setTileLabel(R.id.tile_height, R.string.poke_label_height);
+        setTileLabel(R.id.tile_weight, R.string.poke_label_weight);
+        setTileLabel(R.id.tile_habitat, R.string.poke_label_habitat);
+        setTileLabel(R.id.tile_capture_rate, R.string.poke_label_capture_rate);
+        setTileLabel(R.id.tile_happiness, R.string.poke_label_happiness);
+        setTileLabel(R.id.tile_base_exp, R.string.poke_label_base_exp);
+        setTileLabel(R.id.tile_growth_rate, R.string.poke_label_growth_rate);
+        setTileLabel(R.id.tile_ev_yield, R.string.poke_label_ev_yield);
+        setTileLabel(R.id.tile_egg_groups, R.string.poke_label_egg_groups);
+        setTileLabel(R.id.tile_egg_cycles, R.string.poke_label_egg_cycles);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            this.finish(); // back button
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void getPokemonData() {
-        IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
-        Call<Pokemon> pokemonCall = apiService.getPokemon(String.valueOf(poke.getNum()));
+    @Override
+    protected void onDestroy() {
+        calls.cancelAll();
+        if (cryPlayer != null) {
+            cryPlayer.release();
+            cryPlayer = null;
+        }
+        super.onDestroy();
+    }
 
-        pokemonCall.enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<Pokemon> call, @NonNull Response<Pokemon> response) {
-                if (response.isSuccessful()) {
-                    Pokemon resp = response.body();
-                    assert resp != null;
+    // ---- Networking ----
 
-                    TextView poke_name = findViewById(R.id.poke_name);
-                    String name = resp.getName();
-                    setTextViewText(poke_name, name);
+    private <T> void enqueue(Call<T> call, Consumer<T> onSuccess, @Nullable Runnable onFailure) {
+        calls.enqueue(call, onSuccess, onFailure);
+    }
 
-                    // Set an OnClickListener to show the tooltip when the TextView is clicked
-                    poke_name.setOnClickListener(v -> {
-                        TooltipCompat.setTooltipText(poke_name, name);
-
-                        // To programmatically show the tooltip, we need to manually trigger it
-                        // This method is private, so there's no direct way to show it programmatically
-                        // Instead, we'll simulate a long click
-                        poke_name.performLongClick();
-                    });
-
-                    ImageView sprite_view = findViewById(R.id.poke_image);
-                    String sprite_url = "https://raw.githubusercontent.com/PokeAPI/sprites/" +
-                            "master/sprites/pokemon/" + poke.getNum() + ".png";
-                    addImageView(sprite_url, sprite_view);
-
-                    ImageView shiny_sprite_view = findViewById(R.id.shiny_image);
-                    String shiny_sprite_url =
-                            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/" +
-                                    "pokemon/shiny/" + poke.getNum() + ".png";
-                    addImageView(shiny_sprite_url, shiny_sprite_view);
-
-                    loadPokemonTypes(resp);
-                    loadPokemonAbilities(resp);
-
-                    try {
-                        scrapPokemonPokedexInfo();
-                    } catch (IOException e) {
-                        Log.e(LOG_TAG, "An error occurred", e);
-                    }
-
-                    TextView poke_exp = findViewById(R.id.poke_exp);
-                    setTextViewText(poke_exp, resp.getExperience() + " xp");
-                    TextView poke_height = findViewById(R.id.height);
-                    setTextViewText(poke_height, resp.getHeight() + " m");
-                    TextView poke_weight = findViewById(R.id.weight);
-                    setTextViewText(poke_weight, resp.getWeight() + " kg");
-
-                    getSpeciesData();
-
-                    loadStats(resp);
-
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Pokemon> call, @NonNull Throwable t) {
-                Log.d(LOG_TAG, t.toString());
-            }
+    private void loadPokemon() {
+        loadingView.setVisibility(View.VISIBLE);
+        errorView.setVisibility(View.GONE);
+        sectionsView.setVisibility(View.GONE);
+        enqueue(api.getPokemon(String.valueOf(poke.getNum())), this::onPokemonLoaded, () -> {
+            loadingView.setVisibility(View.GONE);
+            errorView.setVisibility(View.VISIBLE);
         });
     }
 
-    private void getSpeciesData() {
-        IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
-        Call<Species> pokemonCall = apiService.getPokemonSpecies(String.valueOf(poke.getNum()));
+    private void onPokemonLoaded(Pokemon loaded) {
+        pokemon = loaded;
+        loadingView.setVisibility(View.GONE);
+        sectionsView.setVisibility(View.VISIBLE);
 
-        pokemonCall.enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<Species> call, @NonNull Response<Species> response) {
-                if (response.isSuccessful()) {
-                    Species resp = response.body();
-                    assert resp != null;
-                    Log.d(LOG_TAG, "Capture rate: " + resp.getCaptureRate());
+        NamedApiResource species = loaded.getSpecies();
+        Integer speciesId = species != null ? species.getId() : null;
+        if (speciesId != null) {
+            currentSpeciesId = speciesId;
+            numberView.setText(getString(R.string.pokemon_number, speciesId));
+        }
+        displayName = NamedApiResource.prettify(loaded.getName());
+        nameView.setText(displayName);
 
-                    TextView poke_capt_rate = findViewById(R.id.poke_capt_rate);
-                    setTextViewText(poke_capt_rate, resp.getCaptureRate() + " %");
-
-                    TextView poke_happiness = findViewById(R.id.poke_happiness);
-                    setTextViewText(poke_happiness, String.valueOf(resp.getBaseHappiness()));
-                }
+        headerTypes.clear();
+        if (loaded.getTypes() != null) {
+            for (TypeList typeList : loaded.getTypes()) {
+                headerTypes.add(typeList.getType().getName());
             }
+        }
+        int typeColor = PokeFormat.typeColor(headerTypes.isEmpty() ? null : headerTypes.get(0));
+        applyHeaderColor(ColorUtils.blendARGB(typeColor, Color.BLACK, 0.12f));
+        loadArtwork();
+        setUpCryButton(loaded.getCries());
 
-            @Override
-            public void onFailure(@NonNull Call<Species> call, @NonNull Throwable t) {
-                Log.d(LOG_TAG, t.toString());
-            }
+        bindAbout(loaded);
+        bindStats(loaded);
+        bindTraining(loaded);
+        bindAbilities(loaded);
+        loadTypeDefenses(new ArrayList<>(headerTypes));
+        if (speciesId != null) {
+            enqueue(api.getPokemonSpecies(String.valueOf(speciesId)), this::onSpeciesLoaded, null);
+        }
+    }
+
+    // ---- Header ----
+
+    private void applyHeaderColor(int color) {
+        int from = headerColor;
+        headerColor = color;
+        ValueAnimator animator = ValueAnimator.ofArgb(from, color);
+        animator.setDuration(350);
+        animator.addUpdateListener(animation -> {
+            int value = (int) animation.getAnimatedValue();
+            header.setBackgroundColor(value);
+            toolbar.setBackgroundColor(value);
         });
+        animator.start();
+
+        int darkText = ContextCompat.getColor(this, R.color.textPrimary);
+        boolean useDarkText = ColorUtils.calculateContrast(darkText, color)
+                > ColorUtils.calculateContrast(Color.WHITE, color);
+        onHeaderColor = useDarkText ? darkText : Color.WHITE;
+
+        nameView.setTextColor(onHeaderColor);
+        numberView.setTextColor(ColorUtils.setAlphaComponent(onHeaderColor, 190));
+        genusView.setTextColor(ColorUtils.setAlphaComponent(onHeaderColor, 220));
+        toolbar.setTitleTextColor(onHeaderColor);
+        Drawable navigationIcon = toolbar.getNavigationIcon();
+        if (navigationIcon != null) {
+            navigationIcon.mutate().setTint(onHeaderColor);
+        }
+        watermarkView.setColorFilter(onHeaderColor, PorterDuff.Mode.SRC_IN);
+        styleHeaderButton(cryButton);
+        styleHeaderButton(shinyButton);
+        styleHeaderButton(pixelButton);
+        new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView())
+                .setAppearanceLightStatusBars(useDarkText);
+        renderHeaderChips();
     }
 
-    public void loadPokemonTypes(Pokemon pokemon) {
-        LinearLayout type_layout = findViewById(R.id.type_layout);
-        List<TypeList> list_type_list = pokemon.getTypes();
-        int type_list_size = list_type_list.size();
+    private void styleHeaderButton(MaterialButton button) {
+        ColorStateList content = ColorStateList.valueOf(onHeaderColor);
+        button.setTextColor(content);
+        button.setIconTint(content);
+        button.setStrokeColor(ColorStateList.valueOf(ColorUtils.setAlphaComponent(onHeaderColor, 120)));
+        button.setRippleColor(ColorStateList.valueOf(ColorUtils.setAlphaComponent(onHeaderColor, 50)));
+    }
 
-        if (type_list_size == 1) {
-            String pokemon_type1 = list_type_list.get(0).getType().getName();
+    private void renderHeaderChips() {
+        headerChips.removeAllViews();
+        ColorStateList stroke = ColorStateList.valueOf(ColorUtils.setAlphaComponent(onHeaderColor, 140));
+        for (String type : headerTypes) {
+            int typeColor = PokeFormat.typeColor(type);
+            Chip chip = createChip(NamedApiResource.prettify(type), typeColor, readableTextOn(typeColor));
+            chip.setChipStrokeColor(stroke);
+            chip.setChipStrokeWidth(dp(1));
+            headerChips.addView(chip);
+        }
+        for (String badge : headerBadges) {
+            // Chips draw an opaque surface layer, so a transparent background would render white.
+            Chip chip = createChip(badge, headerColor, onHeaderColor);
+            chip.setChipStrokeColor(stroke);
+            chip.setChipStrokeWidth(dp(1));
+            headerChips.addView(chip);
+        }
+    }
 
-            // Capitalize first letter of each word
-            String[] words = pokemon_type1.split(" ");
-            StringBuilder sb = new StringBuilder();
-
-            for (String s : words) {
-                sb.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
+    private void loadArtwork() {
+        boolean pixel = showingPixelArt;
+        String primary = pixel ? spriteUrl() : artworkUrl();
+        String fallback = pixel ? artworkUrl() : spriteUrl();
+        Picasso.get().load(primary).into(artworkView, new Callback() {
+            @Override
+            public void onSuccess() {
+                setPixelScaling(pixel);
             }
 
-            String pokemon_type1_capitalized = sb.toString().trim();
-
-            Log.d(LOG_TAG, "Type 1: " + pokemon_type1);
-
-
-            addCardView(type_layout, pokemon_type1_capitalized, -1);
-        } else if (type_list_size == 2) {
-            String pokemon_type1 = list_type_list.get(0).getType().getName();
-            String pokemon_type2 = list_type_list.get(1).getType().getName();
-
-            // Capitalize first letter of each word
-            String[] words = pokemon_type1.split(" ");
-            StringBuilder sb = new StringBuilder();
-
-            for (String s : words) {
-                sb.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
-            }
-
-            String pokemon_type1_capitalized = sb.toString().trim();
-
-            String[] words2 = pokemon_type2.split(" ");
-            StringBuilder sb2 = new StringBuilder();
-
-            for (String s : words2) {
-                sb2.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
-            }
-
-            String pokemon_type2_capitalized = sb2.toString().trim();
-
-            Log.d(LOG_TAG, "Type 1: " + pokemon_type1);
-            Log.d(LOG_TAG, "Type 2: " + pokemon_type2);
-
-
-            addCardView(type_layout, pokemon_type1_capitalized, -1);
-            addCardView(type_layout, pokemon_type2_capitalized, -1);
-        }
-    }
-
-    public void addCardView(LinearLayout layout, String text, int i) {
-        // Create round CardView and add the ability_name
-        CardView cardView = new CardView(this);
-
-        // Change width and height of the card
-        cardView.setRadius(100);
-        cardView.setCardElevation(4);
-        cardView.setContentPadding(20, 20, 20, 20);
-
-        // Set background color to material color
-        cardView.setCardBackgroundColor(Color.parseColor("#FAFAFA"));
-
-        // Set margin right in CardView
-        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        cardParams.setMargins(25, 0, 5, 0);
-        cardView.setLayoutParams(cardParams);
-
-        // Add the ability_name to the CardView
-        TextView textView = new TextView(this);
-        textView.setText(text);
-        textView.setTextSize(16);
-
-        if (i != -1) {
-            textView.setTextColor(getMaterialColorSeq(i));
-        } else {
-            textView.setTextColor(getMaterialColorType(text));
-        }
-
-        // Set layout parameters for TextView
-        LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        textView.setLayoutParams(textParams);
-
-        // Add the TextView to the CardView
-        cardView.addView(textView);
-
-        // Add the CardView to the layout
-        layout.addView(cardView);
-    }
-
-
-    // function that given a type of Pokémon, returns a material design color
-    public int getMaterialColorType(String typeColor) {
-        Log.d("COLOR_REQUEST_POKE_TYPE", "Type: " + typeColor);
-        HashMap<String, String> matColor = new HashMap<>();
-        matColor.put("Grass", "#7a8a06");
-        matColor.put("Poison", "#A33EA1");
-        matColor.put("Fire", "#e6653e");
-        matColor.put("Water", "#6390F0");
-        matColor.put("Bug", "#A6B91A");
-        matColor.put("Normal", "#A8A77A");
-        matColor.put("Electric", "#F7D02C");
-        matColor.put("Ground", "#D9A664");
-        matColor.put("Fairy", "#F4B1F4");
-        matColor.put("Fighting", "#C22E28");
-        matColor.put("Psychic", "#F95587");
-        matColor.put("Rock", "#B6A136");
-        matColor.put("Ice", "#96D9D6");
-        matColor.put("Ghost", "#735797");
-        matColor.put("Dragon", "#6F35FC");
-        matColor.put("Dark", "#705746");
-        matColor.put("Steel", "#B7B7CE");
-        matColor.put("Flying", "#d0c0fc");
-
-        return Color.parseColor(matColor.get(typeColor));
-    }
-
-    private int getMaterialColorSeq(int index)
-    {
-        HashMap<Integer, Integer> matColor = new HashMap<>();
-        matColor.put(0, Color.parseColor("#388baf"));
-        matColor.put(1, Color.parseColor("#5f3061"));
-        matColor.put(2, Color.parseColor("#ef4d46"));
-        matColor.put(3, Color.parseColor("#f4e7e3"));
-
-        Integer color = matColor.get(index);
-        if (color == null) {
-            return Color.BLACK;
-        }
-        return color;
-    }
-
-    public void loadPokemonAbilities(Pokemon pokemon) {
-        LinearLayout ability_layout = findViewById(R.id.ability_layout);
-
-        List<AbilityList> list_ability_list = pokemon.getAbilities();
-
-        int i = 0;
-
-        for (AbilityList ability_list : list_ability_list) {
-            Ability ability = ability_list.getAbility();
-            String ability_name = ability.getName();
-            ability_name = ability_name.substring(0, 1).toUpperCase(java.util.Locale.ROOT) +
-                    ability_name.substring(1);
-            Log.d(LOG_TAG, "Ability: " + ability_name);
-
-            addCardView(ability_layout, ability_name, i);
-
-            i++;
-        }
-    }
-
-    public void scrapPokemonPokedexInfo() throws IOException {
-        LinearLayout pokedex_description_layout = findViewById(R.id.pokedex_desc_layout);
-        TextView pokedex_summary = findViewById(R.id.pokedex_summary);
-        TextView pokedex_description = findViewById(R.id.pokedex_description);
-        TextView pokedex_summary_placeholder = findViewById(R.id.pokedex_summary_placeholder);
-        TextView pokedex_description_placeholder = findViewById(R.id.pokedex_description_placeholder);
-
-        int pokemon_num = poke.getNum();
-
-        Log.d("Scrapping", "Pokemon num: " + pokemon_num);
-
-        String url = "https://pokemon.gameinfo.io/en/pokemon/" + pokemon_num + "-" + poke.getName().toLowerCase(java.util.Locale.ROOT);
-
-        Log.d("Scrapping", "URL: " + url);
-
-        new Thread(() -> {
-            try {
-                Document document = Jsoup.connect(url).get();
-                Elements description = document.select("meta[name=description]");
-                Element about = Objects.requireNonNull(document.select("h2:contains(About)").first()).nextElementSibling();
-
-                String pokemon_about;
-                String pokemon_description;
-
-                if (!description.isEmpty()) {
-                    pokemon_description = Objects.requireNonNull(description.first()).attr("content");
-                } else {
-                    pokemon_description = "Description not available.";
-                }
-
-                if (about != null) {
-                    pokemon_about = about.text().replaceAll("^\"|\"$", "");
-                } else {
-                    pokemon_about = "About not available.";
-                }
-
-
-                Log.d("Scrapping", "About: " + pokemon_about);
-                Log.d("Scrapping", "Description: " + pokemon_description);
-
-                String finalPokemon_description = pokemon_description;
-                String finalPokemon_about = pokemon_about;
-                runOnUiThread(() -> {
-
-                    pokedex_summary_placeholder.setText(finalPokemon_about);
-                    // underline monster_species
-                    pokedex_summary.setPaintFlags(pokedex_summary.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-                    pokedex_description_placeholder.setText(finalPokemon_description);
-                    pokedex_description.setPaintFlags(pokedex_summary.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-                    // dynamically adjust the height of the description based on the number of characters
-                    int number_of_lines = finalPokemon_description.length() / 30;
-                    if (number_of_lines > 1) {
-                        pokedex_description_layout.setLayoutParams(new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT));
+            @Override
+            public void onError(Exception e) {
+                Picasso.get().load(fallback).into(artworkView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        setPixelScaling(!pixel);
                     }
 
-                    // move the layout to the top
-                    pokedex_description_layout.setY(50);
-
-
+                    @Override
+                    public void onError(Exception e) {
+                    }
                 });
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "An error occurred", e);
             }
-        }).start();
+        });
     }
 
-    public void loadStats(Pokemon pokemon) {
-        List<Stat> list_stat_list = pokemon.getStats();
-        // initializing variable for bar chart.
-        // variable for our bar chart
-        BarChart barChart = findViewById(R.id.stats_bar_chart);
+    private String artworkUrl() {
+        String url = pokemon != null && pokemon.getSprites() != null
+                ? pokemon.getSprites().getArtworkUrl(showingShiny) : null;
+        if (url != null) {
+            return url;
+        }
+        return showingShiny ? PokeApiClient.shinyArtworkUrl(poke.getNum()) : PokeApiClient.artworkUrl(poke.getNum());
+    }
 
-        barEntriesArrayList = new ArrayList<>();
+    private String spriteUrl() {
+        String url = pokemon != null && pokemon.getSprites() != null
+                ? pokemon.getSprites().getSpriteUrl(showingShiny) : null;
+        if (url != null) {
+            return url;
+        }
+        return showingShiny ? PokeApiClient.shinySpriteUrl(poke.getNum()) : PokeApiClient.spriteUrl(poke.getNum());
+    }
 
-        String[] stat_names = new String[list_stat_list.size()];
+    // Sprites are ~96px; nearest-neighbour scaling keeps the pixels crisp instead of blurring them.
+    private void setPixelScaling(boolean pixel) {
+        Drawable drawable = artworkView.getDrawable();
+        if (drawable != null) {
+            drawable.setFilterBitmap(!pixel);
+            drawable.invalidateSelf();
+        }
+    }
 
-        // create hashmap for stat names and values
-        HashMap<String, String> stat_hashmap = new HashMap<>();
-        stat_hashmap.put("hp", "HP");
-        stat_hashmap.put("attack", "Atk");
-        stat_hashmap.put("defense", "Def");
-        stat_hashmap.put("special-attack", "SpA");
-        stat_hashmap.put("special-defense", "SpD");
-        stat_hashmap.put("speed", "Spe");
+    private void toggleShiny() {
+        showingShiny = !showingShiny;
+        updateArtButtons();
+        loadArtwork();
+    }
 
-        HashMap<String, Integer> stats_order_hashmap = new HashMap<>();
-        stats_order_hashmap.put("hp", 0);
-        stats_order_hashmap.put("attack", 1);
-        stats_order_hashmap.put("defense", 2);
-        stats_order_hashmap.put("special-attack", 3);
-        stats_order_hashmap.put("special-defense", 4);
-        stats_order_hashmap.put("speed", 5);
+    private void togglePixelArt() {
+        showingPixelArt = !showingPixelArt;
+        updateArtButtons();
+        loadArtwork();
+    }
 
-        //reorder list of stats based on order of stats_order_hashmap
-        List<Stat> ordered_list_stat_list = new ArrayList<>();
-        for (Stat stat_value : list_stat_list) {
-            StatName stat = stat_value.getStat();
-            String stat_name = stat.getName();
+    private void updateArtButtons() {
+        shinyButton.setText(showingShiny ? R.string.poke_normal : R.string.poke_shiny);
+        pixelButton.setText(showingPixelArt ? R.string.poke_artwork : R.string.poke_pixel_art);
+    }
 
-            Integer position = stats_order_hashmap.get(stat_name);
-            if (position == null) {
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_SHINY, showingShiny);
+        outState.putBoolean(STATE_PIXEL_ART, showingPixelArt);
+    }
 
-                Log.w("reorder", "Position for stat_name '" + stat_name + "' not found. Skipping.");
+    private void setUpCryButton(Cries cries) {
+        String cryUrl = null;
+        if (cries != null) {
+            cryUrl = cries.getLatest() != null ? cries.getLatest() : cries.getLegacy();
+        }
+        String finalCryUrl = cryUrl;
+        setCryButtonEnabled(finalCryUrl != null);
+        cryButton.setOnClickListener(v -> playCry(finalCryUrl));
+    }
+
+    private void setCryButtonEnabled(boolean enabled) {
+        cryButton.setEnabled(enabled);
+        cryButton.setAlpha(enabled ? 1f : 0.5f);
+    }
+
+    private void playCry(String url) {
+        if (url == null) {
+            return;
+        }
+        if (cryPlayer != null) {
+            cryPlayer.release();
+        }
+        cryPlayer = new MediaPlayer();
+        cryPlayer.setOnPreparedListener(MediaPlayer::start);
+        cryPlayer.setOnCompletionListener(MediaPlayer::release);
+        cryPlayer.setOnErrorListener((mp, what, extra) -> {
+            Log.e(LOG_TAG, "Failed to play pokemon cry: what=" + what + " extra=" + extra);
+            Toast.makeText(this, R.string.poke_cry_error, Toast.LENGTH_SHORT).show();
+            mp.release();
+            return true;
+        });
+        try {
+            cryPlayer.setDataSource(url);
+            cryPlayer.prepareAsync();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Failed to load pokemon cry", e);
+        }
+    }
+
+    // ---- Sections backed by /pokemon ----
+
+    private void bindAbout(Pokemon loaded) {
+        setTileValue(R.id.tile_height, orUnknown(loaded.getHeight(), R.string.poke_height_value));
+        setTileValue(R.id.tile_weight, orUnknown(loaded.getWeight(), R.string.poke_weight_value));
+    }
+
+    private void bindStats(Pokemon loaded) {
+        LinearLayout container = findViewById(R.id.stats_container);
+        container.removeAllViews();
+        Map<String, Stat> statsByName = statsByName(loaded);
+        LayoutInflater inflater = getLayoutInflater();
+        int total = 0;
+        for (String key : STAT_ORDER) {
+            Stat stat = statsByName.get(key);
+            if (stat == null || stat.getBaseStat() == null) {
                 continue;
             }
-
-            Log.d("reorder", "Stat name: " + stat_name + " Position: " + position);
-            ordered_list_stat_list.add(position, stat_value);
+            int value = stat.getBaseStat();
+            total += value;
+            container.addView(ViewUtils.createStatRow(inflater, container, PokeFormat.statLabel(key), value));
         }
+        ((TextView) findViewById(R.id.stat_total)).setText(String.valueOf(total));
+    }
 
-        for (Stat stat_value : ordered_list_stat_list) {
-            int index = ordered_list_stat_list.indexOf(stat_value);
-            StatName stat = stat_value.getStat();
-            String stat_name = stat_hashmap.get(stat.getName());
+    private void bindTraining(Pokemon loaded) {
+        String experience = loaded.getExperience();
+        setTileValue(R.id.tile_base_exp, experience != null ? experience : getString(R.string.poke_unknown));
 
-            Integer stat_base_stat = stat_value.getBaseStat();
-            Log.d("poke_stats", "Index: " + index + " Stat: " + stat_name + " - " + stat_base_stat);
-
-            // adding new entry to our array list with bar
-            // entry and passing x and y-axis value to it.
-            barEntriesArrayList.add(new BarEntry(index, stat_base_stat));
-
-            stat_names[index] = stat_name;
-        }
-
-        // creating a new bar data set.
-        // variable for our bar data set.
-        BarDataSet barDataSet = new BarDataSet(barEntriesArrayList, "Stats");
-
-        // creating a new bar data and
-        // passing our bar data set.
-        // variable for our bar data.
-        BarData barData = new BarData(barDataSet);
-
-        // below line is to set data
-        // to our bar chart.
-        barChart.setData(barData);
-
-        // set the colors of the bars
-        int[] colors = new int[]{
-                Color.rgb(239, 71, 111),
-                Color.rgb(237, 142, 80),
-                Color.rgb(255, 209, 82),
-                Color.rgb(6, 204, 160),
-                Color.rgb(17, 155, 198),
-                Color.rgb(164, 164, 255),
-        };
-
-        barDataSet.setColors(colors);
-
-        // setting text color.
-        barDataSet.setValueTextColor(Color.BLACK);
-
-        // setting text size
-        barDataSet.setValueTextSize(25f);
-
-        // set column label
-        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(stat_names));
-
-        barChart.setNoDataText("Loading stats...");
-
-        int max = list_stat_list.size();
-        barChart.getAxisLeft().setLabelCount(max);
-
-        // disable grid lines
-        barChart.getAxisRight().setDrawGridLines(false);
-        barChart.getAxisLeft().setDrawGridLines(false);
-        barChart.getXAxis().setDrawGridLines(false);
-
-        // remove legend
-        barChart.getLegend().setEnabled(false);
-
-        // remove description
-        barChart.getDescription().setEnabled(false);
-
-        // make it non-interactive
-        barChart.setTouchEnabled(false);
-        barChart.setPinchZoom(false);
-
-        // put y values at the right of each bar
-        barChart.getAxisRight().setEnabled(false);
-        barChart.getAxisLeft().setEnabled(false);
-
-        barDataSet.setDrawValues(true);
-        barDataSet.setValueTextColor(Color.BLACK);
-        barDataSet.setValueTextSize(12f);
-
-        YAxis left = barChart.getAxisLeft();
-        left.setAxisMinimum(0f);
-
-        // format y values as integers
-        barDataSet.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.valueOf((int) value);
+        List<String> evYield = new ArrayList<>();
+        Map<String, Stat> statsByName = statsByName(loaded);
+        for (String key : STAT_ORDER) {
+            Stat stat = statsByName.get(key);
+            if (stat != null && stat.getEffort() != null && stat.getEffort() > 0) {
+                evYield.add(stat.getEffort() + " " + PokeFormat.statLabel(key));
             }
-        });
-
-        // add extra space to the left of the chart
-        barChart.setExtraLeftOffset(10f);
-        barChart.setExtraRightOffset(20f);
-
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-        // set bar width
-        barData.setBarWidth(0.6f);
-
-        // increase x axis label size
-        xAxis.setTextSize(13f);
-
-        CircleHorizontalBarChartRenderer renderer = new CircleHorizontalBarChartRenderer(barChart, barChart.getAnimator(), barChart.getViewPortHandler());
-        renderer.initBuffers();
-        barChart.setRenderer(renderer);
-
-        barChart.invalidate();
-        barChart.refreshDrawableState();
-    }
-    
-
-    public void addImageView(String url, ImageView sprite_view) {
-        Picasso.get().load(url).into(sprite_view);
+        }
+        setTileValue(R.id.tile_ev_yield, evYield.isEmpty() ? getString(R.string.poke_unknown) : String.join(", ", evYield));
     }
 
-    public void setTextViewText(TextView view, String text) {
-        view.setText(text);
+    private Map<String, Stat> statsByName(Pokemon loaded) {
+        Map<String, Stat> statsByName = new HashMap<>();
+        if (loaded.getStats() != null) {
+            for (Stat stat : loaded.getStats()) {
+                statsByName.put(stat.getStat().getName(), stat);
+            }
+        }
+        return statsByName;
     }
 
+    private void bindAbilities(Pokemon loaded) {
+        LinearLayout container = findViewById(R.id.abilities_container);
+        container.removeAllViews();
+        if (loaded.getAbilities() == null) {
+            return;
+        }
+        LayoutInflater inflater = getLayoutInflater();
+        for (AbilityList abilityList : loaded.getAbilities()) {
+            String abilityName = abilityList.getAbility().getName();
+            View item = inflater.inflate(R.layout.item_ability, container, false);
+            ((TextView) item.findViewById(R.id.ability_name)).setText(NamedApiResource.prettify(abilityName));
+            item.findViewById(R.id.ability_hidden)
+                    .setVisibility(Boolean.TRUE.equals(abilityList.getIsHidden()) ? View.VISIBLE : View.GONE);
+            TextView description = item.findViewById(R.id.ability_description);
+            container.addView(item);
 
-    @Override
-    public void onStart() {
-        super.onStart();
+            enqueue(api.getAbility(abilityName), detail -> {
+                String text = detail.getShortDescription();
+                if (text != null) {
+                    description.setText(text);
+                } else {
+                    description.setVisibility(View.GONE);
+                }
+            }, () -> description.setVisibility(View.GONE));
+        }
     }
 
+    private void loadTypeDefenses(List<String> types) {
+        if (types.isEmpty()) {
+            return;
+        }
+        TypeDetail[] details = new TypeDetail[types.size()];
+        int[] remaining = {types.size()};
+        for (int i = 0; i < types.size(); i++) {
+            int index = i;
+            enqueue(api.getType(types.get(i)), detail -> {
+                details[index] = detail;
+                remaining[0]--;
+                if (remaining[0] == 0) {
+                    renderTypeDefenses(Arrays.asList(details));
+                }
+            }, null);
+        }
+    }
 
-    @Override
-    public void onClick(View v) {
+    private void renderTypeDefenses(List<TypeDetail> details) {
+        Map<String, Double> multipliers = TypeDetail.defensiveMultipliers(details);
+        fillMultiplierGroup(R.id.label_weaknesses, R.id.chips_weaknesses, multipliers, value -> value > 1, true);
+        fillMultiplierGroup(R.id.label_resistances, R.id.chips_resistances, multipliers, value -> value > 0 && value < 1, true);
+        fillMultiplierGroup(R.id.label_immunities, R.id.chips_immunities, multipliers, value -> value == 0, false);
+        findViewById(R.id.section_defenses).setVisibility(View.VISIBLE);
+    }
 
+    private void fillMultiplierGroup(int labelId, int groupId, Map<String, Double> multipliers,
+                                     DoublePredicate include, boolean showMultiplier) {
+        ChipGroup group = findViewById(groupId);
+        group.removeAllViews();
+        for (Map.Entry<String, Double> entry : multipliers.entrySet()) {
+            if (!include.test(entry.getValue())) {
+                continue;
+            }
+            String suffix = showMultiplier ? PokeFormat.multiplier(entry.getValue()) : null;
+            group.addView(ViewUtils.createTypeChip(this, entry.getKey(), suffix));
+        }
+        int visibility = group.getChildCount() > 0 ? View.VISIBLE : View.GONE;
+        group.setVisibility(visibility);
+        findViewById(labelId).setVisibility(visibility);
+    }
+
+    // ---- Sections backed by /pokemon-species ----
+
+    private void onSpeciesLoaded(Species species) {
+        String genus = species.getEnglishGenus();
+        if (genus != null) {
+            genusView.setText(genus);
+            genusView.setVisibility(View.VISIBLE);
+        }
+
+        // Only the default form shares the species name; forms like "charizard-mega-x" keep their own.
+        String englishName = species.getEnglishName();
+        if (englishName != null && pokemon != null && species.getName() != null
+                && species.getName().equalsIgnoreCase(pokemon.getName())) {
+            displayName = englishName;
+            nameView.setText(englishName);
+        }
+
+        headerBadges.clear();
+        if (species.isLegendary()) {
+            headerBadges.add(getString(R.string.poke_legendary));
+        }
+        if (species.isMythical()) {
+            headerBadges.add(getString(R.string.poke_mythical));
+        }
+        if (species.isBaby()) {
+            headerBadges.add(getString(R.string.poke_baby));
+        }
+        String generation = species.getGeneration() != null
+                ? PokeFormat.generation(species.getGeneration().getName()) : null;
+        if (generation != null) {
+            headerBadges.add(generation);
+        }
+        renderHeaderChips();
+
+        bindFlavorText(species.getLatestEnglishFlavorText());
+        setTileValue(R.id.tile_habitat, prettifyOrUnknown(species.getHabitat()));
+        bindSpeciesTraining(species);
+        bindBreeding(species);
+
+        NamedApiResource chain = species.getEvolutionChain();
+        Integer chainId = chain != null ? chain.getId() : null;
+        if (chainId != null) {
+            enqueue(api.getEvolutionChain(chainId), this::renderEvolution, null);
+        }
+    }
+
+    private void bindFlavorText(FlavorTextEntry entry) {
+        if (entry == null) {
+            return;
+        }
+        TextView flavorView = findViewById(R.id.poke_flavor_text);
+        flavorView.setText(entry.getCleanText());
+        flavorView.setVisibility(View.VISIBLE);
+        if (entry.getVersion() != null) {
+            TextView sourceView = findViewById(R.id.poke_flavor_source);
+            sourceView.setText(getString(R.string.poke_flavor_source,
+                    NamedApiResource.prettify(entry.getVersion().getName())));
+            sourceView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void bindSpeciesTraining(Species species) {
+        Float rawCaptureRate = species.getRawCaptureRate();
+        setTileValue(R.id.tile_capture_rate, rawCaptureRate != null
+                ? getString(R.string.poke_capture_rate_value, rawCaptureRate.intValue(),
+                PokeFormat.percent(species.getCaptureRate()))
+                : getString(R.string.poke_unknown));
+        Integer happiness = species.getBaseHappiness();
+        setTileValue(R.id.tile_happiness, happiness != null ? String.valueOf(happiness) : getString(R.string.poke_unknown));
+        setTileValue(R.id.tile_growth_rate, prettifyOrUnknown(species.getGrowthRate()));
+    }
+
+    private void bindBreeding(Species species) {
+        Integer genderRate = species.getGenderRate();
+        TextView genderText = findViewById(R.id.gender_text);
+        if (genderRate == null) {
+            genderText.setText(R.string.poke_unknown);
+        } else if (genderRate < 0) {
+            genderText.setText(R.string.poke_genderless);
+        } else {
+            double female = genderRate * 12.5;
+            double male = 100 - female;
+            LinearProgressIndicator bar = findViewById(R.id.gender_bar);
+            bar.setVisibility(View.VISIBLE);
+            bar.setProgressCompat((int) Math.round(male), true);
+            ((TextView) findViewById(R.id.gender_male)).setText(getString(R.string.poke_gender_male, PokeFormat.percent(male)));
+            ((TextView) findViewById(R.id.gender_female)).setText(getString(R.string.poke_gender_female, PokeFormat.percent(female)));
+            findViewById(R.id.gender_labels).setVisibility(View.VISIBLE);
+            genderText.setVisibility(View.GONE);
+        }
+
+        List<String> eggGroups = new ArrayList<>();
+        if (species.getEggGroups() != null) {
+            for (NamedApiResource group : species.getEggGroups()) {
+                eggGroups.add(NamedApiResource.prettify(group.getName()));
+            }
+        }
+        setTileValue(R.id.tile_egg_groups, eggGroups.isEmpty() ? getString(R.string.poke_unknown) : String.join(", ", eggGroups));
+        Integer hatchCounter = species.getHatchCounter();
+        setTileValue(R.id.tile_egg_cycles, hatchCounter != null ? String.valueOf(hatchCounter) : getString(R.string.poke_unknown));
+    }
+
+    // ---- Evolution ----
+
+    private void renderEvolution(EvolutionChain chain) {
+        List<List<EvolutionChain.ChainLink>> stages = chain.getStages();
+        LinearLayout container = findViewById(R.id.evolution_container);
+        container.removeAllViews();
+
+        boolean evolves = stages.size() > 1;
+        findViewById(R.id.evolution_scroll).setVisibility(evolves ? View.VISIBLE : View.GONE);
+        findViewById(R.id.evolution_none).setVisibility(evolves ? View.GONE : View.VISIBLE);
+
+        if (evolves) {
+            int widestStage = 0;
+            for (List<EvolutionChain.ChainLink> stage : stages) {
+                widestStage = Math.max(widestStage, stage.size());
+            }
+            // Heavily branched chains (Eevee, Tyrogue) read better top-to-bottom with each stage as a grid.
+            boolean vertical = widestStage > 2;
+            container.setOrientation(vertical ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL);
+            container.setGravity(vertical ? Gravity.CENTER_HORIZONTAL : Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+
+            for (int depth = 0; depth < stages.size(); depth++) {
+                if (depth > 0) {
+                    ImageView arrow = new ImageView(this);
+                    arrow.setImageResource(R.drawable.ic_chevron_right);
+                    arrow.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    LinearLayout.LayoutParams arrowParams = new LinearLayout.LayoutParams(dp(24), dp(24));
+                    if (vertical) {
+                        arrow.setRotation(90);
+                    } else {
+                        // Line the arrow up with the centre of the sprite (6dp padding + 76dp / 2).
+                        arrowParams.topMargin = dp(32);
+                    }
+                    container.addView(arrow, arrowParams);
+                }
+
+                List<EvolutionChain.ChainLink> stage = stages.get(depth);
+                ViewGroup group;
+                if (vertical) {
+                    GridLayout grid = new GridLayout(this);
+                    grid.setColumnCount(Math.min(3, stage.size()));
+                    group = grid;
+                } else {
+                    LinearLayout column = new LinearLayout(this);
+                    column.setOrientation(LinearLayout.VERTICAL);
+                    column.setGravity(Gravity.CENTER_HORIZONTAL);
+                    group = column;
+                }
+                for (EvolutionChain.ChainLink link : stage) {
+                    group.addView(createEvolutionItem(group, link, depth > 0));
+                }
+                container.addView(group, new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+        }
+        findViewById(R.id.section_evolution).setVisibility(View.VISIBLE);
+    }
+
+    private View createEvolutionItem(ViewGroup parent, EvolutionChain.ChainLink link, boolean showRequirement) {
+        View item = getLayoutInflater().inflate(R.layout.item_evolution, parent, false);
+        NamedApiResource species = link.getSpecies();
+        Integer speciesId = species.getId();
+        ImageView image = item.findViewById(R.id.evo_image);
+        TextView name = item.findViewById(R.id.evo_name);
+        name.setText(NamedApiResource.prettify(species.getName()));
+        if (speciesId != null) {
+            Picasso.get().load(PokeApiClient.artworkUrl(speciesId)).into(image);
+        }
+
+        if (showRequirement) {
+            EvolutionChain.EvolutionDetail detail = link.getPrimaryDetail();
+            String requirement = detail != null ? detail.describe() : null;
+            if (requirement != null) {
+                TextView requirementView = item.findViewById(R.id.evo_requirement);
+                requirementView.setText(requirement);
+                requirementView.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (speciesId != null && speciesId == currentSpeciesId) {
+            name.setTypeface(name.getTypeface(), Typeface.BOLD);
+            GradientDrawable ring = new GradientDrawable();
+            ring.setShape(GradientDrawable.OVAL);
+            ring.setColor(ContextCompat.getColor(this, R.color.tileBackground));
+            ring.setStroke(dp(3), headerColor);
+            image.setBackground(ring);
+            item.setClickable(false);
+        } else if (speciesId != null) {
+            item.setOnClickListener(v -> openPokemon(species.getName(), speciesId));
+        }
+        return item;
+    }
+
+    private void openPokemon(String name, int speciesId) {
+        PokemonResult target = new PokemonResult();
+        target.setName(name);
+        target.setNum(speciesId);
+        Intent intent = new Intent(this, PokemonActivity.class);
+        intent.putExtra("pokemon", target);
+        startActivity(intent);
+    }
+
+    // ---- Helpers ----
+
+    private Chip createChip(String text, int background, int textColor) {
+        return ViewUtils.createChip(this, text, background, textColor);
+    }
+
+    private int readableTextOn(int background) {
+        return ViewUtils.readableTextOn(this, background);
+    }
+
+    private void setTileLabel(int tileId, @StringRes int label) {
+        ((TextView) findViewById(tileId).findViewById(R.id.tile_label)).setText(label);
+    }
+
+    private void setTileValue(int tileId, CharSequence value) {
+        ((TextView) findViewById(tileId).findViewById(R.id.tile_value)).setText(value);
+    }
+
+    private String orUnknown(String value, @StringRes int format) {
+        return value == null || value.isEmpty() ? getString(R.string.poke_unknown) : getString(format, value);
+    }
+
+    private String prettifyOrUnknown(NamedApiResource resource) {
+        return resource != null ? NamedApiResource.prettify(resource.getName()) : getString(R.string.poke_unknown);
+    }
+
+    private int dp(int value) {
+        return ViewUtils.dp(this, value);
     }
 }

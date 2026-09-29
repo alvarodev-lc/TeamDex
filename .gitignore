@@ -86,6 +86,3 @@ lint/tmp/
 # lint/reports/
 
 .env
-
-# Claude
-CLAUDE.md

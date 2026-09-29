@@ -4,4 +4,12 @@
     <color name="colorPrimaryDark">#5DC784</color>
     <color name="colorAccent">#FDB449</color>
     <color name="colorWhite">#FFFFFF</color>
+
+    <color name="textPrimary">#1F2328</color>
+    <color name="textSecondary">#6B7280</color>
+    <color name="tileBackground">#F3F4F6</color>
+    <color name="statTrack">#E5E7EB</color>
+    <color name="genderMale">#4A90E2</color>
+    <color name="genderFemale">#F06292</color>
+    <color name="badgeBackground">#374151</color>
 </resources>

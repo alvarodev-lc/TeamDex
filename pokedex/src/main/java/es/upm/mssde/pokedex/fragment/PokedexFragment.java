@@ -168,11 +168,7 @@ public class PokedexFragment extends Fragment implements View.OnClickListener, P
         ArrayList<PokemonResult> poke_list_new = pokedexListAdapter.getData();
         PokemonResult pokemon = poke_list_new.get(position);
 
-        String poke_name = pokemon.getName();
-        String poke_url = pokemon.getUrl();
-        String poke_id = poke_url.substring(poke_url.length() - 2, poke_url.length() - 1);
-        int poke_id_num = Integer.parseInt(poke_id);
-        Log.d("poke_click", poke_name + " " + poke_id_num);
+        Log.d("poke_click", pokemon.getName() + " " + pokemon.getNum());
 
         Intent intent = new Intent(getActivity(), PokemonActivity.class);
         intent.putExtra("pokemon", pokemon);

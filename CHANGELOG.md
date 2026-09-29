@@ -1,13 +1,23 @@
-v1.3.x
-- Search now queries the full Pokémon list from the API (not just locally loaded data)
-- Fixed team save bug: removing a Pokémon from a team now correctly removes it from the database
-- Fixed Pokédex scroll jumping back to top when loading the next batch of Pokémon
-- Fixed SQL injection vulnerability in team database queries
-- Pokédex card colors are now cached — smoother scrolling and no duplicate image downloads
-- Fixed team ID loss on screen rotation in team builder
-- Fixed crash when login or sign-up fails with a null error message
-- Fixed crash when changelog fails to load from the network
-- Fixed Pokémon name, height and weight displaying incorrectly when data is missing
-- Fixed capture rate calculation running twice and returning wrong results
-- Fixed team viewer querying the database on the UI thread
-- Added Buy Me a Coffee button to the Pokédex toolbar and changelog screen
+v2.0.x
+Pokémon details
+- Brand-new Pokémon screen: header in the color of its type, official artwork or pixel art, both also in shiny
+- Listen to each Pokémon's cry
+- Official Pokédex entries, category, generation and Legendary/Mythical badges
+- Base stats with color-coded bars and total
+- Type defenses: weaknesses, resistances and immunities at a glance
+- Abilities with their descriptions, including hidden abilities
+- Evolution chain with requirements (level, stone, friendship…) — tap any stage to open it
+- Training and breeding info: capture rate, base friendship, growth rate, EV yield, gender ratio, egg groups and egg cycles
+- Alternate forms such as Mega Evolutions now show their full details
+
+Teams
+- Redesigned team list: swipe a team to delete it (with undo) and create teams from the new button
+- Redesigned team editor with team names, per-Pokémon remove buttons and a search with sprites
+- Team analysis: shared weaknesses, resistances and average base stats
+- You're asked before leaving a team with unsaved changes
+- Team order is now kept, and a Pokémon can no longer be added twice
+- Team Builder search now finds every Pokémon
+
+Other
+- Fixed several crashes when data fails to load
+- Updated AppCompat, ConstraintLayout, Firebase Auth, Glide, Android Gradle Plugin, Jsoup and Navigation
