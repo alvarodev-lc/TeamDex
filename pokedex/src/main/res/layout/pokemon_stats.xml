@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pokemon_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -12,344 +13,530 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@android:color/white"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:elevation="4dp" />
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@android:color/white" />
 
-    <ScrollView
-        android:id="@+id/poke_popup"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/poke_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:clipToPadding="false"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="20dp"
-                android:contentDescription="@string/desc_image_pokeball"
-                android:layout_marginTop="29dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/pokeball" />
-
-            <TextView
-                android:id="@+id/poke_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:textSize="30sp"
-                android:maxWidth="150dp"
-                android:maxLines="1"
-                android:ellipsize="end" />
-
-            <TextView
-                android:id="@+id/poke_name_tooltip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/poke_image"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="-5dp"
-                android:contentDescription="@string/desc_image_pokemon"
-                android:scaleType="fitXY" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/pokedex_desc_layout"
-            android:layout_width="match_parent"
-            android:layout_height="270dp"
-            android:layout_marginTop="-50dp"
-            android:minHeight="268dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/pokedex_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="12dp"
-                android:text="@string/pokedex_info"
-                android:textColor="#016C4E"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
+            <!-- Header -->
             <LinearLayout
-                android:id="@+id/pokedex_desc_placeholder_layout"
+                android:id="@+id/header_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="45dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/pokedex_summary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="22dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/poke_about"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/pokedex_summary_placeholder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="22dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#000000"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/pokedex_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="22dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/poke_description"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/pokedex_description_placeholder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="22dp"
-                    android:layout_marginTop="10dp"
-                    android:justificationMode="inter_word"
-                    android:textColor="#000000"
-                    android:textSize="15sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/type_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/type_desc"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/poke_type"
-                android:textColor="#016C4E"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:background="@color/colorPrimary"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="48dp">
 
+                <LinearLayout
+                    android:id="@+id/header_name_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/exp_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/poke_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="@android:color/white"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/exp_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/poke_exp"
-                android:textColor="#016C4E"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/poke_exp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/ability_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/poke_ability"
-            android:textColor="#016C4E"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="22dp"/>
-
-        <LinearLayout
-            android:id="@+id/ability_layout"
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="22dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/height_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/height_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="15dp"
-                android:text="@string/poke_height"
-                android:textColor="#016C4E"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/height"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="15dp"
-                android:textSize="18sp" />
-
-            <LinearLayout
-                android:id="@+id/wieght_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/poke_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/weight_desc"
+                    android:id="@+id/poke_genus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/poke_weight"
-                    android:textColor="#016C4E"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="2dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/weight"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/header_chips"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="15dp"
-                    android:textSize="18sp" />
+                    android:layout_marginTop="12dp"
+                    app:chipSpacingHorizontal="8dp"
+                    app:chipSpacingVertical="4dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"
+                    android:layout_marginTop="4dp">
+
+                    <ImageView
+                        android:id="@+id/poke_watermark"
+                        android:layout_width="230dp"
+                        android:layout_height="230dp"
+                        android:layout_gravity="center"
+                        android:alpha="0.15"
+                        android:importantForAccessibility="no"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/pokeball" />
+
+                    <ImageView
+                        android:id="@+id/poke_image"
+                        android:layout_width="210dp"
+                        android:layout_height="210dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/desc_image_pokemon"
+                        android:scaleType="fitCenter" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_play_cry"
+                        style="@style/PokeHeaderButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/poke_cry"
+                        app:icon="@drawable/ic_volume_up" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_toggle_shiny"
+                        style="@style/PokeHeaderButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/poke_shiny"
+                        app:icon="@drawable/ic_star" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_toggle_pixel"
+                        style="@style/PokeHeaderButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/poke_pixel_art"
+                        app:icon="@drawable/ic_grid" />
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Content sheet -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="-28dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_sheet"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="24dp">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/poke_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="48dp"
+                    android:indeterminate="true" />
+
+                <LinearLayout
+                    android:id="@+id/poke_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/poke_load_error"
+                        android:textColor="@color/textSecondary"
+                        android:textSize="15sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_retry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/poke_retry" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/poke_sections"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <!-- About -->
+                    <TextView
+                        style="@style/PokeSectionTitle"
+                        android:text="@string/poke_section_about" />
+
+                    <TextView
+                        android:id="@+id/poke_flavor_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="1.2"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/poke_flavor_source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/textSecondary"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/tile_height"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/tile_weight"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/tile_habitat"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <!-- Base stats -->
+                    <TextView
+                        style="@style/PokeSectionTitle"
+                        android:text="@string/poke_section_stats" />
+
+                    <LinearLayout
+                        android:id="@+id/stats_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="72dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/poke_stat_total"
+                            android:textColor="@color/textSecondary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/stat_total"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textColor="@color/textPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Type defenses -->
+                    <LinearLayout
+                        android:id="@+id/section_defenses"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            style="@style/PokeSectionTitle"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/poke_section_defenses" />
+
+                        <TextView
+                            android:id="@+id/label_weaknesses"
+                            style="@style/PokeSubLabel"
+                            android:text="@string/poke_weaknesses" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chips_weaknesses"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:chipSpacingHorizontal="6dp"
+                            app:chipSpacingVertical="2dp" />
+
+                        <TextView
+                            android:id="@+id/label_resistances"
+                            style="@style/PokeSubLabel"
+                            android:text="@string/poke_resistances" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chips_resistances"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:chipSpacingHorizontal="6dp"
+                            app:chipSpacingVertical="2dp" />
+
+                        <TextView
+                            android:id="@+id/label_immunities"
+                            style="@style/PokeSubLabel"
+                            android:text="@string/poke_immunities" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chips_immunities"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:chipSpacingHorizontal="6dp"
+                            app:chipSpacingVertical="2dp" />
+                    </LinearLayout>
+
+                    <!-- Abilities -->
+                    <TextView
+                        style="@style/PokeSectionTitle"
+                        android:text="@string/poke_section_abilities" />
+
+                    <LinearLayout
+                        android:id="@+id/abilities_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <!-- Evolution -->
+                    <LinearLayout
+                        android:id="@+id/section_evolution"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            style="@style/PokeSectionTitle"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/poke_section_evolution" />
+
+                        <HorizontalScrollView
+                            android:id="@+id/evolution_scroll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fillViewport="true"
+                            android:scrollbars="none">
+
+                            <LinearLayout
+                                android:id="@+id/evolution_container"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal|top"
+                                android:orientation="horizontal" />
+                        </HorizontalScrollView>
+
+                        <TextView
+                            android:id="@+id/evolution_none"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/poke_no_evolution"
+                            android:textColor="@color/textSecondary"
+                            android:textSize="15sp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <!-- Training -->
+                    <TextView
+                        style="@style/PokeSectionTitle"
+                        android:text="@string/poke_section_training" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/tile_capture_rate"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/tile_happiness"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/tile_base_exp"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/tile_growth_rate"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <include
+                        android:id="@+id/tile_ev_yield"
+                        layout="@layout/item_info_tile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Breeding -->
+                    <TextView
+                        style="@style/PokeSectionTitle"
+                        android:text="@string/poke_section_breeding" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_tile"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/poke_label_gender"
+                            android:textColor="@color/textSecondary"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/gender_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:max="100"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/genderMale"
+                            app:trackColor="@color/genderFemale"
+                            app:trackCornerRadius="5dp"
+                            app:trackThickness="10dp" />
+
+                        <LinearLayout
+                            android:id="@+id/gender_labels"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/gender_male"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/genderMale"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/gender_female"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/genderFemale"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/gender_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/poke_unknown"
+                            android:textColor="@color/textPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/tile_egg_groups"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/tile_egg_cycles"
+                            layout="@layout/item_info_tile"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/capt_rate_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/capt_rate_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/poke_capt_rate"
-                android:textColor="#016C4E"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/poke_capt_rate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/happiness_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/happiness_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/poke_happiness"
-                android:textColor="#016C4E"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/poke_happiness"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/shiny_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/shiny_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/shiny_version"
-                android:textColor="#016C4E"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/shiny_image"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="5dp"
-                android:contentDescription="@string/desc_image_pokemon_shiny"
-                android:scaleType="fitXY" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/poke_stats_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="0dp"
-            android:text="@string/poke_stats"
-            android:textColor="#016C4E"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <com.github.mikephil.charting.charts.HorizontalBarChart
-            android:id="@+id/stats_bar_chart"
-            android:layout_width="match_parent"
-            android:layout_height="175dp"
-            android:layout_marginStart="19dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="60dp" />
-    </LinearLayout>
-</ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

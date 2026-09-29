@@ -20,11 +20,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonResult;
 
 public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.ViewHolder> implements MyObserver {
+
+    private static final ExecutorService COLOR_EXECUTOR = Executors.newFixedThreadPool(4);
 
     public final ArrayList<PokemonResult> data;
     public final ArrayList<PokemonResult> unfilteredData;
@@ -78,7 +81,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
         String poke_num_str = "#" + String.format(Locale.getDefault(), "%03d", poke_num);
         holder.poke_num.setText(poke_num_str);
 
-        String spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke_num + ".png";
+        String spriteUrl = PokeApiClient.spriteUrl(poke_num);
         Picasso.get().load(spriteUrl).into(holder.poke_image);
 
         Integer cachedColor = colorCache.get(poke_num);
@@ -86,7 +89,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
             holder.cardView.setCardBackgroundColor(cachedColor);
         } else {
             holder.cardView.setCardBackgroundColor(Color.LTGRAY);
-            new Thread(() -> {
+            COLOR_EXECUTOR.execute(() -> {
                 try {
                     Bitmap bitmap = Picasso.get().load(spriteUrl).get();
                     int color = getDominantColor(bitmap);
@@ -106,7 +109,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
                 } catch (Exception e) {
                     Log.e("Error", e.getMessage() != null ? e.getMessage() : "Unknown error");
                 }
-            }).start();
+            });
         }
     }
 
@@ -178,18 +181,7 @@ public class PokedexListAdapter extends RecyclerView.Adapter<PokedexListAdapter.
             data.addAll(newItems);
             notifyItemRangeInserted(previousUnfilteredSize, newItemsCount);
         }
-        Log.d("POKEMON_LIST_ADAPTER", "onPokemonDataChanged");
-    }
-
-
-    @Override
-    public void onPokemonDataChanged(Pokemon pokemon) {
-
-    }
-
-    @Override
-    public void onPokemonDataFromNameChanged(Pokemon pokemon) {
-
+        Log.d("POKEMON_LIST_ADAPTER", "onPokemonsDataChanged");
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

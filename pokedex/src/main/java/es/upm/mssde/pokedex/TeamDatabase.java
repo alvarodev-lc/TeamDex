@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import es.upm.mssde.pokedex.models.PokemonResult;
 import es.upm.mssde.pokedex.models.PokemonTeam;
@@ -17,15 +18,19 @@ import es.upm.mssde.pokedex.models.PokemonTeam;
 public class TeamDatabase extends SQLiteOpenHelper {
     private static final String DB_NAME = "TEAM";
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     private static final String TABLE_NAME = "team";
+
+    private static final String META_TABLE_NAME = "team_meta";
 
     private static final String TEAM_ID_COL = "team_id";
 
     private static final String NUM_COL = "num";
 
     private static final String NAME_COL = "name";
+
+    private static final String TEAM_NAME_COL = "team_name";
 
     public TeamDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -40,157 +45,125 @@ public class TeamDatabase extends SQLiteOpenHelper {
                 + "PRIMARY KEY (" + TEAM_ID_COL + "," + NUM_COL + "));";
 
         db.execSQL(query);
-
-    }
-
-    public void addPokemonToTeam(PokemonResult pokemon, String team_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(TEAM_ID_COL, team_id);
-
-        String name = pokemon.getName().substring(0, 1).toUpperCase(java.util.Locale.ROOT) + pokemon.getName().substring(1);
-        values.put(NAME_COL, name);
-
-        int poke_num = pokemon.getNum();
-        values.put(NUM_COL, poke_num);
-
-        db.insert(TABLE_NAME, null, values);
-
-        Log.d("DB", "Added pokemon to team in DB: " + name);
-
-        db.close();
-    }
-
-    public ArrayList<PokemonResult> getTeam(String team_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<PokemonResult> team_pokemons = new ArrayList<>();
-
-        Log.d("DB", "Getting team from DB: " + team_id);
-
-        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME + " WHERE " + TEAM_ID_COL + " = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{team_id});
-
-        if (cursor.getCount() == 0) {
-            Log.d("DB", "Team is empty");
-            return team_pokemons;
-        }
-
-        int i = 0;
-        while (cursor.moveToNext()) {
-            Log.d("DB", "Loading pokemon " + i + ": " + cursor.getString(2));
-            int col_num = cursor.getColumnIndex(NUM_COL);
-            String num = cursor.getString(col_num);
-
-            int colIndex = cursor.getColumnIndex(NAME_COL);
-            String name = cursor.getString(colIndex);
-
-            PokemonResult pokemon = new PokemonResult();
-
-            pokemon.setName(name);
-            pokemon.setNum(Integer.parseInt(num));
-
-            team_pokemons.add(i, pokemon);
-
-            i++;
-        }
-        cursor.close();
-        return team_pokemons;
-    }
-
-    public ArrayList<PokemonTeam> getAllTeams() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<PokemonTeam> teams = new ArrayList<>();
-        ArrayList<PokemonResult> pokemons = new ArrayList<>();
-
-        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME;
-        Cursor cursor = db.rawQuery(query, null);
-
-        ArrayList<Integer> team_ids = new ArrayList<>();
-
-        int i = 0;
-        while (cursor.moveToNext()) {
-            int col_num = cursor.getColumnIndex(NUM_COL);
-            String num = cursor.getString(col_num);
-
-            int colIndex = cursor.getColumnIndex(NAME_COL);
-            String name = cursor.getString(colIndex);
-
-            int col_team_id = cursor.getColumnIndex(TEAM_ID_COL);
-            int team_id = cursor.getInt(col_team_id);
-
-            team_ids.add(team_id);
-
-            PokemonResult pokemon = new PokemonResult();
-
-            pokemon.setName(name);
-            pokemon.setNum(Integer.parseInt(num));
-
-            pokemons.add(i, pokemon);
-
-            i++;
-        }
-
-        // group pokemons by team_id
-        HashMap<Integer, ArrayList<PokemonResult>> pokemons_by_team = new HashMap<>();
-        int j = 0;
-        for (PokemonResult pokemon : pokemons) {
-            int team_id = team_ids.get(j);
-            if (!pokemons_by_team.containsKey(team_id)) {
-                pokemons_by_team.put(team_id, new ArrayList<>());
-            }
-            Objects.requireNonNull(pokemons_by_team.get(team_id)).add(pokemon);
-
-            j++;
-        }
-
-        // convert to ArrayList<PokemonTeam>
-        for (int team_id : pokemons_by_team.keySet()) {
-            PokemonTeam team = new PokemonTeam();
-            team.setTeamPokemons(pokemons_by_team.get(team_id));
-            team.setTeamId(String.valueOf(team_id));
-            teams.add(team);
-        }
-        cursor.close();
-        return teams;
+        createMetaTable(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+        // Migrations must keep existing rows: users' saved teams live in this database.
+        if (oldVersion < 2) {
+            createMetaTable(db);
+        }
+    }
+
+    private static void createMetaTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + META_TABLE_NAME + " ("
+                + TEAM_ID_COL + " INTEGER PRIMARY KEY, "
+                + TEAM_NAME_COL + " TEXT);");
+    }
+
+    public ArrayList<PokemonResult> getTeam(String team_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<PokemonResult> team_pokemons = new ArrayList<>();
+
+        String query = "SELECT " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME
+                + " WHERE " + TEAM_ID_COL + " = ? ORDER BY rowid";
+        try (Cursor cursor = db.rawQuery(query, new String[]{team_id})) {
+            while (cursor.moveToNext()) {
+                team_pokemons.add(readPokemon(cursor, 0, 1));
+            }
+        }
+        return team_pokemons;
+    }
+
+    public String getTeamName(String team_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + TEAM_NAME_COL + " FROM " + META_TABLE_NAME + " WHERE " + TEAM_ID_COL + " = ?";
+        try (Cursor cursor = db.rawQuery(query, new String[]{team_id})) {
+            return cursor.moveToFirst() ? cursor.getString(0) : null;
+        }
+    }
+
+    public ArrayList<PokemonTeam> getAllTeams() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Map<Integer, PokemonTeam> teamsById = new LinkedHashMap<>();
+
+        String query = "SELECT " + TEAM_ID_COL + ", " + NUM_COL + ", " + NAME_COL + " FROM " + TABLE_NAME
+                + " ORDER BY " + TEAM_ID_COL + ", rowid";
+        try (Cursor cursor = db.rawQuery(query, null)) {
+            while (cursor.moveToNext()) {
+                int teamId = cursor.getInt(0);
+                PokemonTeam team = teamsById.get(teamId);
+                if (team == null) {
+                    team = new PokemonTeam();
+                    team.setTeamId(String.valueOf(teamId));
+                    teamsById.put(teamId, team);
+                }
+                team.getTeamPokemons().add(readPokemon(cursor, 1, 2));
+            }
+        }
+
+        String namesQuery = "SELECT " + TEAM_ID_COL + ", " + TEAM_NAME_COL + " FROM " + META_TABLE_NAME;
+        try (Cursor cursor = db.rawQuery(namesQuery, null)) {
+            while (cursor.moveToNext()) {
+                PokemonTeam team = teamsById.get(cursor.getInt(0));
+                if (team != null) {
+                    team.setTeamName(cursor.getString(1));
+                }
+            }
+        }
+        return new ArrayList<>(teamsById.values());
+    }
+
+    private static PokemonResult readPokemon(Cursor cursor, int numIndex, int nameIndex) {
+        PokemonResult pokemon = new PokemonResult();
+        pokemon.setNum(cursor.getInt(numIndex));
+        pokemon.setName(cursor.getString(nameIndex));
+        return pokemon;
+    }
+
+    /**
+     * Replaces the team stored under team_id with the given roster and name in a single
+     * transaction, so a crash mid-save can't leave the team half-deleted.
+     * Saving an empty roster deletes the team.
+     */
+    public void saveTeam(List<PokemonResult> team, String team_id, String teamName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            String[] args = new String[]{team_id};
+            db.delete(TABLE_NAME, TEAM_ID_COL + " = ?", args);
+            db.delete(META_TABLE_NAME, TEAM_ID_COL + " = ?", args);
+            for (PokemonResult pokemon : team) {
+                ContentValues values = new ContentValues();
+                values.put(TEAM_ID_COL, team_id);
+                values.put(NUM_COL, pokemon.getNum());
+                values.put(NAME_COL, pokemon.getName());
+                db.insert(TABLE_NAME, null, values);
+            }
+            if (!team.isEmpty() && teamName != null && !teamName.trim().isEmpty()) {
+                ContentValues meta = new ContentValues();
+                meta.put(TEAM_ID_COL, team_id);
+                meta.put(TEAM_NAME_COL, teamName.trim());
+                db.insert(META_TABLE_NAME, null, meta);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        Log.d("DB", "Saved team to DB with ID: " + team_id);
     }
 
     public void deleteTeam(String team_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_NAME, TEAM_ID_COL + " = ?", new String[]{team_id});
-        Log.d("Erased", "Erased from database");
-    }
-
-    public void addTeam(ArrayList<PokemonResult> team, String team_id) {
-        for (PokemonResult pokemon : team) {
-            addPokemonToTeam(pokemon, team_id);
-        }
-
-        Log.d("DB", "Added team to DB with ID: " + team_id);
+        saveTeam(new ArrayList<>(), team_id, null);
     }
 
     public int getLatestTeamId() {
         SQLiteDatabase db = this.getReadableDatabase();
-        int latestTeamId = 0;
-
         String query = "SELECT MAX(" + TEAM_ID_COL + ") FROM " + TABLE_NAME;
-        Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            latestTeamId = cursor.getInt(0);
+        try (Cursor cursor = db.rawQuery(query, null)) {
+            return cursor.moveToFirst() ? cursor.getInt(0) : 0;
         }
-
-        cursor.close();
-
-        return latestTeamId;
     }
-
-
 }

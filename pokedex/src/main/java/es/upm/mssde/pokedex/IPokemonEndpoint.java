@@ -15,4 +15,10 @@ public interface IPokemonEndpoint {
     Call<Pokemon> getPokemon(@Path("num") String num);
     @GET("pokemon-species/{num}")
     Call<Species> getPokemonSpecies(@Path("num") String num);
+    @GET("evolution-chain/{id}")
+    Call<EvolutionChain> getEvolutionChain(@Path("id") int id);
+    @GET("type/{name}")
+    Call<TypeDetail> getType(@Path("name") String name);
+    @GET("ability/{name}")
+    Call<AbilityDetail> getAbility(@Path("name") String name);
 }

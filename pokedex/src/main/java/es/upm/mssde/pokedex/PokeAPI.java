@@ -3,19 +3,18 @@ package es.upm.mssde.pokedex;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import es.upm.mssde.pokedex.models.Pokemon;
 import es.upm.mssde.pokedex.models.PokemonList;
 import es.upm.mssde.pokedex.models.PokemonResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PokeAPI implements MyObservable {
 
@@ -24,50 +23,12 @@ public class PokeAPI implements MyObservable {
     public final ArrayList<PokemonResult> poke_list;
     private final ArrayList<PokemonResult> allPokemonNames = new ArrayList<>();
     private boolean allNamesLoaded = false;
-    private Pokemon queryPokemon;
-    private Pokemon queryPokemonFromName;
     private final List<MyObserver> myObservers;
 
     public PokeAPI() {
-        String base_url = "https://pokeapi.co/api/v2/";
-
-        retrofit = new retrofit2.Retrofit.Builder()
-                .baseUrl(base_url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        retrofit = PokeApiClient.getRetrofit();
         poke_list = new ArrayList<>();
         myObservers = new ArrayList<>();
-    }
-
-    public void getPokemonData(int poke_num, boolean from_name) {
-        IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
-        String poke_id = String.valueOf(poke_num);
-        Call<Pokemon> pokemonResultCall = apiService.getPokemon(poke_id);
-
-        pokemonResultCall.enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<Pokemon> call, @NonNull Response<Pokemon> response) {
-                if (response.isSuccessful()) {
-                    Pokemon pokemon = response.body();
-                    Log.d("poke_request_db", response.message());
-                    assert pokemon != null;
-
-                    if (from_name) {
-                        queryPokemonFromName = pokemon;
-                        notifyObserversPokemonDataFromName();
-                    } else {
-                        queryPokemon = pokemon;
-                        notifyObserversPokemonData();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Pokemon> call, @NonNull Throwable t) {
-                Log.d("poke_request_db", t.toString());
-            }
-        });
     }
 
     public void getPokemonsData(int offset){
@@ -81,7 +42,10 @@ public class PokeAPI implements MyObservable {
                 if (response.isSuccessful()){
                     PokemonList Pokemons = response.body();
                     Log.d("poke_api_all", response.message());
-                    assert Pokemons != null;
+                    if (Pokemons == null) {
+                        Log.w("poke_api_all", "Response body was null for offset " + offset);
+                        return;
+                    }
                     ArrayList<PokemonResult> Pokemon_list = Pokemons.getResults();
                     poke_list.addAll(Pokemon_list);
                     Log.d("poke_api_all", "poke_list size: " + poke_list.size());
@@ -96,7 +60,14 @@ public class PokeAPI implements MyObservable {
     }
 
     public void loadAllPokemonNames() {
-        if (allNamesLoaded) return;
+        loadAllPokemonNames(null);
+    }
+
+    public void loadAllPokemonNames(@Nullable Runnable onLoaded) {
+        if (allNamesLoaded) {
+            if (onLoaded != null) onLoaded.run();
+            return;
+        }
         IPokemonEndpoint apiService = retrofit.create(IPokemonEndpoint.class);
         Call<PokemonList> call = apiService.getAllPokemon(10000, 0);
         call.enqueue(new Callback<>() {
@@ -106,6 +77,7 @@ public class PokeAPI implements MyObservable {
                     allPokemonNames.addAll(response.body().getResults());
                     allNamesLoaded = true;
                     Log.d("poke_api_all_names", "Loaded " + allPokemonNames.size() + " pokemon names");
+                    if (onLoaded != null) onLoaded.run();
                 }
             }
 
@@ -153,22 +125,6 @@ public class PokeAPI implements MyObservable {
         for (MyObserver myObserver : myObservers) {
             Log.d("notifyObserversPokemonsData", "Notifying observer");
             myObserver.onPokemonsDataChanged(poke_list);
-        }
-    }
-
-    @Override
-    public void notifyObserversPokemonData() {
-        for (MyObserver myObserver : myObservers) {
-            Log.d("notifyObserversPokemonData", "Notifying observer");
-            myObserver.onPokemonDataChanged(queryPokemon);
-        }
-    }
-
-    @Override
-    public void notifyObserversPokemonDataFromName() {
-        for (MyObserver myObserver : myObservers) {
-            Log.d("notifyObserversPokemonDataFromName", "Notifying observer");
-            myObserver.onPokemonDataFromNameChanged(queryPokemonFromName);
         }
     }
 }

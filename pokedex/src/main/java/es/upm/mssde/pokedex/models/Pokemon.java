@@ -39,6 +39,16 @@ public class Pokemon {
     @Expose
     private List<Stat> stats = null;
 
+    @SerializedName("cries")
+    @Expose
+    private Cries cries = null;
+
+    @SerializedName("sprites")
+    private Sprites sprites = null;
+
+    @SerializedName("species")
+    private NamedApiResource species = null;
+
     public String getNum() {
         return num;
     }
@@ -107,5 +117,21 @@ public class Pokemon {
 
     public void setStats(List<Stat> stats) {
         this.stats = stats;
+    }
+
+    public Cries getCries() {
+        return cries;
+    }
+
+    public void setCries(Cries cries) {
+        this.cries = cries;
+    }
+
+    public Sprites getSprites() {
+        return sprites;
+    }
+
+    public NamedApiResource getSpecies() {
+        return species;
     }
 }
