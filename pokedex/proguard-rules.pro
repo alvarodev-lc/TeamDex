@@ -22,3 +22,22 @@
 
 -keepattributes Signature
 -keepattributes *Annotation*
+# Readable stack traces in Play Console crash reports (the mapping file ships inside the AAB).
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
+# Gson fills the API models by field name through reflection, and several of them have no
+# @SerializedName, so their field names and no-arg constructors must survive obfuscation.
+-keepclassmembers class es.upm.mssde.pokedex.models.** {
+    <fields>;
+    <init>();
+}
+
+# PokemonResult travels between activities as a Serializable extra.
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}

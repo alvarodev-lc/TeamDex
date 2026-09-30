@@ -19,5 +19,6 @@ Teams
 - Team Builder search now finds every Pokémon
 
 Other
+- Smaller, optimized app download
 - Fixed several crashes when data fails to load
 - Updated AppCompat, ConstraintLayout, Firebase Auth, Glide, Android Gradle Plugin, Jsoup and Navigation
